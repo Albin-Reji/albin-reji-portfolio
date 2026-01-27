@@ -84,11 +84,6 @@ const glow = keyframes`
   50% { box-shadow: 0 0 40px ${props => props.theme?.accent || '#00ffcc'}, 0 0 60px ${props => props.theme?.accent || '#00ffcc'}; }
 `;
 
-const gradientShift = keyframes`
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-`;
 
 // ==================== STYLED COMPONENTS ====================
 const Container = styled.div`
