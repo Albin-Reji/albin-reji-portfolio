@@ -2,42 +2,80 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>React App</title>
+    <meta name="theme-color" content="#0a0e27" />
+    <meta name="description" content="Albin Reji - Full Stack Developer specializing in Java, Spring Boot, React, and modern web technologies. Building scalable, high-performance applications." />
+    <meta name="keywords" content="Albin Reji, Full Stack Developer, Java Developer, Spring Boot, React Developer, Web Developer, Software Engineer" />
+    <meta name="author" content="Albin Reji" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Albin Reji - Full Stack Developer" />
+    <meta property="og:description" content="Full Stack Developer specializing in Java, Spring Boot, React, and modern web technologies." />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content="Albin Reji - Full Stack Developer" />
+    <meta property="twitter:description" content="Full Stack Developer specializing in Java, Spring Boot, React, and modern web technologies." />
+    
+    <title>Albin Reji - Full Stack Developer</title>
+    
+    <style>
+      /* Loading screen */
+      #loading-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #0a0e27;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        transition: opacity 0.5s ease;
+      }
+      
+      .loader {
+        width: 50px;
+        height: 50px;
+        border: 4px solid #2d3561;
+        border-top: 4px solid #00ffcc;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      .fade-out {
+        opacity: 0;
+        pointer-events: none;
+      }
+    </style>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+    
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+      <div class="loader"></div>
+    </div>
+    
     <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+    
+    <script>
+      // Hide loading screen after page loads
+      window.addEventListener('load', function() {
+        setTimeout(function() {
+          document.getElementById('loading-screen').classList.add('fade-out');
+          setTimeout(function() {
+            document.getElementById('loading-screen').style.display = 'none';
+          }, 500);
+        }, 1000);
+      });
+    </script>
   </body>
 </html>

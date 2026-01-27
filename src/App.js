@@ -1,9 +1,14 @@
 import logo from './logo.svg';
 import './App.css';
+// 1. You must import the component first
+import Portfolio from './Portfolio'; 
 
 function App() {
   return (
     <div className="App">
+      {/* 2. Place the component where you want it to appear */}
+      <Portfolio />
+      
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
