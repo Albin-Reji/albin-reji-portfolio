@@ -730,8 +730,8 @@ const portfolioData = {
   email: "albinrejim30@gmail.com",
   phone: "+91-8123160330",
   github: "https://github.com/Albin-Reji",
-  linkedin: "https://linkedin.com/in/albin-reji",
-  leetcode: "https://leetcode.com/u/Albin-Reji/",
+  linkedin: "https://www.linkedin.com/in/albin--reji/",
+  leetcode: "https://leetcode.com/u/_albinreji_/",
   
   stats: [
     { value: "8.5", label: "CGPA" },
