@@ -595,86 +595,6 @@ const ProjectLink = styled.a`
   }
 `;
 
-const ContactSection = styled.section`
-  padding: 100px 0;
-  text-align: center;
-`;
-
-const ContactContent = styled.div`
-  max-width: 600px;
-  margin: 0 auto;
-`;
-
-const ContactForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  margin-top: 40px;
-`;
-
-const Input = styled.input`
-  background: ${props => props.theme.card};
-  border: 2px solid ${props => props.theme.border};
-  border-radius: 15px;
-  padding: 15px 20px;
-  color: ${props => props.theme.text};
-  font-family: 'Space Mono', monospace;
-  font-size: 14px;
-  transition: all 0.3s ease;
-
-  &:focus {
-    outline: none;
-    border-color: ${props => props.theme.accent};
-    box-shadow: 0 0 20px ${props => props.theme.accent}30;
-  }
-
-  &::placeholder {
-    color: ${props => props.theme.textAlt};
-  }
-`;
-
-const TextArea = styled.textarea`
-  background: ${props => props.theme.card};
-  border: 2px solid ${props => props.theme.border};
-  border-radius: 15px;
-  padding: 15px 20px;
-  color: ${props => props.theme.text};
-  font-family: 'Space Mono', monospace;
-  font-size: 14px;
-  min-height: 150px;
-  resize: vertical;
-  transition: all 0.3s ease;
-
-  &:focus {
-    outline: none;
-    border-color: ${props => props.theme.accent};
-    box-shadow: 0 0 20px ${props => props.theme.accent}30;
-  }
-
-  &::placeholder {
-    color: ${props => props.theme.textAlt};
-  }
-`;
-
-const SubmitButton = styled.button`
-  padding: 15px 35px;
-  background: linear-gradient(135deg, ${props => props.theme.accent}, ${props => props.theme.accentAlt});
-  border: none;
-  color: ${props => props.theme.bg};
-  font-family: 'Orbitron', sans-serif;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  border-radius: 50px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: all 0.3s ease;
-
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 30px ${props => props.theme.accent}60;
-  }
-`;
 
 const Footer = styled.footer`
   background: ${props => props.theme.card};
@@ -880,14 +800,7 @@ function Portfolio() {
                 to crafting responsive user interfaces.
               </p>
             </AboutText>
-            {/* <AboutStats>
-              {portfolioData.stats.map((stat, index) => (
-                <StatCard key={index}>
-                  <h4>{stat.value}</h4>
-                  <p>{stat.label}</p>
-                </StatCard>
-              ))}
-            </AboutStats> */}
+
           </AboutGrid>
         </Container>
       </Section>
