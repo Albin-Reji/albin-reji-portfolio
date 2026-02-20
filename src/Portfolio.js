@@ -302,19 +302,20 @@ const SectionTitle = styled.h2`
     border-radius: 2px;
   }
 `;
-
 const AboutGrid = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  /* Change '1fr 1fr' to just '1fr' to force a single column */
+  grid-template-columns: 1fr; 
   gap: 60px;
-  align-items: center;
+  /* 'stretch' ensures items fill the width of the column */
+  align-items: stretch; 
 
   @media (max-width: 768px) {
+    /* This stays 1fr for mobile, but you can adjust the gap */
     grid-template-columns: 1fr;
     gap: 40px;
   }
 `;
-
 const AboutText = styled.div`
   h3 {
     font-family: 'Orbitron', sans-serif;
@@ -728,12 +729,12 @@ const portfolioData = {
   linkedin: "https://www.linkedin.com/in/albin--reji/",
   leetcode: "https://leetcode.com/u/_albinreji_/",
   
-  stats: [
-    { value: "8.5", label: "CGPA" },
-    { value: "2+", label: "Years Exp" },
-    { value: "5+", label: "Projects" },
-    { value: "96%", label: "ML Accuracy" }
-  ],
+  // stats: [
+  //   { value: "8.5", label: "CGPA" },
+  //   { value: "2+", label: "Years Exp" },
+  //   { value: "5+", label: "Projects" },
+  //   { value: "96%", label: "ML Accuracy" }
+  // ],
 
   skills: {
     "Programming Languages": ["Java", "Python", "JavaScript (ES6+)", "SQL", "C++"],
@@ -879,14 +880,14 @@ function Portfolio() {
                 to crafting responsive user interfaces.
               </p>
             </AboutText>
-            <AboutStats>
+            {/* <AboutStats>
               {portfolioData.stats.map((stat, index) => (
                 <StatCard key={index}>
                   <h4>{stat.value}</h4>
                   <p>{stat.label}</p>
                 </StatCard>
               ))}
-            </AboutStats>
+            </AboutStats> */}
           </AboutGrid>
         </Container>
       </Section>
@@ -990,24 +991,6 @@ function Portfolio() {
         </Container>
       </Section>
 
-      {/* Contact Section */}
-      <ContactSection id="contact">
-        <Container>
-          <ContactContent>
-            <SectionTitle>Get In Touch</SectionTitle>
-            <p style={{ color: themes[theme].textAlt, marginBottom: '30px' }}>
-              I'm always open to discussing new projects, creative ideas, or opportunities to be part of your visions.
-            </p>
-            <ContactForm onSubmit={(e) => { e.preventDefault(); alert('Form submitted!'); }}>
-              <Input type="text" placeholder="Your Name" required />
-              <Input type="email" placeholder="Your Email" required />
-              <Input type="text" placeholder="Subject" required />
-              <TextArea placeholder="Your Message" required />
-              <SubmitButton type="submit">Send Message</SubmitButton>
-            </ContactForm>
-          </ContactContent>
-        </Container>
-      </ContactSection>
 
       {/* Footer */}
       <Footer>
