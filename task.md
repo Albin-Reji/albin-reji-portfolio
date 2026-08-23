@@ -1,0 +1,21 @@
+# Portfolio Build Tasks
+
+- [/] Install dependencies (framer-motion, lucide-react)
+- [/] Create data layer (portfolio.ts)
+- [/] Configure design system (globals.css)
+- [ ] Build UI components (SectionHeading, TechChip, AnimatedSection, ArchitectureDiagram)
+- [ ] Build layout components (Navbar, Footer)
+- [ ] Build Hero section
+- [ ] Build About section
+- [ ] Build Education section
+- [ ] Build Skills section
+- [ ] Build Experience section
+- [ ] Build Projects section
+- [ ] Build Certifications section
+- [ ] Build Contact section
+- [ ] Update layout.tsx with metadata & fonts
+- [ ] Update page.tsx to compose sections
+- [ ] Add SEO files (robots.ts, sitemap.ts)
+- [ ] Run lint & build
+- [ ] Fix all errors
+- [ ] Visual review
