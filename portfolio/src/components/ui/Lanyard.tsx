@@ -28,7 +28,7 @@ export default function Lanyard({
   imageFit = 'cover',
   lanyardWidth = 1.3,
   cardScale = 3.2,
-  cardBgColor = '#D7FF00',
+  cardBgColor = '#D4FF45',
 }: {
   position?: [number, number, number];
   gravity?: [number, number, number];
@@ -56,11 +56,21 @@ export default function Lanyard({
     <div className="lanyard-wrapper w-full h-full relative overflow-hidden">
       <Canvas
         camera={{ position: position, fov: responsiveFov }}
-        dpr={[1, isMobile ? 1.5 : 2]}
-        gl={{ alpha: transparent, antialias: true }}
-        onCreated={({ gl }) => gl.setClearColor(new THREE.Color(0x000000), transparent ? 0 : 1)}
+        dpr={[1, typeof window !== 'undefined' ? Math.min(window.devicePixelRatio, 2.5) : 2]}
+        gl={{
+          alpha: transparent,
+          antialias: true,
+          powerPreference: 'high-performance',
+        }}
+        onCreated={({ gl }) => {
+          gl.setClearColor(new THREE.Color(0x000000), transparent ? 0 : 1);
+          gl.outputColorSpace = THREE.SRGBColorSpace;
+          gl.toneMapping = THREE.ACESFilmicToneMapping;
+          gl.toneMappingExposure = 1.1;
+        }}
       >
-        <ambientLight intensity={Math.PI * 0.9} />
+        <ambientLight intensity={Math.PI * 1.1} />
+        <directionalLight position={[0, 6, 12]} intensity={1.4} />
         <Suspense fallback={null}>
           <Physics gravity={gravity} timeStep={isMobile ? 1 / 30 : 1 / 60}>
             <Band
@@ -118,7 +128,7 @@ function Band({
   imageFit = 'cover',
   lanyardWidth = 1.3,
   cardScale = 3.2,
-  cardBgColor = '#D7FF00',
+  cardBgColor = '#D4FF45',
 }: {
   maxSpeed?: number;
   minSpeed?: number;
@@ -155,29 +165,36 @@ function Band({
   const cleanStrapTexture = useMemo(() => {
     if (typeof document === 'undefined') return null;
     const canvas = document.createElement('canvas');
-    canvas.width = 512;
-    canvas.height = 64;
+    canvas.width = 1024;
+    canvas.height = 128;
     const ctx = canvas.getContext('2d');
     if (!ctx) return null;
 
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+
     // Dark sleek webbing base
     ctx.fillStyle = '#080808';
-    ctx.fillRect(0, 0, 512, 64);
+    ctx.fillRect(0, 0, 1024, 128);
 
     // Subtle edge stitch lines in neon lime
     ctx.fillStyle = '#D7FF00';
-    ctx.fillRect(0, 2, 512, 3);
-    ctx.fillRect(0, 59, 512, 3);
+    ctx.fillRect(0, 4, 1024, 6);
+    ctx.fillRect(0, 118, 1024, 6);
 
     // Minimal editorial typography on strap
     ctx.fillStyle = '#D7FF00';
-    ctx.font = '900 18px monospace';
+    ctx.font = '900 36px monospace';
     ctx.textBaseline = 'middle';
-    ctx.fillText('ALBIN REJI  •  FULL STACK  •  ENGINEER  •  ', 10, 32);
+    ctx.fillText('ALBIN REJI  •  FULL STACK  •  ENGINEER  •  ', 20, 64);
 
     const tex = new THREE.CanvasTexture(canvas);
+    tex.colorSpace = THREE.SRGBColorSpace;
     tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
     tex.repeat.set(3, 1);
+    tex.minFilter = THREE.LinearFilter;
+    tex.magFilter = THREE.LinearFilter;
+    tex.generateMipmaps = false;
     tex.anisotropy = 16;
     tex.needsUpdate = true;
     return tex;
@@ -203,24 +220,26 @@ function Band({
     }
   }, [frontTex, backTex]);
 
-  // 2. Vibrant Solid Lime Card with Centered Portrait & High-Contrast Dark Text
+  // 2. High-Resolution (2048x2048) Crisp ID Card: Vibrant solid lime background, razor-sharp photo, black frame & footer
   const cardMap = useMemo(() => {
     const baseMap = materials.base.map;
     if (!frontImage && !backImage && !cardBgColor) return baseMap;
 
-    const baseImg = baseMap.image;
-    if (!baseImg) return baseMap;
-
-    const W = baseImg.width || 1024;
-    const H = baseImg.height || 1024;
+    const W = 2048;
+    const H = 2048;
     const canvas = document.createElement('canvas');
     canvas.width = W;
     canvas.height = H;
     const ctx = canvas.getContext('2d');
     if (!ctx) return baseMap;
 
-    // Draw base card mesh layout
-    ctx.drawImage(baseImg, 0, 0, W, H);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+
+    const baseImg = baseMap.image;
+    if (baseImg) {
+      ctx.drawImage(baseImg, 0, 0, W, H);
+    }
 
     const drawFace = (
       img: HTMLImageElement | null,
@@ -237,75 +256,56 @@ function Band({
       ctx.rect(rx, ry, rw, rh);
       ctx.clip();
 
-      // Card Background: Vibrant Solid Lime Yellow (#D7FF00)
-      ctx.fillStyle = cardBgColor || '#D7FF00';
+      // Outer frame + footer: solid black
+      ctx.fillStyle = '#050505';
       ctx.fillRect(rx, ry, rw, rh);
 
-      // Top Header Bar: Solid Black for strong contrast (#050505)
-      ctx.fillStyle = '#050505';
-      ctx.fillRect(rx, ry, rw, rh * 0.085);
+      // Inner lime panel: thin black margins on top/sides, ~72% height, sharp corners
+      const inset = Math.max(12, Math.round(rw * 0.03));
+      const gx = rx + inset;
+      const gy = ry + inset;
+      const gw = rw - inset * 2;
+      const gh = rh * 0.72 - inset;
 
-      ctx.fillStyle = '#D7FF00';
-      ctx.font = '900 20px monospace';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('// ACCESS PASS', rx + 24, ry + (rh * 0.085) / 2);
+      ctx.fillStyle = cardBgColor || '#D4FF45';
+      ctx.fillRect(gx, gy, gw, gh);
 
-      // Top Punch Hole Indicator
-      ctx.fillStyle = '#050505';
-      ctx.beginPath();
-      ctx.arc(rx + rw / 2, ry + 22, 12, 0, Math.PI * 2);
-      ctx.fill();
-
-      // 3. Centered Portrait Image
+      // Portrait: left + bottom of lime panel, clipped strictly to the green rect (no blur, 100% crisp)
       if (img && img.width > 0) {
-        const photoY = ry + rh * 0.095;
-        const photoH = rh * 0.69;
-        const photoW = rw * 0.88;
-
-        const pick = imageFit === 'contain' ? Math.min : Math.max;
-        const scale = pick(photoW / img.width, photoH / img.height);
-        const dw = img.width * scale;
-        const dh = img.height * scale;
-        // Horizontal centering: (rw - dw) / 2
-        const dx = rx + (rw - dw) / 2;
-        const dy = photoY + (photoH - dh) / 2;
-
         ctx.save();
         ctx.beginPath();
-        // Crisp rounded rectangular frame inside lime card
-        ctx.rect(rx + (rw - photoW) / 2, photoY, photoW, photoH);
+        ctx.rect(gx, gy, gw, gh);
         ctx.clip();
 
-        // Dark photo background in case of transparent edges
-        ctx.fillStyle = '#050505';
-        ctx.fillRect(rx + (rw - photoW) / 2, photoY, photoW, photoH);
+        const targetH = gh * 0.92;
+        const scale =
+          imageFit === 'contain'
+            ? Math.min(gw / img.width, targetH / img.height)
+            : targetH / img.height;
+        const dw = img.width * scale;
+        const dh = img.height * scale;
+        const dx = gx;
+        const dy = gy + gh - dh;
 
         ctx.drawImage(img, dx, dy, dw, dh);
         ctx.restore();
       }
 
-      // 4. High-Contrast Bottom Typography (WCAG Compliant dark badge on lime)
+      // Bottom typography sits in the black footer
       if (isFront) {
-        // Bottom badge container (Solid Black #050505)
-        ctx.fillStyle = '#050505';
-        ctx.fillRect(rx + 16, ry + rh - 96, rw - 32, 80);
-
-        // Name Header (Crisp White #F5F5F0)
         ctx.fillStyle = '#F5F5F0';
-        ctx.font = '900 28px monospace';
+        ctx.font = '900 56px monospace';
         ctx.textBaseline = 'alphabetic';
-        ctx.fillText('ALBIN REJI', rx + 30, ry + rh - 56);
+        ctx.fillText('ALBIN REJI', rx + 60, ry + rh - 112);
 
-        // Subtitle (Neon Lime #D7FF00)
-        ctx.fillStyle = '#D7FF00';
-        ctx.font = 'bold 15px monospace';
-        ctx.fillText('FULL STACK ENGINEER // 2026', rx + 30, ry + rh - 28);
+        ctx.fillStyle = cardBgColor || '#D4FF45';
+        ctx.font = 'bold 30px monospace';
+        ctx.fillText('FULL STACK ENGINEER // 2026', rx + 60, ry + rh - 56);
       }
 
-      // Solid Black Outer Perimeter Border
       ctx.strokeStyle = '#050505';
-      ctx.lineWidth = 6;
-      ctx.strokeRect(rx + 3, ry + 3, rw - 6, rh - 6);
+      ctx.lineWidth = 12;
+      ctx.strokeRect(rx + 6, ry + 6, rw - 12, rh - 12);
 
       ctx.restore();
     };
@@ -316,6 +316,9 @@ function Band({
     const composite = new THREE.CanvasTexture(canvas);
     composite.colorSpace = THREE.SRGBColorSpace;
     composite.flipY = baseMap.flipY;
+    composite.minFilter = THREE.LinearFilter;
+    composite.magFilter = THREE.LinearFilter;
+    composite.generateMipmaps = false; // Eliminates mipmap blur
     composite.anisotropy = 16;
     composite.needsUpdate = true;
     return composite;
@@ -410,10 +413,11 @@ function Band({
               <meshPhysicalMaterial
                 map={cardMap}
                 map-anisotropy={16}
-                clearcoat={isMobile ? 0 : 1}
-                clearcoatRoughness={0.15}
-                roughness={0.7}
-                metalness={0.3}
+                clearcoat={1}
+                clearcoatRoughness={0.05}
+                roughness={0.15}
+                metalness={0.0}
+                envMapIntensity={0.6}
               />
             </mesh>
             <mesh geometry={nodes.clip.geometry} material={materials.metal} material-roughness={0.3} />

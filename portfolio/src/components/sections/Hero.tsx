@@ -92,7 +92,7 @@ export default function Hero() {
       {/* ═══ Main Viewport Composition (Adjusted top padding for comfortable breathing room) ═══ */}
       <div className="relative z-10 flex-1 flex items-center px-6 md:px-12 max-w-[1728px] mx-auto w-full pt-28 sm:pt-32 lg:pt-36 pb-10 sm:pb-14 lg:pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center w-full">
-          
+
           {/* Left Column: Oversized Typography & CTAs (Natural flow, 7 cols on Desktop) */}
           <div
             ref={headlineRef}
@@ -155,7 +155,7 @@ export default function Hero() {
                 frontImage="/albin-reji_photo_fianal.png"
                 cardScale={3.2}
                 lanyardWidth={1.3}
-                cardBgColor="#D7FF00"
+                cardBgColor="#D4ff45"
               />
             </div>
 
