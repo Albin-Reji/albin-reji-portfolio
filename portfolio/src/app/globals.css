@@ -330,6 +330,41 @@
   transform: translateX(4px);
 }
 
+/* ─── Lanyard 3D Badge ────────────────────────────────────────────────────── */
+
+.lanyard-wrapper {
+  position: relative;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ─── 2.5D Portrait Container ─────────────────────────────────────────────── */
+
+.portrait-3d-container {
+  transform-style: preserve-3d;
+  transition: box-shadow 0.4s ease;
+}
+
+.portrait-3d-container:hover {
+  box-shadow:
+    0 0 60px rgba(215, 255, 0, 0.08),
+    0 25px 50px rgba(0, 0, 0, 0.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portrait-3d-container {
+    transform: none !important;
+  }
+
+  .portrait-3d-container [data-layer] {
+    transform: none !important;
+  }
+}
+
 /* ─── Section Index Number ────────────────────────────────────────────────── */
 
 .section-index {

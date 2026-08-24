@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import dynamic from "next/dynamic";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Image from "next/image";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { personalInfo } from "@/data/portfolio";
 import MarqueeTicker from "@/components/ui/MarqueeTicker";
+
+const Lanyard = dynamic(() => import("@/components/ui/Lanyard"), { ssr: false });
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -27,7 +29,6 @@ export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const headlineRef = useRef<HTMLDivElement>(null);
   const imageContainerRef = useRef<HTMLDivElement>(null);
-  const imageInnerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
@@ -75,12 +76,7 @@ export default function Hero() {
               opacity: gsap.utils.interpolate(1, 0.85, progress),
             });
           }
-          if (imageInnerRef.current) {
-            gsap.set(imageInnerRef.current, {
-              scale: gsap.utils.interpolate(1.08, 1.0, progress),
-              yPercent: -4 * progress,
-            });
-          }
+
         },
       });
     }, sectionRef);
@@ -157,33 +153,19 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Right: Sticky/Anchored Portrait Media Container (5 cols) */}
-          <div className="lg:col-span-5 relative">
-            <div
-              ref={imageContainerRef}
-              className="relative aspect-[3/4] max-h-[72vh] w-full overflow-hidden border border-[#F5F5F0]/15 bg-[#111111]"
-            >
-              <div ref={imageInnerRef} className="relative w-full h-full will-change-transform">
-                <Image
-                  src="/hero-portrait.jpg"
-                  alt="Albin Reji — Full Stack Developer"
-                  fill
-                  className="object-cover"
-                  priority
-                  sizes="(max-width: 1024px) 100vw, 42vw"
-                />
-              </div>
-
-              {/* Editorial gradient and corner brackets */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent opacity-70 pointer-events-none" />
-              <div className="absolute top-4 left-4 font-mono text-[9px] uppercase tracking-[0.25em] text-[#D7FF00] px-2 py-1 bg-[#050505]/80 border border-[#F5F5F0]/15">
-                PORTRAIT // 01
-              </div>
-
-              <div className="absolute bottom-6 left-6 right-6 font-mono text-[10px] uppercase tracking-[0.25em] text-[#F5F5F0]/70 flex items-center justify-between">
-                <span>JAVA &bull; SPRING &bull; REACT</span>
-                <span className="text-[#D7FF00] font-bold">2025/2026</span>
-              </div>
+          {/* Right: Interactive 3D Lanyard Badge (5 cols) */}
+          <div className="lg:col-span-5 relative flex items-center justify-center min-h-[550px] lg:min-h-[650px]" ref={imageContainerRef}>
+            <div className="relative w-full h-[550px] lg:h-[650px]">
+              <Lanyard
+                position={[0, 0, 18]}
+                gravity={[0, -40, 0]}
+                fov={20}
+                transparent={true}
+                frontImage="/albin-reji_photo_fianal.png"
+                cardScale={3.4}
+                lanyardWidth={1.5}
+                cardBgColor="#080808"
+              />
             </div>
 
             {/* Accent grid lines */}
