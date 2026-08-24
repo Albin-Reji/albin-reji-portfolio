@@ -89,8 +89,8 @@ export default function Hero() {
       id="home"
       className="relative min-h-screen flex flex-col justify-between overflow-hidden bg-[#050505] border-b border-[#F5F5F0]/15"
     >
-      {/* ═══ Main Viewport Composition (Adjusted top padding for comfortable breathing room) ═══ */}
-      <div className="relative z-10 flex-1 flex items-center px-6 md:px-12 max-w-[1728px] mx-auto w-full pt-28 sm:pt-32 lg:pt-36 pb-10 sm:pb-14 lg:pb-16">
+      {/* ═══ Main Viewport Composition (Tighter top spacing closer to navbar) ═══ */}
+      <div className="relative z-10 flex-1 flex items-center px-6 md:px-12 max-w-[1728px] mx-auto w-full pt-14 sm:pt-16 lg:pt-16 pb-6 sm:pb-8 lg:pb-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center w-full">
 
           {/* Left Column: Oversized Typography & CTAs (Natural flow, 7 cols on Desktop) */}
@@ -101,7 +101,7 @@ export default function Hero() {
             <div>
               <div className="overflow-hidden">
                 <p className="hero-text-line font-mono text-xs md:text-sm font-semibold uppercase tracking-[0.35em] text-[#D7FF00] mb-3">
-                  // {personalInfo.title}
+                  {"// "}{personalInfo.title}
                 </p>
               </div>
 
@@ -144,7 +144,7 @@ export default function Hero() {
           {/* Right Column: Interactive 3D Lanyard Badge (5 cols on Desktop, stacked cleanly below CTAs on Mobile) */}
           <div
             ref={imageContainerRef}
-            className="lg:col-span-5 relative w-full max-w-[340px] sm:max-w-[420px] lg:max-w-none h-[440px] sm:h-[520px] lg:h-[650px] mx-auto flex items-center justify-center mt-6 lg:mt-0"
+            className="lg:col-span-5 relative w-full max-w-[360px] sm:max-w-[440px] lg:max-w-none h-[440px] sm:h-[520px] lg:h-[620px] mx-auto flex items-center justify-center mt-4 lg:mt-0"
           >
             <div className="relative w-full h-full">
               <Lanyard
@@ -153,7 +153,7 @@ export default function Hero() {
                 fov={20}
                 transparent={true}
                 frontImage="/albin-reji_photo_fianal.png"
-                cardScale={3.2}
+                cardScale={4.25}
                 lanyardWidth={1.3}
                 cardBgColor="#D4ff45"
               />
