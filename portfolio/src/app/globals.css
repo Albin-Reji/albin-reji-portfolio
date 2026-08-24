@@ -299,8 +299,10 @@
 .btn-editorial {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.75rem;
   padding: 0.875rem 1.75rem;
+  min-height: 44px;
   border: 1px solid var(--color-border-strong);
   background: transparent;
   color: var(--color-text);

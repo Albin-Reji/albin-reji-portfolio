@@ -62,7 +62,7 @@ export default function Hero() {
         0.9
       );
 
-      // Continuous Scroll-linked Motion (per spec: image scale 1.08 -> 1.0, translateY 0 -> -4%, headline 0 -> -12%)
+      // Continuous Scroll-linked Motion
       ScrollTrigger.create({
         trigger: sectionRef.current,
         start: "top top",
@@ -76,7 +76,6 @@ export default function Hero() {
               opacity: gsap.utils.interpolate(1, 0.85, progress),
             });
           }
-
         },
       });
     }, sectionRef);
@@ -90,26 +89,15 @@ export default function Hero() {
       id="home"
       className="relative min-h-screen flex flex-col justify-between overflow-hidden bg-[#050505] border-b border-[#F5F5F0]/15"
     >
-      {/* ═══ Top Metadata Index Bar ═══ */}
-      <div className="relative z-20 px-6 md:px-12 pt-28 md:pt-32 max-w-[1728px] mx-auto w-full">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#F5F5F0]/15 pb-4 font-mono text-[10px] uppercase tracking-[0.25em] text-[#8A8A8A]">
-          <div className="flex items-center gap-3 hero-fade">
-            <span className="inline-block w-2 h-2 bg-[#D7FF00] animate-pulse" />
-            <span className="text-[#F5F5F0]">EDITION // {new Date().getFullYear()}</span>
-            <span className="text-[#8A8A8A]">/ FULL STACK ENGINEER</span>
-          </div>
-          <div className="flex items-center gap-6 hero-fade">
-            <span>LOC: {personalInfo.location}</span>
-            <span className="text-[#D7FF00] font-semibold">STATUS: AVAILABLE</span>
-          </div>
-        </div>
-      </div>
-
-      {/* ═══ Main Viewport Composition ═══ */}
-      <div className="relative z-10 flex-1 flex items-center px-6 md:px-12 max-w-[1728px] mx-auto w-full py-8 md:py-12">
+      {/* ═══ Main Viewport Composition (Adjusted top padding for comfortable breathing room) ═══ */}
+      <div className="relative z-10 flex-1 flex items-center px-6 md:px-12 max-w-[1728px] mx-auto w-full pt-28 sm:pt-32 lg:pt-36 pb-10 sm:pb-14 lg:pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center w-full">
-          {/* Left: Oversized Typography (7 cols) */}
-          <div ref={headlineRef} className="lg:col-span-7 relative z-10 space-y-6">
+          
+          {/* Left Column: Oversized Typography & CTAs (Natural flow, 7 cols on Desktop) */}
+          <div
+            ref={headlineRef}
+            className="lg:col-span-7 space-y-6 max-w-2xl lg:max-w-none"
+          >
             <div>
               <div className="overflow-hidden">
                 <p className="hero-text-line font-mono text-xs md:text-sm font-semibold uppercase tracking-[0.35em] text-[#D7FF00] mb-3">
@@ -118,13 +106,13 @@ export default function Hero() {
               </div>
 
               <div className="overflow-hidden">
-                <h1 className="hero-text-line text-[clamp(4rem,15vw,14rem)] font-black uppercase leading-[0.82] tracking-[-0.06em] text-[#F5F5F0]">
+                <h1 className="hero-text-line text-[clamp(3.75rem,13vw,13.5rem)] font-black uppercase leading-[0.82] tracking-[-0.06em] text-[#F5F5F0]">
                   ALBIN
                 </h1>
               </div>
 
               <div className="overflow-hidden">
-                <h1 className="hero-text-line text-[clamp(4rem,15vw,14rem)] font-black uppercase leading-[0.82] tracking-[-0.06em] text-[#F5F5F0]">
+                <h1 className="hero-text-line text-[clamp(3.75rem,13vw,13.5rem)] font-black uppercase leading-[0.82] tracking-[-0.06em] text-[#F5F5F0]">
                   REJI<span className="text-[#D7FF00]">.</span>
                 </h1>
               </div>
@@ -153,25 +141,29 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Right: Interactive 3D Lanyard Badge (5 cols) */}
-          <div className="lg:col-span-5 relative flex items-center justify-center min-h-[550px] lg:min-h-[650px]" ref={imageContainerRef}>
-            <div className="relative w-full h-[550px] lg:h-[650px]">
+          {/* Right Column: Interactive 3D Lanyard Badge (5 cols on Desktop, stacked cleanly below CTAs on Mobile) */}
+          <div
+            ref={imageContainerRef}
+            className="lg:col-span-5 relative w-full max-w-[340px] sm:max-w-[420px] lg:max-w-none h-[440px] sm:h-[520px] lg:h-[650px] mx-auto flex items-center justify-center mt-6 lg:mt-0"
+          >
+            <div className="relative w-full h-full">
               <Lanyard
                 position={[0, 0, 18]}
                 gravity={[0, -40, 0]}
                 fov={20}
                 transparent={true}
                 frontImage="/albin-reji_photo_fianal.png"
-                cardScale={3.4}
-                lanyardWidth={1.5}
-                cardBgColor="#080808"
+                cardScale={3.2}
+                lanyardWidth={1.3}
+                cardBgColor="#D7FF00"
               />
             </div>
 
-            {/* Accent grid lines */}
-            <div className="absolute -top-3 -right-3 w-8 h-8 border-t-2 border-r-2 border-[#D7FF00]/50 pointer-events-none" />
-            <div className="absolute -bottom-3 -left-3 w-8 h-8 border-b-2 border-l-2 border-[#D7FF00]/50 pointer-events-none" />
+            {/* Accent Editorial Grid Brackets (Desktop) */}
+            <div className="hidden lg:block absolute -top-3 -right-3 w-8 h-8 border-t-2 border-r-2 border-[#D7FF00]/50 pointer-events-none" />
+            <div className="hidden lg:block absolute -bottom-3 -left-3 w-8 h-8 border-b-2 border-l-2 border-[#D7FF00]/50 pointer-events-none" />
           </div>
+
         </div>
       </div>
 

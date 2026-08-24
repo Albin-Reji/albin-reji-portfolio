@@ -81,43 +81,54 @@ export default function StatementSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative py-28 md:py-48 px-6 md:px-12 bg-[#000000] border-b border-[#F5F5F0]/15 overflow-hidden"
+      className="relative py-24 md:py-40 px-6 md:px-12 bg-[#000000] border-b border-[#F5F5F0]/15 overflow-hidden"
     >
       <div
         ref={containerRef}
         className="max-w-[1728px] mx-auto flex flex-col justify-center min-h-[50vh]"
       >
-        {/* Chapter marker */}
-        <div className="statement-meta flex items-center gap-4 font-mono text-xs uppercase tracking-[0.25em] text-[#8A8A8A] mb-8 border-b border-[#F5F5F0]/15 pb-4">
-          <span className="text-[#D7FF00] font-bold">[STATEMENT // 01]</span>
-          <span>DISCIPLINE &amp; EXECUTION</span>
-          <span className="flex-1" />
-          <span className="hidden sm:inline">PRECISION BACKEND SYSTEMS</span>
+        {/* Chapter marker metadata header */}
+        <div className="statement-meta flex items-center justify-between gap-4 font-mono text-xs uppercase tracking-[0.25em] text-[#8A8A8A] mb-8 border-b border-[#F5F5F0]/15 pb-4">
+          <div className="flex items-center gap-4">
+            <span className="text-[#D7FF00] font-bold">[STATEMENT // 01]</span>
+            <span className="hidden sm:inline">DISCIPLINE &amp; EXECUTION</span>
+          </div>
+          <span className="text-right text-[#B5B5B5]">PRECISION BACKEND SYSTEMS</span>
         </div>
 
-        {/* Masked Headline Lines */}
+        {/* Masked Headline Lines with 1:1 Responsive SVG Anchor */}
         <div className="space-y-1 md:space-y-2 relative">
+          
+          {/* Line 1: REDEFINING */}
           <div className="overflow-hidden">
-            <h2 className="statement-line text-[clamp(2.5rem,7.5vw,8rem)] font-black uppercase tracking-[-0.05em] leading-[0.88] text-[#F5F5F0]">
+            <h2 className="statement-line text-[clamp(2.5rem,7.5vw,8.5rem)] font-black uppercase tracking-[-0.05em] leading-[0.88] text-[#F5F5F0]">
               REDEFINING
             </h2>
           </div>
 
-          <div className="overflow-hidden relative">
-            <h2 className="statement-line text-[clamp(2.5rem,7.5vw,8rem)] font-black uppercase tracking-[-0.05em] leading-[0.88] text-[#F5F5F0]">
-              SCALABILITY
+          {/* Line 2: SCALABILITY with anchored SVG underline loop */}
+          <div className="overflow-visible relative">
+            <h2 className="statement-line text-[clamp(2.5rem,7.5vw,8.5rem)] font-black uppercase tracking-[-0.05em] leading-[0.88] text-[#F5F5F0]">
+              <span className="relative inline-block">
+                SCALABILITY
+                {/* 1:1 Ratio Anchored SVG Vector Loop */}
+                <span
+                  className="absolute -bottom-[22%] left-[-2%] w-[108%] pointer-events-none z-10 block"
+                  aria-hidden="true"
+                >
+                  <SVGSignature delay={0.6} strokeWidth={4} />
+                </span>
+              </span>
             </h2>
-            {/* SVG Handwritten accent sweep */}
-            <div className="absolute -bottom-4 md:-bottom-8 left-0 max-w-[280px] md:max-w-[440px] pointer-events-none z-10">
-              <SVGSignature delay={0.6} />
-            </div>
           </div>
 
-          <div className="overflow-hidden pt-4 md:pt-6">
-            <h2 className="statement-line text-[clamp(2.5rem,7.5vw,8rem)] font-black uppercase tracking-[-0.05em] leading-[0.88] text-[#D7FF00]">
+          {/* Line 3: THROUGH CODE. */}
+          <div className="overflow-hidden pt-3 md:pt-5">
+            <h2 className="statement-line text-[clamp(2.5rem,7.5vw,8.5rem)] font-black uppercase tracking-[-0.05em] leading-[0.88] text-[#D7FF00]">
               THROUGH CODE<span className="text-[#F5F5F0]">.</span>
             </h2>
           </div>
+
         </div>
 
         {/* Core Philosophy Architectural Pillars Grid */}
