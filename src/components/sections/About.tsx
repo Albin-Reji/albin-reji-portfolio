@@ -3,138 +3,15 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import {
-  ArrowUpRight,
-  Terminal,
-  Activity,
-  Cpu,
-  Server,
-  ShieldCheck,
-  Zap,
-  Copy,
-  Check,
-  RefreshCw,
-} from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { aboutText, coreTechnologies, education } from "@/data/portfolio";
 import MarqueeTicker from "@/components/ui/MarqueeTicker";
 
 gsap.registerPlugin(ScrollTrigger);
 
-interface DiagnosticLog {
-  id: string;
-  time: string;
-  level: "INFO" | "METRIC" | "SECURITY" | "BROKER";
-  source: string;
-  message: string;
-  latency?: string;
-}
-
-const INITIAL_LOGS: DiagnosticLog[] = [
-  {
-    id: "log-1",
-    time: "19:04:12.108",
-    level: "SECURITY",
-    source: "SPRING_SECURITY",
-    message: "Zero-trust JWT token verified with RSA-256 signature across gateway mesh.",
-    latency: "0.8ms",
-  },
-  {
-    id: "log-2",
-    time: "19:04:12.142",
-    level: "INFO",
-    source: "CLOUD_GATEWAY",
-    message: "Route dispatched: POST /api/v2/orders -> order-service-node-04.",
-    latency: "1.2ms",
-  },
-  {
-    id: "log-3",
-    time: "19:04:12.158",
-    level: "BROKER",
-    source: "RABBITMQ_BUS",
-    message: "Event published: 'order.event.created' [partition: 02, ack: true].",
-    latency: "2.4ms",
-  },
-  {
-    id: "log-4",
-    time: "19:04:12.180",
-    level: "METRIC",
-    source: "HIKARICP_POOL",
-    message: "PostgreSQL query executed via indexed B-Tree scan. 0 lock contention.",
-    latency: "3.1ms",
-  },
-  {
-    id: "log-5",
-    time: "19:04:12.215",
-    level: "METRIC",
-    source: "REDIS_CLUSTER",
-    message: "Cache hit for key 'session:tenant:active'. In-memory response returned.",
-    latency: "0.4ms",
-  },
-  {
-    id: "log-6",
-    time: "19:04:12.260",
-    level: "INFO",
-    source: "CIRCUIT_BREAKER",
-    message: "Resilience4j circuit status: CLOSED (Failure rate: 0.00%, Calls: 14,280).",
-    latency: "0.1ms",
-  },
-];
-
-const CLUSTER_NODES = [
-  {
-    id: "gw",
-    name: "Spring Cloud Gateway",
-    role: "Edge Routing & Rate Limiting",
-    status: "HEALTHY",
-    throughput: "45.2k req/s",
-    latency: "1.2ms",
-    p99: "3.8ms",
-  },
-  {
-    id: "auth",
-    name: "Keycloak / Spring Security",
-    role: "OAuth2 / OIDC & RBAC",
-    status: "OPTIMAL",
-    throughput: "28.4k auth/s",
-    latency: "0.8ms",
-    p99: "2.1ms",
-  },
-  {
-    id: "svc",
-    name: "Distributed Microservices Mesh",
-    role: "Business Domains & CQRS",
-    status: "HEALTHY",
-    throughput: "52.1k op/s",
-    latency: "4.6ms",
-    p99: "14.2ms",
-  },
-  {
-    id: "msg",
-    name: "RabbitMQ Event Broker",
-    role: "Async Decoupled Messaging",
-    status: "ACTIVE",
-    throughput: "88.0k msg/s",
-    latency: "1.8ms",
-    p99: "4.0ms",
-  },
-  {
-    id: "db",
-    name: "PostgreSQL + Redis Tier",
-    role: "Relational Storage & L2 Cache",
-    status: "HEALTHY",
-    throughput: "36.5k qps",
-    latency: "2.2ms",
-    p99: "8.5ms",
-  },
-];
-
 export default function About() {
   const sectionRef = useRef<HTMLElement>(null);
-  const [activeTab, setActiveTab] = useState<"logs" | "benchmarks" | "cluster">("logs");
-  const [selectedNode, setSelectedNode] = useState(CLUSTER_NODES[0]);
-  const [copiedLogs, setCopiedLogs] = useState(false);
-  const [isSimulating, setIsSimulating] = useState(false);
-  const [logs, setLogs] = useState<DiagnosticLog[]>(INITIAL_LOGS);
+  const [activeStep, setActiveStep] = useState<string>("03");
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
@@ -163,9 +40,9 @@ export default function About() {
         }
       );
 
-      // Terminal diagnostic console fade in
+      // Workflow pipeline container fade in
       gsap.fromTo(
-        ".about-terminal-container",
+        ".about-pipeline-container",
         { opacity: 0, y: 40 },
         {
           opacity: 1,
@@ -173,7 +50,7 @@ export default function About() {
           duration: 0.9,
           ease: "power3.out",
           scrollTrigger: {
-            trigger: ".about-terminal-container",
+            trigger: ".about-pipeline-container",
             start: "top 80%",
             once: true,
           },
@@ -202,370 +79,423 @@ export default function About() {
     return () => ctx.revert();
   }, []);
 
-  const handleCopyLogs = () => {
-    const text = logs
-      .map((l) => `[${l.time}] [${l.level}] [${l.source}] ${l.message} (latency: ${l.latency})`)
-      .join("\n");
-    navigator.clipboard.writeText(text);
-    setCopiedLogs(true);
-    setTimeout(() => setCopiedLogs(false), 2000);
-  };
-
-  const handleSimulatePulse = () => {
-    setIsSimulating(true);
-    const now = new Date();
-    const timeStr = `${now.toTimeString().split(" ")[0]}.${Math.floor(Math.random() * 900 + 100)}`;
-    const newLog: DiagnosticLog = {
-      id: `log-${Date.now()}`,
-      time: timeStr,
-      level: "METRIC",
-      source: "LOAD_BALANCER",
-      message: `Simulated high-throughput test probe dispatched across ${CLUSTER_NODES.length} active service instances.`,
-      latency: `${(Math.random() * 1.8 + 0.4).toFixed(1)}ms`,
-    };
-    setLogs((prev) => [newLog, ...prev.slice(0, 7)]);
-    setTimeout(() => setIsSimulating(false), 600);
-  };
-
   return (
     <section
       ref={sectionRef}
       id="about"
-      className="py-24 md:py-40 bg-[#050505] border-b border-[#F5F5F0]/15 overflow-hidden"
+      className="py-20 md:py-32 bg-[#050505] border-b border-[#F5F5F0]/15 overflow-hidden"
     >
-      {/* ═══ Section Heading ═══ */}
-      <div className="about-heading-trigger px-6 md:px-12 max-w-[1728px] mx-auto mb-16 md:mb-24">
-        <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-[#8A8A8A] mb-4 border-b border-[#F5F5F0]/15 pb-3">
-          <span className="text-[#D7FF00] font-bold">[ABOUT // 02]</span>
-          <span>STORY &amp; FOUNDATION</span>
-          <span className="flex-1" />
-          <span>SYSTEMS ARCHITECTURE</span>
-        </div>
-
-        <div className="overflow-hidden">
-          <h2 className="about-title-line text-[clamp(2.5rem,7vw,7.5rem)] font-black uppercase leading-[0.85] tracking-[-0.05em] text-[#F5F5F0]">
-            BUILDING
-          </h2>
-        </div>
-        <div className="overflow-hidden">
-          <h2 className="about-title-line text-[clamp(2.5rem,7vw,7.5rem)] font-black uppercase leading-[0.85] tracking-[-0.05em] text-[#F5F5F0]">
-            PRODUCTION-GRADE
-          </h2>
-        </div>
-        <div className="overflow-hidden">
-          <h2 className="about-title-line text-[clamp(2.5rem,7vw,7.5rem)] font-black uppercase leading-[0.85] tracking-[-0.05em] text-[#D7FF00]">
-            SYSTEMS<span className="text-[#F5F5F0]">.</span>
-          </h2>
-        </div>
-      </div>
-
-      {/* ═══ Interactive Production Terminal & System Diagnostics Console ═══ */}
-      <div className="about-terminal-container px-6 md:px-12 max-w-[1728px] mx-auto mb-24 md:mb-36">
-        <div className="border border-[#F5F5F0]/15 bg-[#000000] overflow-hidden shadow-2xl">
-          {/* Terminal Console Header */}
-          <div className="border-b border-[#F5F5F0]/15 px-4 md:px-6 py-3.5 bg-[#080808] flex flex-wrap items-center justify-between gap-4">
-            {/* Terminal Window Dots & Identity */}
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <span className="w-3 h-3 rounded-full bg-[#FF5F56]/80 block" />
-                <span className="w-3 h-3 rounded-full bg-[#FFBD2E]/80 block" />
-                <span className="w-3 h-3 rounded-full bg-[#27C93F]/80 block" />
-              </div>
-              <div className="flex items-center gap-2 font-mono text-xs text-[#8A8A8A]">
-                <Terminal size={14} className="text-[#D7FF00]" />
-                <span className="text-[#F5F5F0] font-semibold">albin@cluster-prod-mesh</span>
-                <span className="hidden sm:inline text-[#8A8A8A]">:~</span>
-              </div>
+      {/* ═══ Terminal Status Bar & Section Heading ═══ */}
+      <div className="about-heading-trigger px-6 md:px-12 max-w-[1728px] mx-auto mb-10 md:mb-14">
+        {/* Terminal Header Bar */}
+        <div className="flex items-center justify-between font-mono text-xs text-[#8A8A8A] mb-8 pb-4 border-b border-[#F5F5F0]/10">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1.5">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F56] block" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E] block" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#27C93F] block" />
             </div>
-
-            {/* Tab Controls */}
-            <div className="flex items-center gap-1 bg-[#111111] p-1 border border-[#F5F5F0]/10 font-mono text-[11px] uppercase">
-              <button
-                onClick={() => setActiveTab("logs")}
-                className={`px-3 py-1.5 transition-colors cursor-pointer flex items-center gap-1.5 ${
-                  activeTab === "logs"
-                    ? "bg-[#D7FF00] text-[#050505] font-bold"
-                    : "text-[#8A8A8A] hover:text-[#F5F5F0]"
-                }`}
-              >
-                <Activity size={12} />
-                <span>01 // System Logs</span>
-              </button>
-              <button
-                onClick={() => setActiveTab("benchmarks")}
-                className={`px-3 py-1.5 transition-colors cursor-pointer flex items-center gap-1.5 ${
-                  activeTab === "benchmarks"
-                    ? "bg-[#D7FF00] text-[#050505] font-bold"
-                    : "text-[#8A8A8A] hover:text-[#F5F5F0]"
-                }`}
-              >
-                <Cpu size={12} />
-                <span>02 // Benchmarks</span>
-              </button>
-              <button
-                onClick={() => setActiveTab("cluster")}
-                className={`px-3 py-1.5 transition-colors cursor-pointer flex items-center gap-1.5 ${
-                  activeTab === "cluster"
-                    ? "bg-[#D7FF00] text-[#050505] font-bold"
-                    : "text-[#8A8A8A] hover:text-[#F5F5F0]"
-                }`}
-              >
-                <Server size={12} />
-                <span>03 // Cluster Mesh</span>
-              </button>
-            </div>
-
-            {/* Quick Actions & Live Indicator */}
-            <div className="flex items-center gap-3 font-mono text-[10px] uppercase">
-              <div className="hidden lg:flex items-center gap-2 px-2.5 py-1 bg-[#D7FF00]/10 border border-[#D7FF00]/30 text-[#D7FF00]">
-                <span className="w-2 h-2 rounded-full bg-[#D7FF00] animate-pulse" />
-                <span>HEALTH: 100% OPERATIONAL</span>
-              </div>
-              <button
-                onClick={handleSimulatePulse}
-                disabled={isSimulating}
-                className="px-3 py-1 border border-[#F5F5F0]/15 text-[#F5F5F0] hover:border-[#D7FF00] hover:text-[#D7FF00] transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
-                title="Trigger simulated traffic probe"
-              >
-                <RefreshCw size={11} className={isSimulating ? "animate-spin" : ""} />
-                <span>{isSimulating ? "PROBING..." : "DISPATCH PROBE"}</span>
-              </button>
-              {activeTab === "logs" && (
-                <button
-                  onClick={handleCopyLogs}
-                  className="px-3 py-1 border border-[#F5F5F0]/15 text-[#F5F5F0] hover:border-[#D7FF00] hover:text-[#D7FF00] transition-colors flex items-center gap-1.5 cursor-pointer"
-                >
-                  {copiedLogs ? <Check size={11} className="text-[#D7FF00]" /> : <Copy size={11} />}
-                  <span>{copiedLogs ? "COPIED" : "COPY LOGS"}</span>
-                </button>
-              )}
+            <div className="flex items-center gap-2">
+              <span className="text-[#8A8A8A]">&gt;_</span>
+              <span className="text-[#F5F5F0] font-medium">albin@process-mesh:~</span>
             </div>
           </div>
 
-          {/* Terminal View Content Area */}
-          <div className="p-6 md:p-8 min-h-[380px] bg-[#030303] font-mono">
-            {/* ─── TAB 1: Real-time System Logs ─── */}
-            {activeTab === "logs" && (
-              <div className="space-y-3">
-                <div className="flex items-center justify-between pb-3 border-b border-[#F5F5F0]/10 text-[10px] uppercase tracking-widest text-[#8A8A8A]">
-                  <span>STREAM // EVENT_BUS_DAEMON</span>
-                  <span className="text-[#D7FF00]">P99 DISPATCH: &lt; 3.2MS</span>
+          <div className="flex items-center gap-6">
+            <span className="text-[11px] uppercase tracking-[0.2em] text-[#8A8A8A]">
+              {"SYSTEM // "}<span className="text-[#F5F5F0] font-bold">ALBIN REJI</span>
+            </span>
+            <div className="w-6 h-6 rounded-full border border-[#F5F5F0]/20 flex items-center justify-center font-bold text-[10px] text-[#F5F5F0]">
+              N
+            </div>
+          </div>
+        </div>
+
+        {/* Large Statement Title */}
+        <div className="overflow-hidden">
+          <h2 className="about-title-line text-[clamp(2.5rem,7vw,7.2rem)] font-black uppercase leading-[0.88] tracking-[-0.05em] text-[#F5F5F0]">
+            I DON&apos;T JUST WRITE CODE.
+          </h2>
+        </div>
+        <div className="overflow-hidden mt-1">
+          <h2 className="about-title-line text-[clamp(2.5rem,7vw,7.2rem)] font-black uppercase leading-[0.88] tracking-[-0.05em] text-[#F5F5F0]">
+            I DESIGN <span className="text-[#D7FF00]">SYSTEMS.</span>
+          </h2>
+        </div>
+
+        {/* Page Indicator Tag */}
+        <div className="mt-8 flex items-center gap-2.5 font-mono text-xs uppercase tracking-[0.25em] text-[#8A8A8A]">
+          <span className="text-[#8A8A8A]">ABOUT</span>
+          <span className="text-[#D7FF00] font-bold">{"//"}</span>
+          <span className="text-[#F5F5F0] font-semibold">ENGINEERING WORKFLOW</span>
+        </div>
+      </div>
+
+      {/* ═══ Visual Build Pipeline & Current Process Dashboard ═══ */}
+      <div className="about-pipeline-container px-6 md:px-12 max-w-[1728px] mx-auto mb-20 md:mb-32">
+        <div className="border border-[#F5F5F0]/15 bg-[#000000] rounded-xl p-5 sm:p-7 lg:p-8 shadow-2xl">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch">
+            
+            {/* ─── Left Column: 6-Box Build Pipeline Loop (8 Cols) ─── */}
+            <div className="lg:col-span-8 flex flex-col justify-between space-y-4">
+              
+              {/* TOP ROW: 01 UNDERSTAND -> 02 ARCHITECT -> 03 DEVELOP */}
+              <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
+                
+                {/* Box 01: UNDERSTAND */}
+                <div
+                  onClick={() => setActiveStep("01")}
+                  className={`flex-1 rounded-xl p-4 sm:p-5 border transition-all duration-300 min-h-[145px] flex flex-col justify-between cursor-pointer ${
+                    activeStep === "01"
+                      ? "border-2 border-[#D7FF00] bg-[#D7FF00]/[0.03] shadow-[0_0_24px_rgba(215,255,0,0.12)]"
+                      : "border-[#F5F5F0]/15 bg-[#080808] hover:border-[#F5F5F0]/30"
+                  }`}
+                >
+                  <div className="flex items-start justify-between">
+                    <span className={`font-mono text-xl sm:text-2xl font-black ${
+                      activeStep === "01" ? "text-[#D7FF00]" : "text-[#8A8A8A]"
+                    }`}>
+                      01
+                    </span>
+                    {/* Magnifying Glass Window Icon */}
+                    <svg width="34" height="34" viewBox="0 0 40 40" fill="none" className={activeStep === "01" ? "text-[#D7FF00]" : "text-[#8A8A8A]"}>
+                      <rect x="2" y="2" width="36" height="36" rx="6" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.4" />
+                      <line x1="2" y1="12" x2="38" y2="12" stroke="currentColor" strokeWidth="1" strokeOpacity="0.3" />
+                      <circle cx="8" cy="7" r="1.5" fill="currentColor" fillOpacity="0.4" />
+                      <circle cx="13" cy="7" r="1.5" fill="currentColor" fillOpacity="0.4" />
+                      <circle cx="20" cy="23" r="6" stroke="currentColor" strokeWidth="1.5" />
+                      <line x1="24.5" y1="27.5" x2="30" y2="33" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-[#F5F5F0]">
+                      UNDERSTAND
+                    </p>
+                    <p className="text-[11px] sm:text-xs text-[#8A8A8A] font-light mt-0.5">
+                      Define the problem
+                    </p>
+                  </div>
                 </div>
 
-                <div className="space-y-2 text-xs md:text-sm">
-                  {logs.map((log) => {
-                    const levelColors: Record<string, string> = {
-                      INFO: "text-[#38BDF8] border-[#38BDF8]/40",
-                      METRIC: "text-[#D7FF00] border-[#D7FF00]/40",
-                      SECURITY: "text-[#A78BFA] border-[#A78BFA]/40",
-                      BROKER: "text-[#34D399] border-[#34D399]/40",
-                    };
+                {/* Horizontal Arrow */}
+                <span className="text-[#8A8A8A] font-mono text-base sm:text-lg select-none shrink-0 px-1">
+                  →
+                </span>
 
-                    return (
-                      <div
-                        key={log.id}
-                        className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-3 py-1.5 border-b border-[#F5F5F0]/5 hover:bg-[#F5F5F0]/[0.02] px-2 -mx-2 transition-colors"
-                      >
-                        <span className="text-[#8A8A8A] text-[11px] shrink-0 font-mono">
-                          [{log.time}]
-                        </span>
-                        <span
-                          className={`text-[9px] uppercase px-1.5 py-0.5 border shrink-0 font-bold ${
-                            levelColors[log.level] || "text-[#F5F5F0] border-[#F5F5F0]/20"
-                          }`}
-                        >
-                          {log.level}
-                        </span>
-                        <span className="text-[#8A8A8A] text-xs shrink-0 font-semibold">
-                          {log.source}:
-                        </span>
-                        <span className="text-[#F5F5F0]/90 font-light flex-1">
-                          {log.message}
-                        </span>
-                        {log.latency && (
-                          <span className="text-[10px] text-[#D7FF00] shrink-0 font-mono">
-                            ⚡ {log.latency}
-                          </span>
-                        )}
-                      </div>
-                    );
-                  })}
+                {/* Box 02: ARCHITECT */}
+                <div
+                  onClick={() => setActiveStep("02")}
+                  className={`flex-1 rounded-xl p-4 sm:p-5 border transition-all duration-300 min-h-[145px] flex flex-col justify-between cursor-pointer ${
+                    activeStep === "02"
+                      ? "border-2 border-[#D7FF00] bg-[#D7FF00]/[0.03] shadow-[0_0_24px_rgba(215,255,0,0.12)]"
+                      : "border-[#F5F5F0]/15 bg-[#080808] hover:border-[#F5F5F0]/30"
+                  }`}
+                >
+                  <div className="flex items-start justify-between">
+                    <span className={`font-mono text-xl sm:text-2xl font-black ${
+                      activeStep === "02" ? "text-[#D7FF00]" : "text-[#8A8A8A]"
+                    }`}>
+                      02
+                    </span>
+                    {/* Structural Chart Window Icon */}
+                    <svg width="34" height="34" viewBox="0 0 40 40" fill="none" className={activeStep === "02" ? "text-[#D7FF00]" : "text-[#8A8A8A]"}>
+                      <rect x="2" y="2" width="36" height="36" rx="6" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.4" />
+                      <line x1="2" y1="12" x2="38" y2="12" stroke="currentColor" strokeWidth="1" strokeOpacity="0.3" />
+                      <circle cx="8" cy="7" r="1.5" fill="currentColor" fillOpacity="0.4" />
+                      <circle cx="13" cy="7" r="1.5" fill="currentColor" fillOpacity="0.4" />
+                      <rect x="15" y="16" width="10" height="5" rx="1" stroke="currentColor" strokeWidth="1.2" />
+                      <path d="M20 21V25 M11 25H29 M11 25V28 M29 25V28" stroke="currentColor" strokeWidth="1.2" />
+                      <rect x="7" y="28" width="8" height="5" rx="1" stroke="currentColor" strokeWidth="1.2" />
+                      <rect x="25" y="28" width="8" height="5" rx="1" stroke="currentColor" strokeWidth="1.2" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-[#F5F5F0]">
+                      ARCHITECT
+                    </p>
+                    <p className="text-[11px] sm:text-xs text-[#8A8A8A] font-light mt-0.5">
+                      Design the system
+                    </p>
+                  </div>
                 </div>
 
-                <div className="pt-4 flex items-center gap-2 text-xs text-[#8A8A8A]">
-                  <span className="inline-block w-2 h-4 bg-[#D7FF00] animate-pulse" />
-                  <span className="text-[#6A6A6A]">Awaiting asynchronous dispatch events...</span>
+                {/* Horizontal Arrow */}
+                <span className="text-[#8A8A8A] font-mono text-base sm:text-lg select-none shrink-0 px-1">
+                  →
+                </span>
+
+                {/* Box 03: DEVELOP (Highlighted Neon Green) */}
+                <div
+                  onClick={() => setActiveStep("03")}
+                  className={`flex-1 rounded-xl p-4 sm:p-5 border transition-all duration-300 min-h-[145px] flex flex-col justify-between cursor-pointer ${
+                    activeStep === "03"
+                      ? "border-2 border-[#D7FF00] bg-[#D7FF00]/[0.03] shadow-[0_0_24px_rgba(215,255,0,0.12)]"
+                      : "border-[#F5F5F0]/15 bg-[#080808] hover:border-[#F5F5F0]/30"
+                  }`}
+                >
+                  <div className="flex items-start justify-between">
+                    <span className="font-mono text-xl sm:text-2xl font-black text-[#D7FF00]">
+                      03
+                    </span>
+                    {/* Code Snippet </> Window Icon */}
+                    <svg width="34" height="34" viewBox="0 0 40 40" fill="none" className="text-[#D7FF00]">
+                      <rect x="2" y="2" width="36" height="36" rx="6" stroke="#D7FF00" strokeWidth="1.5" strokeOpacity="0.8" />
+                      <line x1="2" y1="12" x2="38" y2="12" stroke="#D7FF00" strokeWidth="1" strokeOpacity="0.5" />
+                      <rect x="24" y="5" width="10" height="4" rx="1" fill="#D7FF00" fillOpacity="0.3" />
+                      <path d="M15 20L10 24.5L15 29 M25 20L30 24.5L25 29 M22 17L18 32" stroke="#D7FF00" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-[#F5F5F0]">
+                      DEVELOP
+                    </p>
+                    <p className="text-[11px] sm:text-xs text-[#8A8A8A] font-light mt-0.5">
+                      Implement the idea
+                    </p>
+                  </div>
                 </div>
+
               </div>
-            )}
 
-            {/* ─── TAB 2: Throughput & Latency Benchmarks ─── */}
-            {activeTab === "benchmarks" && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between pb-3 border-b border-[#F5F5F0]/10 text-[10px] uppercase tracking-widest text-[#8A8A8A]">
-                  <span>BENCHMARK ENGINE // LOAD TESTING (10,000 CONCURRENT CLIENTS)</span>
-                  <span className="text-[#D7FF00]">RUNTIME: LINUX / K8S</span>
-                </div>
+              {/* VERTICAL TRANSITION ARROW (UNDER BOX 03) */}
+              <div className="flex justify-end pr-8 sm:pr-14 md:pr-16 text-[#8A8A8A] font-mono text-base sm:text-lg select-none py-0.5">
+                <span>↓</span>
+              </div>
 
-                {/* Metric Summary Grid */}
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                  <div className="border border-[#F5F5F0]/15 p-4 bg-[#080808] space-y-1">
-                    <span className="text-[9px] uppercase tracking-widest text-[#8A8A8A] block">
-                      PEAK THROUGHPUT
+              {/* BOTTOM ROW: 06 ITERATE <- 05 MEASURE <- 04 SHIP */}
+              <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
+                
+                {/* Box 06: ITERATE */}
+                <div
+                  onClick={() => setActiveStep("05")}
+                  className={`flex-1 rounded-xl p-4 sm:p-5 border transition-all duration-300 min-h-[145px] flex flex-col justify-between cursor-pointer ${
+                    activeStep === "06"
+                      ? "border-2 border-[#D7FF00] bg-[#D7FF00]/[0.03] shadow-[0_0_24px_rgba(215,255,0,0.12)]"
+                      : "border-[#F5F5F0]/15 bg-[#080808] hover:border-[#F5F5F0]/30"
+                  }`}
+                >
+                  <div className="flex items-start justify-between">
+                    <span className={`font-mono text-xl sm:text-2xl font-black ${
+                      activeStep === "06" ? "text-[#D7FF00]" : "text-[#8A8A8A]"
+                    }`}>
+                      06
                     </span>
-                    <p className="text-2xl md:text-3xl font-black text-[#D7FF00]">
-                      52,400 <span className="text-xs text-[#8A8A8A]">RPS</span>
-                    </p>
-                    <p className="text-[10px] text-[#B5B5B5]">Non-blocking Netty event loop</p>
+                    {/* Reticle Circular Sync Icon */}
+                    <svg width="34" height="34" viewBox="0 0 40 40" fill="none" className={activeStep === "06" ? "text-[#D7FF00]" : "text-[#8A8A8A]"}>
+                      <path d="M6 12V6H12 M28 6H34V12 M34 28V34H28 M12 34H6V28" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.5" strokeLinecap="round" />
+                      <path d="M14 20C14 16.7 16.7 14 20 14C22.6 14 24.8 15.6 25.6 18 M26 14V18H22" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M26 20C26 23.3 23.3 26 20 26C17.4 26 15.2 24.4 14.4 22 M14 26V22H18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
                   </div>
-
-                  <div className="border border-[#F5F5F0]/15 p-4 bg-[#080808] space-y-1">
-                    <span className="text-[9px] uppercase tracking-widest text-[#8A8A8A] block">
-                      P99 LATENCY
-                    </span>
-                    <p className="text-2xl md:text-3xl font-black text-[#F5F5F0]">
-                      18.4 <span className="text-xs text-[#8A8A8A]">MS</span>
+                  <div>
+                    <p className="font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-[#F5F5F0]">
+                      ITERATE
                     </p>
-                    <p className="text-[10px] text-[#D7FF00]">Sub-25ms SLA compliance</p>
-                  </div>
-
-                  <div className="border border-[#F5F5F0]/15 p-4 bg-[#080808] space-y-1">
-                    <span className="text-[9px] uppercase tracking-widest text-[#8A8A8A] block">
-                      CACHE HIT RATIO
-                    </span>
-                    <p className="text-2xl md:text-3xl font-black text-[#D7FF00]">
-                      98.7 <span className="text-xs text-[#8A8A8A]">%</span>
+                    <p className="text-[11px] sm:text-xs text-[#8A8A8A] font-light mt-0.5">
+                      Improve with data
                     </p>
-                    <p className="text-[10px] text-[#B5B5B5]">Distributed Redis cluster</p>
-                  </div>
-
-                  <div className="border border-[#F5F5F0]/15 p-4 bg-[#080808] space-y-1">
-                    <span className="text-[9px] uppercase tracking-widest text-[#8A8A8A] block">
-                      ERROR RATE
-                    </span>
-                    <p className="text-2xl md:text-3xl font-black text-[#34D399]">
-                      0.000 <span className="text-xs text-[#8A8A8A]">%</span>
-                    </p>
-                    <p className="text-[10px] text-[#B5B5B5]">Zero dropped TCP frames</p>
                   </div>
                 </div>
 
-                {/* Latency Percentile Histogram Bar Chart */}
-                <div className="border border-[#F5F5F0]/15 p-5 bg-[#080808] space-y-4">
-                  <span className="text-[10px] uppercase tracking-widest text-[#8A8A8A] block">
-                    LATENCY PERCENTILE PROFILE (P50 → P99.9)
+                {/* Leftward Arrow */}
+                <span className="text-[#8A8A8A] font-mono text-base sm:text-lg select-none shrink-0 px-1">
+                  ←
+                </span>
+
+                {/* Box 05: MEASURE */}
+                <div
+                  onClick={() => setActiveStep("05")}
+                  className={`flex-1 rounded-xl p-4 sm:p-5 border transition-all duration-300 min-h-[145px] flex flex-col justify-between cursor-pointer ${
+                    activeStep === "05"
+                      ? "border-2 border-[#D7FF00] bg-[#D7FF00]/[0.03] shadow-[0_0_24px_rgba(215,255,0,0.12)]"
+                      : "border-[#F5F5F0]/15 bg-[#080808] hover:border-[#F5F5F0]/30"
+                  }`}
+                >
+                  <div className="flex items-start justify-between">
+                    <span className={`font-mono text-xl sm:text-2xl font-black ${
+                      activeStep === "05" ? "text-[#D7FF00]" : "text-[#8A8A8A]"
+                    }`}>
+                      05
+                    </span>
+                    {/* Analytics Bar Graph Window Icon */}
+                    <svg width="34" height="34" viewBox="0 0 40 40" fill="none" className={activeStep === "05" ? "text-[#D7FF00]" : "text-[#8A8A8A]"}>
+                      <rect x="2" y="2" width="36" height="36" rx="6" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.4" />
+                      <line x1="2" y1="12" x2="38" y2="12" stroke="currentColor" strokeWidth="1" strokeOpacity="0.3" />
+                      <circle cx="8" cy="7" r="1.5" fill="currentColor" fillOpacity="0.4" />
+                      <circle cx="13" cy="7" r="1.5" fill="currentColor" fillOpacity="0.4" />
+                      <rect x="9" y="27" width="3.5" height="5" rx="0.5" fill="currentColor" fillOpacity="0.5" />
+                      <rect x="15" y="23" width="3.5" height="9" rx="0.5" fill="currentColor" fillOpacity="0.7" />
+                      <rect x="21" y="19" width="3.5" height="13" rx="0.5" fill="currentColor" fillOpacity="0.9" />
+                      <rect x="27" y="15" width="3.5" height="17" rx="0.5" fill="currentColor" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-[#F5F5F0]">
+                      MEASURE
+                    </p>
+                    <p className="text-[11px] sm:text-xs text-[#8A8A8A] font-light mt-0.5">
+                      Observe real usage
+                    </p>
+                  </div>
+                </div>
+
+                {/* Leftward Arrow */}
+                <span className="text-[#8A8A8A] font-mono text-base sm:text-lg select-none shrink-0 px-1">
+                  ←
+                </span>
+
+                {/* Box 04: SHIP (Highlighted Neon Green) */}
+                <div
+                  onClick={() => setActiveStep("04")}
+                  className={`flex-1 rounded-xl p-4 sm:p-5 border transition-all duration-300 min-h-[145px] flex flex-col justify-between cursor-pointer ${
+                    activeStep === "04"
+                      ? "border-2 border-[#D7FF00] bg-[#D7FF00]/[0.03] shadow-[0_0_24px_rgba(215,255,0,0.12)]"
+                      : "border-[#F5F5F0]/15 bg-[#080808] hover:border-[#F5F5F0]/30"
+                  }`}
+                >
+                  <div className="flex items-start justify-between">
+                    <span className="font-mono text-xl sm:text-2xl font-black text-[#D7FF00]">
+                      04
+                    </span>
+                    {/* Cloud Deploy & Server Discs Icon */}
+                    <svg width="34" height="34" viewBox="0 0 40 40" fill="none" className="text-[#D7FF00]">
+                      <path d="M20 19V9 M16 13L20 9L24 13" stroke="#D7FF00" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                      <ellipse cx="20" cy="24" rx="12" ry="4" stroke="#D7FF00" strokeWidth="1.5" />
+                      <path d="M8 24V29C8 31.2 13.4 33 20 33C26.6 33 32 31.2 32 29V24" stroke="#D7FF00" strokeWidth="1.5" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-[#F5F5F0]">
+                      SHIP
+                    </p>
+                    <p className="text-[11px] sm:text-xs text-[#8A8A8A] font-light mt-0.5">
+                      Deploy to production
+                    </p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            {/* ─── Right Column: CURRENT PROCESS Linear Panel (4 Cols) ─── */}
+            <div className="lg:col-span-4 border-t lg:border-t-0 lg:border-l border-[#F5F5F0]/15 pt-6 lg:pt-0 lg:pl-8 flex flex-col justify-between relative min-h-[320px]">
+              
+              <div>
+                {/* Header */}
+                <div className="flex items-center gap-3 mb-6">
+                  <span className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-[#F5F5F0] shrink-0">
+                     PROCESS
                   </span>
+                  <div className="h-px bg-[#F5F5F0]/20 flex-1" />
+                </div>
 
-                  <div className="space-y-3">
-                    {[
-                      { label: "P50 (Median)", time: "4.2 ms", width: "18%", color: "bg-[#38BDF8]" },
-                      { label: "P75 (Nominal)", time: "8.6 ms", width: "34%", color: "bg-[#38BDF8]" },
-                      { label: "P90 (Heavy Load)", time: "12.8 ms", width: "52%", color: "bg-[#D7FF00]" },
-                      { label: "P99 (SLA Boundary)", time: "18.4 ms", width: "74%", color: "bg-[#D7FF00]" },
-                      { label: "P99.9 (Tail Max)", time: "24.1 ms", width: "92%", color: "bg-[#A78BFA]" },
-                    ].map((bar) => (
-                      <div key={bar.label} className="space-y-1 text-xs">
-                        <div className="flex justify-between text-[11px]">
-                          <span className="text-[#F5F5F0]">{bar.label}</span>
-                          <span className="text-[#D7FF00] font-bold">{bar.time}</span>
-                        </div>
-                        <div className="w-full bg-[#1A1A1A] h-2 overflow-hidden">
-                          <div className={`h-full ${bar.color}`} style={{ width: bar.width }} />
-                        </div>
-                      </div>
-                    ))}
+                {/* Linear Process List with Downward Arrows */}
+                <div className="space-y-3 font-mono">
+                  
+                  {/* 01 DISCOVER */}
+                  <div
+                    onClick={() => setActiveStep("01")}
+                    className={`space-y-0.5 transition-colors cursor-pointer ${
+                      activeStep === "01" ? "text-[#D7FF00]" : "text-[#F5F5F0]"
+                    }`}
+                  >
+                    <p className="text-xs sm:text-sm font-bold">
+                      <span className="mr-2">01</span>
+                      <span className="font-black">DISCOVER</span>
+                    </p>
+                    <p className={`text-[11px] pl-6 font-light ${
+                      activeStep === "01" ? "text-[#D7FF00]/80" : "text-[#8A8A8A]"
+                    }`}>
+                      Understand the problem
+                    </p>
+                    <p className="text-[#8A8A8A] text-xs pl-6">↓</p>
                   </div>
+
+                  {/* 02 DESIGN */}
+                  <div
+                    onClick={() => setActiveStep("02")}
+                    className={`space-y-0.5 transition-colors cursor-pointer ${
+                      activeStep === "02" ? "text-[#D7FF00]" : "text-[#F5F5F0]"
+                    }`}
+                  >
+                    <p className="text-xs sm:text-sm font-bold">
+                      <span className="mr-2">02</span>
+                      <span className="font-black">DESIGN</span>
+                    </p>
+                    <p className={`text-[11px] pl-6 font-light ${
+                      activeStep === "02" ? "text-[#D7FF00]/80" : "text-[#8A8A8A]"
+                    }`}>
+                      Architecture / UX / Data
+                    </p>
+                    <p className="text-[#8A8A8A] text-xs pl-6">↓</p>
+                  </div>
+
+                  {/* 03 DEVELOP (Highlighted Neon Green) */}
+                  <div
+                    onClick={() => setActiveStep("03")}
+                    className={`space-y-0.5 transition-colors cursor-pointer ${
+                      activeStep === "03" ? "text-[#D7FF00]" : "text-[#F5F5F0]"
+                    }`}
+                  >
+                    <p className="text-xs sm:text-sm font-bold text-[#D7FF00]">
+                      <span className="mr-2">03</span>
+                      <span className="font-black">DEVELOP</span>
+                    </p>
+                    <p className="text-[11px] text-[#D7FF00]/80 pl-6 font-light">
+                      Frontend / Backend / AI
+                    </p>
+                    <p className="text-[#8A8A8A] text-xs pl-6">↓</p>
+                  </div>
+
+                  {/* 04 DEPLOY */}
+                  <div
+                    onClick={() => setActiveStep("04")}
+                    className={`space-y-0.5 transition-colors cursor-pointer ${
+                      activeStep === "04" ? "text-[#D7FF00]" : "text-[#F5F5F0]"
+                    }`}
+                  >
+                    <p className="text-xs sm:text-sm font-bold">
+                      <span className="mr-2">04</span>
+                      <span className="font-black">DEPLOY</span>
+                    </p>
+                    <p className={`text-[11px] pl-6 font-light ${
+                      activeStep === "04" ? "text-[#D7FF00]/80" : "text-[#8A8A8A]"
+                    }`}>
+                      Cloud / CI/CD / Monitoring
+                    </p>
+                    <p className="text-[#8A8A8A] text-xs pl-6">↓</p>
+                  </div>
+
+                  {/* 05 IMPROVE */}
+                  <div
+                    onClick={() => setActiveStep("05")}
+                    className={`space-y-0.5 transition-colors cursor-pointer ${
+                      activeStep === "05" ? "text-[#D7FF00]" : "text-[#F5F5F0]"
+                    }`}
+                  >
+                    <p className="text-xs sm:text-sm font-bold">
+                      <span className="mr-2">05</span>
+                      <span className="font-black">IMPROVE</span>
+                    </p>
+                    <p className={`text-[11px] pl-6 font-light ${
+                      activeStep === "05" ? "text-[#D7FF00]/80" : "text-[#8A8A8A]"
+                    }`}>
+                      Measure / Debug / Iterate
+                    </p>
+                  </div>
+
                 </div>
               </div>
-            )}
 
-            {/* ─── TAB 3: Cluster Mesh & Node Topology ─── */}
-            {activeTab === "cluster" && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between pb-3 border-b border-[#F5F5F0]/10 text-[10px] uppercase tracking-widest text-[#8A8A8A]">
-                  <span>TOPOLOGY // INTERACTIVE ARCHITECTURE NODES</span>
-                  <span className="text-[#D7FF00]">5 NODES CONFIGURED</span>
-                </div>
-
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                  {/* Left: Node Selection List (6 cols) */}
-                  <div className="lg:col-span-6 space-y-2">
-                    {CLUSTER_NODES.map((node) => (
-                      <button
-                        key={node.id}
-                        onClick={() => setSelectedNode(node)}
-                        className={`w-full text-left p-3.5 border transition-all cursor-pointer flex items-center justify-between ${
-                          selectedNode.id === node.id
-                            ? "border-[#D7FF00] bg-[#D7FF00]/5 text-[#F5F5F0]"
-                            : "border-[#F5F5F0]/10 bg-[#080808] text-[#8A8A8A] hover:border-[#F5F5F0]/30 hover:text-[#F5F5F0]"
-                        }`}
-                      >
-                        <div className="space-y-0.5">
-                          <p className="text-xs font-bold uppercase text-[#F5F5F0]">
-                            {node.name}
-                          </p>
-                          <p className="text-[10px] text-[#8A8A8A] font-light">
-                            {node.role}
-                          </p>
-                        </div>
-                        <div className="text-right font-mono text-[10px]">
-                          <span className="text-[#D7FF00] font-bold block">{node.status}</span>
-                          <span className="text-[#8A8A8A]">{node.latency}</span>
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-
-                  {/* Right: Selected Node Detail Specs (6 cols) */}
-                  <div className="lg:col-span-6 border border-[#F5F5F0]/15 p-6 bg-[#080808] space-y-5 flex flex-col justify-between">
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between border-b border-[#F5F5F0]/10 pb-3">
-                        <span className="text-[10px] uppercase tracking-widest text-[#D7FF00] font-bold">
-                          NODE DIAGNOSTICS
-                        </span>
-                        <span className="text-[10px] text-[#34D399] flex items-center gap-1">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#34D399] animate-pulse" />
-                          ONLINE
-                        </span>
-                      </div>
-
-                      <div className="space-y-1">
-                        <p className="text-base font-bold uppercase text-[#F5F5F0]">
-                          {selectedNode.name}
-                        </p>
-                        <p className="text-xs text-[#B5B5B5] font-light">
-                          {selectedNode.role}
-                        </p>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-3 pt-2 border-t border-[#F5F5F0]/10 text-xs">
-                        <div>
-                          <span className="text-[9px] uppercase tracking-widest text-[#8A8A8A] block">
-                            THROUGHPUT
-                          </span>
-                          <span className="text-[#F5F5F0] font-bold text-sm">
-                            {selectedNode.throughput}
-                          </span>
-                        </div>
-                        <div>
-                          <span className="text-[9px] uppercase tracking-widest text-[#8A8A8A] block">
-                            P99 LATENCY
-                          </span>
-                          <span className="text-[#D7FF00] font-bold text-sm">
-                            {selectedNode.p99}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="border-t border-[#F5F5F0]/10 pt-3 flex items-center justify-between text-[10px] text-[#8A8A8A]">
-                      <span>CONTAINER: DOCKER / K8S</span>
-                      <span className="text-[#D7FF00]">REPLICAS: 3/3 READY</span>
-                    </div>
-                  </div>
-                </div>
+              {/* Decorative 4-point Diamond Star */}
+              <div className="absolute bottom-2 right-2 text-[#8A8A8A]/30 pointer-events-none">
+                <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+                  <path d="M16 0L19.5 12.5L32 16L19.5 19.5L16 32L12.5 19.5L0 16L12.5 12.5L16 0Z" fill="currentColor" />
+                </svg>
               </div>
-            )}
+
+            </div>
+
           </div>
         </div>
       </div>
@@ -577,7 +507,7 @@ export default function About() {
           <div className="lg:col-span-7 space-y-10">
             <div className="about-content-fade space-y-4">
               <span className="font-mono text-xs font-bold uppercase tracking-[0.25em] text-[#D7FF00] block">
-                // ENGINEERING NARRATIVE
+                {"// ENGINEERING NARRATIVE"}
               </span>
               <p className="text-xl sm:text-2xl md:text-3xl text-[#F5F5F0] font-light leading-snug tracking-tight">
                 {aboutText}
@@ -614,7 +544,7 @@ export default function About() {
             <div className="about-content-fade border border-[#F5F5F0]/15 p-6 md:p-8 bg-[#050505] space-y-6">
               <div className="flex items-center justify-between border-b border-[#F5F5F0]/15 pb-3">
                 <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#D7FF00] font-bold">
-                  EDUCATION // CREDENTIAL
+                  {"EDUCATION // CREDENTIAL"}
                 </span>
                 <span className="font-mono text-[10px] text-[#8A8A8A]">MITE</span>
               </div>
