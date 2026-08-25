@@ -131,11 +131,11 @@ export default function EngineeringNotes() {
     <section
       ref={sectionRef}
       id="notes"
-      className="py-24 md:py-36 bg-transparent border-b border-[#F5F5F0]/15 overflow-hidden"
+      className="py-14 md:py-20 bg-transparent border-b border-[#F5F5F0]/15 overflow-hidden"
     >
       <div className="max-w-[1728px] mx-auto px-6 md:px-12">
         {/* ═══ Section Header ═══ */}
-        <div className="notes-header space-y-6 mb-12 md:mb-16">
+        <div className="notes-header space-y-6 mb-8 md:mb-10">
           {/* Eyebrow & Status Row */}
           <div className="flex flex-wrap items-center justify-between gap-4 font-mono text-xs uppercase tracking-[0.25em] text-[#8A8A8A] border-b border-[#F5F5F0]/15 pb-4">
             <div className="flex items-center gap-3">

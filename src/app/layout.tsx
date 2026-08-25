@@ -28,6 +28,14 @@ export const metadata: Metadata = {
     "Software Engineer",
   ],
   authors: [{ name: "Albin Reji" }],
+  icons: {
+    icon: [
+      { url: "/logo.png", sizes: "any" },
+      { url: "/logo.png", type: "image/png" },
+    ],
+    shortcut: "/logo.png",
+    apple: "/logo.png",
+  },
   openGraph: {
     type: "website",
     locale: "en_IN",

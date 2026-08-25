@@ -84,10 +84,10 @@ export default function Experience() {
     <section
       ref={sectionRef}
       id="experience"
-      className="py-24 md:py-40 bg-transparent border-b border-[#F5F5F0]/15 overflow-hidden"
+      className="py-14 md:py-20 bg-transparent border-b border-[#F5F5F0]/15 overflow-hidden"
     >
       {/* ═══ Section Heading ═══ */}
-      <div className="exp-header-trigger px-6 md:px-12 max-w-[1728px] mx-auto mb-16 md:mb-28">
+      <div className="exp-header-trigger px-6 md:px-12 max-w-[1728px] mx-auto mb-8 md:mb-12">
         <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-[#8A8A8A] mb-4 border-b border-[#F5F5F0]/15 pb-3">
           <span className="text-[#D7FF00] font-bold">[TRACK // 04]</span>
           <span>PROFESSIONAL TIMELINE</span>
@@ -116,7 +116,7 @@ export default function Experience() {
           aria-hidden="true"
         />
 
-        <div className="space-y-16 md:space-y-28">
+        <div className="space-y-10 md:space-y-14">
           {experiences.map((exp, idx) => {
             const num = String(idx + 1).padStart(2, "0");
             return (

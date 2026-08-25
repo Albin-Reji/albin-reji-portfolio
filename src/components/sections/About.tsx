@@ -82,10 +82,10 @@ export default function About() {
     <section
       ref={sectionRef}
       id="about"
-      className="py-20 md:py-32 bg-transparent border-b border-[#F5F5F0]/15 overflow-hidden"
+      className="py-14 md:py-20 bg-transparent border-b border-[#F5F5F0]/15 overflow-hidden"
     >
       {/* ═══ Terminal Status Bar & Section Heading ═══ */}
-      <div className="about-heading-trigger px-6 md:px-12 max-w-[1728px] mx-auto mb-10 md:mb-14">
+      <div className="about-heading-trigger px-6 md:px-12 max-w-[1728px] mx-auto mb-8 md:mb-10">
         {/* Terminal Header Bar */}
         <div className="flex items-center justify-between font-mono text-xs text-[#8A8A8A] mb-8 pb-4 border-b border-[#F5F5F0]/10">
           <div className="flex items-center gap-3">
@@ -131,7 +131,7 @@ export default function About() {
       </div>
 
       {/* ═══ Engineering Philosophy Manifesto ═══ */}
-      <div className="about-pipeline-container px-6 md:px-12 max-w-[1728px] mx-auto mb-20 md:mb-32">
+      <div className="about-pipeline-container px-6 md:px-12 max-w-[1728px] mx-auto mb-10 md:mb-14">
         <div className="relative overflow-hidden rounded-xl border border-[#F5F5F0]/15 bg-[#000000] p-6 sm:p-10 md:p-14 lg:p-16 shadow-2xl transition-all duration-500 hover:border-[#D7FF00]/30 group">
           {/* Subtle Ambient Radial Glows */}
           <div className="absolute -top-24 -left-24 w-80 h-80 bg-[#D7FF00]/[0.03] rounded-full blur-3xl pointer-events-none" />
@@ -283,7 +283,7 @@ export default function About() {
       </div>
 
       {/* ═══ Capabilities Marquee Ticker ═══ */}
-      <div className="mt-24 md:mt-36 border-t border-b border-[#F5F5F0]/15 py-3.5 bg-[#050505]/70 backdrop-blur-md">
+      <div className="mt-12 md:mt-16 border-t border-b border-[#F5F5F0]/15 py-3.5 bg-[#050505]/70 backdrop-blur-md">
         <MarqueeTicker
           items={[
             "BACKEND ARCHITECTURE",

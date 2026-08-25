@@ -17,7 +17,7 @@ export default function SectionHeading({
   children,
 }: SectionHeadingProps) {
   return (
-    <div className="relative mb-16 md:mb-24">
+    <div className="relative mb-8 md:mb-12">
       {/* Top micro metadata strip */}
       <div className="flex items-center justify-between border-b border-[#F5F5F0]/15 pb-3 mb-6">
         <div className="flex items-center gap-3">

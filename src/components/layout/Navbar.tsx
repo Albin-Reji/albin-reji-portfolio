@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 import { navItems, personalInfo } from "@/data/portfolio";
@@ -8,7 +9,7 @@ import { navItems, personalInfo } from "@/data/portfolio";
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("projects");
+  const [activeSection, setActiveSection] = useState("about");
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 40);
@@ -54,37 +55,38 @@ export default function Navbar() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
             ? "bg-[#050505]/85 backdrop-blur-md border-b border-[#F5F5F0]/10 py-3.5"
             : "bg-transparent py-6"
-        }`}
+          }`}
       >
         <nav
           className="mx-auto flex w-full max-w-[1728px] items-center justify-between px-6 md:px-12"
           aria-label="Main navigation"
         >
-          {/* Logo / Monogram */}
+          {/* Logo */}
           <button
             onClick={() => {
               window.scrollTo({ top: 0, behavior: "smooth" });
             }}
-            className="group text-left cursor-pointer"
-            aria-label="Back to top"
+            className="group text-left cursor-pointer flex items-center focus:outline-none"
+            aria-label="Albin Reji - Back to top"
           >
-            <div className="flex items-center gap-3">
-              <span className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-[#F5F5F0] group-hover:text-[#D7FF00] transition-colors">
-                AR // DEV
-              </span>
-              <span className="hidden sm:inline-block h-2 w-2 bg-[#D7FF00] rounded-full animate-pulse" />
+            <div className="relative h-10 w-10 sm:h-11 sm:w-11 overflow-hidden rounded-lg border border-[#F5F5F0]/20 bg-[#D7FF00]/10 transition-all duration-300 group-hover:border-[#D7FF00] group-hover:scale-105 group-hover:shadow-[0_0_15px_rgba(215,255,0,0.35)]">
+              <Image
+                src="/logo.png"
+                alt="Albin Reji Logo"
+                fill
+                sizes="(max-width: 640px) 60px, 60px"
+                className="object-cover"
+                priority
+              />
             </div>
           </button>
 
           {/* Center Coordinates / Editorial Label */}
           <div className="hidden lg:flex items-center gap-4 font-mono text-[10px] tracking-[0.25em] text-[#8A8A8A] uppercase">
             <span>FULL STACK ENGINEER</span>
-            <span className="text-[#D7FF00]">/</span>
-            <span>SYSTEM ARCHITECTURE</span>
           </div>
 
           {/* Desktop Nav Links */}
@@ -102,11 +104,10 @@ export default function Navbar() {
                       0{idx + 1}
                     </span>
                     <span
-                      className={`font-semibold ${
-                        isActive
+                      className={`font-semibold ${isActive
                           ? "text-[#D7FF00]"
                           : "text-[#F5F5F0] group-hover:text-[#D7FF00]"
-                      } transition-colors`}
+                        } transition-colors`}
                     >
                       {item.label}
                     </span>

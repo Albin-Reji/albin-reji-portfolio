@@ -158,10 +158,10 @@ export default function Projects() {
     <section
       ref={sectionRef}
       id="projects"
-      className="py-24 md:py-40 bg-transparent border-b border-[#F5F5F0]/15 overflow-hidden"
+      className="py-14 md:py-20 bg-transparent border-b border-[#F5F5F0]/15 overflow-hidden"
     >
       {/* ═══ Section Heading & Navigation Controls ═══ */}
-      <div className="projects-header-trigger px-6 md:px-12 max-w-[1728px] mx-auto mb-12 md:mb-16">
+      <div className="projects-header-trigger px-6 md:px-12 max-w-[1728px] mx-auto mb-8 md:mb-10">
         <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-[#8A8A8A] mb-4 border-b border-[#F5F5F0]/15 pb-3">
           <span className="text-[#D7FF00] font-bold">[WORK // 03]</span>
           <span>ON TRACK // SELECTED SYSTEMS</span>

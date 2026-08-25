@@ -24,7 +24,7 @@ export default function ContourBackground() {
     const CONFIG = {
       bg: "#050505",
       lineRGB: "215, 255, 0", // Neon lime #D7FF00
-      lineAlpha: 0.16,        // Low, subtle opacity
+      lineAlpha: 0.17,        // Low, subtle opacity
       lineWidth: 0.75,        // Fine, razor-thin linework
       noiseScale: 11 / SCALE_DIV, // 11
       timeScale: 30 / SPEED_DIV,  // 30

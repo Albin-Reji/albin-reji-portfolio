@@ -81,14 +81,14 @@ export default function StatementSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative py-24 md:py-40 px-6 md:px-12 bg-transparent border-b border-[#F5F5F0]/15 overflow-hidden"
+      className="relative py-14 md:py-20 px-6 md:px-12 bg-transparent border-b border-[#F5F5F0]/15 overflow-hidden"
     >
       <div
         ref={containerRef}
-        className="max-w-[1728px] mx-auto flex flex-col justify-center min-h-[50vh]"
+        className="max-w-[1728px] mx-auto flex flex-col justify-center"
       >
         {/* Chapter marker metadata header */}
-        <div className="statement-meta flex items-center justify-between gap-4 font-mono text-xs uppercase tracking-[0.25em] text-[#8A8A8A] mb-8 border-b border-[#F5F5F0]/15 pb-4">
+        <div className="statement-meta flex items-center justify-between gap-4 font-mono text-xs uppercase tracking-[0.25em] text-[#8A8A8A] mb-6 border-b border-[#F5F5F0]/15 pb-4">
           <div className="flex items-center gap-4">
             <span className="text-[#D7FF00] font-bold">[STATEMENT // 01]</span>
             <span className="hidden sm:inline">DISCIPLINE &amp; EXECUTION</span>
@@ -132,7 +132,7 @@ export default function StatementSection() {
         </div>
 
         {/* Core Philosophy Architectural Pillars Grid */}
-        <div className="mt-16 md:mt-24 space-y-6">
+        <div className="mt-10 md:mt-14 space-y-6">
           <div className="statement-meta flex items-center justify-between border-b border-[#F5F5F0]/15 pb-3 font-mono text-[10px] uppercase tracking-[0.25em] text-[#8A8A8A]">
             <span className="text-[#D7FF00] font-bold">// ARCHITECTURAL PILLARS</span>
             <span>CORE ENGINEERING POLICIES</span>
@@ -173,7 +173,7 @@ export default function StatementSection() {
         </div>
 
         {/* Bottom Annotation Strip */}
-        <div className="statement-meta mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-12 gap-6 pt-6 border-t border-[#F5F5F0]/15 font-mono text-xs text-[#8A8A8A]">
+        <div className="statement-meta mt-8 md:mt-10 grid grid-cols-1 md:grid-cols-12 gap-6 pt-6 border-t border-[#F5F5F0]/15 font-mono text-xs text-[#8A8A8A]">
           <div className="md:col-span-6 space-y-1">
             <span className="text-[#D7FF00] block text-[10px] uppercase tracking-widest">
               SYSTEM MANDATE

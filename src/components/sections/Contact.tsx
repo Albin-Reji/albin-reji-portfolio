@@ -158,10 +158,10 @@ export default function Contact() {
     <section
       ref={sectionRef}
       id="contact"
-      className="pt-20 md:pt-32 pb-12 md:pb-16 bg-transparent border-b border-[#F5F5F0]/15 overflow-hidden"
+      className="pt-14 md:pt-20 pb-10 md:pb-12 bg-transparent border-b border-[#F5F5F0]/15 overflow-hidden"
     >
       {/* ═══ Section Heading / Massive CTA ═══ */}
-      <div className="contact-cta-trigger px-6 md:px-12 max-w-[1728px] mx-auto mb-20 md:mb-32">
+      <div className="contact-cta-trigger px-6 md:px-12 max-w-[1728px] mx-auto mb-10 md:mb-14">
         <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-[#8A8A8A] mb-6 border-b border-[#F5F5F0]/15 pb-4">
           <span className="text-[#D7FF00] font-bold">[TRANSMISSION // 07]</span>
           <span>INITIATE COLLABORATION</span>

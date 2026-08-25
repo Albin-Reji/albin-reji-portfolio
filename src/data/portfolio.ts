@@ -126,8 +126,8 @@ export const personalInfo = {
 // ─── Navigation ──────────────────────────────────────────────────────────────
 
 export const navItems: NavItem[] = [
-  { label: "Work", href: "#projects" },
   { label: "About", href: "#about" },
+  { label: "Work", href: "#projects" },
   { label: "Stack", href: "#skills" },
   { label: "Experience", href: "#experience" },
   { label: "Notes", href: "#notes" },

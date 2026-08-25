@@ -43,10 +43,10 @@ export default function Certifications() {
     <section
       ref={sectionRef}
       id="certifications"
-      className="py-24 md:py-40 bg-transparent border-b border-[#F5F5F0]/12"
+      className="py-14 md:py-20 bg-transparent border-b border-[#F5F5F0]/12"
     >
       {/* ═══ Section Heading ═══ */}
-      <div className="px-6 md:px-12 max-w-[1728px] mx-auto mb-12 md:mb-16">
+      <div className="px-6 md:px-12 max-w-[1728px] mx-auto mb-8 md:mb-10">
         <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-[#8A8A8A] mb-4 border-b border-[#F5F5F0]/12 pb-3">
           <span className="text-[#D7FF00] font-bold">[05]</span>
           <span>FORMAL CREDENTIALS</span>

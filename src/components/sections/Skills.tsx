@@ -84,10 +84,10 @@ export default function Skills() {
     <section
       ref={sectionRef}
       id="skills"
-      className="py-24 md:py-40 bg-transparent border-b border-[#F5F5F0]/15 overflow-hidden"
+      className="py-14 md:py-20 bg-transparent border-b border-[#F5F5F0]/15 overflow-hidden"
     >
       {/* ═══ Section Heading ═══ */}
-      <div className="stack-header-trigger px-6 md:px-12 max-w-[1728px] mx-auto mb-16 md:mb-24">
+      <div className="stack-header-trigger px-6 md:px-12 max-w-[1728px] mx-auto mb-8 md:mb-10">
         <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-[#8A8A8A] mb-4 border-b border-[#F5F5F0]/15 pb-3">
           <span className="text-[#D7FF00] font-bold">[STACK // 05]</span>
           <span>OFF TRACK // ARCHITECTURAL REPERTOIRE</span>
@@ -108,7 +108,7 @@ export default function Skills() {
       </div>
 
       {/* ═══ Dual Kinetic Marquee Ribbons ═══ */}
-      <div className="space-y-2 mb-20 md:mb-28">
+      <div className="space-y-2 mb-10 md:mb-12">
         <div className="py-3 border-t border-b border-[#F5F5F0]/10 bg-[#000000]">
           <MarqueeTicker
             items={ALL_SKILLS_FLAT}
@@ -139,7 +139,7 @@ export default function Skills() {
 
       {/* ═══ Category Grid with Editorial Dividers ═══ */}
       <div className="stack-grid px-6 md:px-12 max-w-[1728px] mx-auto">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-10">
           {skillGroups.map((group, idx) => (
             <div
               key={group.category}
