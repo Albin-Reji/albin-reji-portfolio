@@ -56,8 +56,8 @@ export default function Navbar() {
     <>
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-            ? "bg-[#050505]/85 backdrop-blur-md border-b border-[#F5F5F0]/10 py-3.5"
-            : "bg-transparent py-6"
+          ? "bg-[#050505]/85 backdrop-blur-md border-b border-[#F5F5F0]/10 py-3.5"
+          : "bg-transparent py-6"
           }`}
       >
         <nav
@@ -69,7 +69,7 @@ export default function Navbar() {
             onClick={() => {
               window.scrollTo({ top: 0, behavior: "smooth" });
             }}
-            className="group text-left cursor-pointer flex items-center focus:outline-none"
+            className="group text-left cursor-pointer flex items-center focus:outline-none flex-shrink-0 z-10"
             aria-label="Albin Reji - Back to top"
           >
             <div className="relative h-10 w-10 sm:h-11 sm:w-11 overflow-hidden rounded-lg border border-[#F5F5F0]/20 bg-[#D7FF00]/10 transition-all duration-300 group-hover:border-[#D7FF00] group-hover:scale-105 group-hover:shadow-[0_0_15px_rgba(215,255,0,0.35)]">
@@ -77,7 +77,7 @@ export default function Navbar() {
                 src="/logo.png"
                 alt="Albin Reji Logo"
                 fill
-                sizes="(max-width: 640px) 60px, 60px"
+                sizes="(max-width: 640px) 44px, 48px"
                 className="object-cover"
                 priority
               />
@@ -85,12 +85,12 @@ export default function Navbar() {
           </button>
 
           {/* Center Coordinates / Editorial Label */}
-          <div className="hidden lg:flex items-center gap-4 font-mono text-[10px] tracking-[0.25em] text-[#8A8A8A] uppercase">
+          <div className="hidden xl:flex items-center gap-4 font-mono text-[10px] tracking-[0.25em] text-[#8A8A8A] uppercase">
             <span>FULL STACK ENGINEER</span>
           </div>
 
           {/* Desktop Nav Links */}
-          <ul className="hidden md:flex items-center gap-8 lg:gap-10">
+          <ul className="hidden md:flex items-center gap-6 lg:gap-8 xl:gap-10">
             {navItems.map((item, idx) => {
               const sectionId = item.href.replace("#", "");
               const isActive = activeSection === sectionId;
@@ -105,8 +105,8 @@ export default function Navbar() {
                     </span>
                     <span
                       className={`font-semibold ${isActive
-                          ? "text-[#D7FF00]"
-                          : "text-[#F5F5F0] group-hover:text-[#D7FF00]"
+                        ? "text-[#D7FF00]"
+                        : "text-[#F5F5F0] group-hover:text-[#D7FF00]"
                         } transition-colors`}
                     >
                       {item.label}

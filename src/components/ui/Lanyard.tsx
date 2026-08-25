@@ -110,7 +110,7 @@ export default function Lanyard({
    * Main portrait.
    */
   frontImage =
-    '/albin-reji_photo_fianal_1.png',
+  '/albin-reji_photo_fianal_1.png',
 
   /*
    * Optional back image.
@@ -210,7 +210,10 @@ export default function Lanyard({
         h-full
         relative
         overflow-hidden
+        touch-none
+        select-none
       "
+      style={{ touchAction: 'none', userSelect: 'none', WebkitUserSelect: 'none' }}
     >
       <Canvas
         camera={{
@@ -222,11 +225,13 @@ export default function Lanyard({
           1,
           typeof window !== 'undefined'
             ? Math.min(
-                window.devicePixelRatio,
-                2.5
-              )
+              window.devicePixelRatio,
+              2
+            )
             : 2,
         ]}
+
+        style={{ touchAction: 'none' }}
 
         gl={{
           alpha: transparent,
@@ -255,11 +260,7 @@ export default function Lanyard({
         <Suspense fallback={null}>
           <Physics
             gravity={gravity}
-            timeStep={
-              isMobile
-                ? 1 / 30
-                : 1 / 60
-            }
+            timeStep="vary"
           >
             <Band
               isMobile={isMobile}
@@ -524,13 +525,13 @@ function Band({
   const frontTex =
     useTexture(
       frontImage ||
-        BLANK_PIXEL
+      BLANK_PIXEL
     ) as THREE.Texture;
 
   const backTex =
     useTexture(
       backImage ||
-        BLANK_PIXEL
+      BLANK_PIXEL
     ) as THREE.Texture;
 
   /* =======================================================
@@ -811,10 +812,10 @@ function Band({
             scale =
               Math.min(
                 gw /
-                  img.width,
+                img.width,
 
                 targetHeight /
-                  img.height
+                img.height
               );
           } else {
             scale =
@@ -1199,8 +1200,8 @@ function Band({
       [
         0,
         1.4 *
-          (cardScale /
-            2.25),
+        (cardScale /
+          2.25),
         0,
       ],
     ]
@@ -1327,14 +1328,14 @@ function Band({
               ref.current.translation(),
 
               delta *
+              (
+                minSpeed +
+                clampedDistance *
                 (
-                  minSpeed +
-                  clampedDistance *
-                    (
-                      maxSpeed -
-                      minSpeed
-                    )
+                  maxSpeed -
+                  minSpeed
                 )
+              )
             );
           }
         );
@@ -1530,8 +1531,8 @@ function Band({
               0,
 
               -1.2 *
-                (cardScale /
-                  2.25),
+              (cardScale /
+                2.25),
 
               -0.05,
             ]}
@@ -1547,9 +1548,23 @@ function Band({
             onPointerUp={(
               e: any
             ) => {
-              e.target.releasePointerCapture(
-                e.pointerId
-              );
+              try {
+                e.target.releasePointerCapture(
+                  e.pointerId
+                );
+              } catch {}
+
+              drag(false);
+            }}
+
+            onPointerCancel={(
+              e: any
+            ) => {
+              try {
+                e.target.releasePointerCapture(
+                  e.pointerId
+                );
+              } catch {}
 
               drag(false);
             }}
@@ -1557,9 +1572,12 @@ function Band({
             onPointerDown={(
               e: any
             ) => {
-              e.target.setPointerCapture(
-                e.pointerId
-              );
+              e.stopPropagation();
+              try {
+                e.target.setPointerCapture(
+                  e.pointerId
+                );
+              } catch {}
 
               drag(
                 new THREE.Vector3()

@@ -89,8 +89,8 @@ export default function Hero() {
       id="home"
       className="relative min-h-screen flex flex-col justify-between overflow-hidden bg-transparent border-b border-[#F5F5F0]/15"
     >
-      {/* ═══ Main Viewport Composition (Tighter top spacing closer to navbar) ═══ */}
-      <div className="relative z-10 flex-1 flex items-center px-6 md:px-12 max-w-[1728px] mx-auto w-full pt-12 sm:pt-16 lg:pt-16 pb-6 sm:pb-8 lg:pb-10">
+      {/* ═══ Main Viewport Composition (Proper clearance for fixed navbar) ═══ */}
+      <div className="relative z-10 flex-1 flex items-center px-6 md:px-12 max-w-[1728px] mx-auto w-full pt-28 sm:pt-32 lg:pt-32 pb-8 sm:pb-12 lg:pb-12">
 
         {/* Subtle Backdrop Quiet Gradient specifically softening contour lines behind text */}
         <div className="absolute top-0 left-6 md:left-12 w-full max-w-3xl h-full bg-gradient-to-r from-[#050505]/95 via-[#050505]/85 to-transparent -z-10 blur-2xl pointer-events-none" />
@@ -150,7 +150,7 @@ export default function Hero() {
           {/* Right Column: Interactive 3D Lanyard Badge (5 cols on Desktop) */}
           <div
             ref={imageContainerRef}
-            className="lg:col-span-5 relative w-full max-w-[360px] sm:max-w-[440px] lg:max-w-none h-[440px] sm:h-[520px] lg:h-[620px] mx-auto flex items-center justify-center mt-4 lg:mt-0"
+            className="lg:col-span-5 relative w-full max-w-[340px] sm:max-w-[420px] lg:max-w-none h-[380px] sm:h-[480px] lg:h-[580px] mx-auto flex items-center justify-center mt-6 lg:mt-0 touch-none select-none"
           >
             {/* Subtle radial shadow behind lanyard badge to quiet lines behind face */}
             <div className="absolute inset-0 bg-radial-[circle_at_center,rgba(5,5,5,0.85)_0%,transparent_70%] -z-10 pointer-events-none" />
