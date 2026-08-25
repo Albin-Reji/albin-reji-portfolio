@@ -4,6 +4,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import SmoothScroll from "@/components/ui/SmoothScroll";
 import CustomCursor from "@/components/ui/CustomCursor";
+import ContourBackground from "@/components/ui/ContourBackground";
 import "./globals.css";
 
 const inter = Inter({
@@ -54,11 +55,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className="bg-bg text-text font-sans antialiased">
+      <body className="bg-bg text-text font-sans antialiased relative">
+        <ContourBackground />
         <SmoothScroll />
         <CustomCursor />
         <Navbar />
-        <main>{children}</main>
+        <main className="relative z-10">{children}</main>
         <Footer />
       </body>
     </html>

@@ -84,7 +84,7 @@ export default function Skills() {
     <section
       ref={sectionRef}
       id="skills"
-      className="py-24 md:py-40 bg-[#050505] border-b border-[#F5F5F0]/15 overflow-hidden"
+      className="py-24 md:py-40 bg-transparent border-b border-[#F5F5F0]/15 overflow-hidden"
     >
       {/* ═══ Section Heading ═══ */}
       <div className="stack-header-trigger px-6 md:px-12 max-w-[1728px] mx-auto mb-16 md:mb-24">

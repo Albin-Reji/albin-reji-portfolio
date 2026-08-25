@@ -87,7 +87,7 @@ export default function Hero() {
     <section
       ref={sectionRef}
       id="home"
-      className="relative min-h-screen flex flex-col justify-between overflow-hidden bg-[#050505] border-b border-[#F5F5F0]/15"
+      className="relative min-h-screen flex flex-col justify-between overflow-hidden bg-transparent border-b border-[#F5F5F0]/15"
     >
       {/* ═══ Main Viewport Composition (Tighter top spacing closer to navbar) ═══ */}
       <div className="relative z-10 flex-1 flex items-center px-6 md:px-12 max-w-[1728px] mx-auto w-full pt-14 sm:pt-16 lg:pt-16 pb-6 sm:pb-8 lg:pb-10">
@@ -168,7 +168,7 @@ export default function Hero() {
       </div>
 
       {/* ═══ Kinetic Infinite Tech Marquee ═══ */}
-      <div className="relative z-20 border-t border-b border-[#F5F5F0]/15 py-3.5 bg-[#050505]">
+      <div className="relative z-20 border-t border-b border-[#F5F5F0]/15 py-3.5 bg-[#050505]/70 backdrop-blur-md">
         <MarqueeTicker
           items={MARQUEE_ITEMS}
           speed={48}

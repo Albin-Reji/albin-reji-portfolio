@@ -158,7 +158,7 @@ export default function Projects() {
     <section
       ref={sectionRef}
       id="projects"
-      className="py-24 md:py-40 bg-[#050505] border-b border-[#F5F5F0]/15 overflow-hidden"
+      className="py-24 md:py-40 bg-transparent border-b border-[#F5F5F0]/15 overflow-hidden"
     >
       {/* ═══ Section Heading & Navigation Controls ═══ */}
       <div className="projects-header-trigger px-6 md:px-12 max-w-[1728px] mx-auto mb-12 md:mb-16">

@@ -131,7 +131,7 @@ export default function EngineeringNotes() {
     <section
       ref={sectionRef}
       id="notes"
-      className="py-24 md:py-36 bg-[#050505] border-b border-[#F5F5F0]/15 overflow-hidden"
+      className="py-24 md:py-36 bg-transparent border-b border-[#F5F5F0]/15 overflow-hidden"
     >
       <div className="max-w-[1728px] mx-auto px-6 md:px-12">
         {/* ═══ Section Header ═══ */}

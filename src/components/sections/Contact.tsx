@@ -158,7 +158,7 @@ export default function Contact() {
     <section
       ref={sectionRef}
       id="contact"
-      className="py-24 md:py-44 bg-[#000000] border-b border-[#F5F5F0]/15 overflow-hidden"
+      className="pt-20 md:pt-32 pb-12 md:pb-16 bg-transparent border-b border-[#F5F5F0]/15 overflow-hidden"
     >
       {/* ═══ Section Heading / Massive CTA ═══ */}
       <div className="contact-cta-trigger px-6 md:px-12 max-w-[1728px] mx-auto mb-20 md:mb-32">

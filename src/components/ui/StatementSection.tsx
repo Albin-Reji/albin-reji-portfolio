@@ -81,7 +81,7 @@ export default function StatementSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative py-24 md:py-40 px-6 md:px-12 bg-[#000000] border-b border-[#F5F5F0]/15 overflow-hidden"
+      className="relative py-24 md:py-40 px-6 md:px-12 bg-transparent border-b border-[#F5F5F0]/15 overflow-hidden"
     >
       <div
         ref={containerRef}
