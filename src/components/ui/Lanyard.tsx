@@ -853,26 +853,47 @@ function Band({
         }
 
         /* =================================================
-           BOTTOM MICRO LABEL
+           CARD ASSET BADGE DETAILS (PUNCH HOLE, CLEARANCE & BARCODE)
            ================================================= */
 
+        /* Top Badge Punch-Hole Slot */
+        const holeW = 80;
+        const holeH = 20;
+        const holeX = gx + (gw - holeW) / 2;
+        const holeY = gy + 16;
+        ctx.fillStyle = '#050505';
+        drawRoundedRect(holeX, holeY, holeW, holeH, 10);
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
         if (isFront) {
-          ctx.fillStyle =
-            '#050505';
+          /* Top asset tag header */
+          ctx.fillStyle = '#050505';
+          ctx.font = '800 18px monospace';
+          ctx.textBaseline = 'top';
+          ctx.fillText('SYSTEMS ARCHITECT', gx + 24, gy + 44);
+          ctx.font = '700 14px monospace';
+          ctx.fillText('ACCESS // LVL-04', gx + gw - 175, gy + 46);
 
-          ctx.font =
-            '700 24px monospace';
-
-          ctx.textBaseline =
-            'alphabetic';
-
-          ctx.fillText(
-            'FULL STACK ENGINEER',
-            gx + 30,
-            gy +
-              gh -
-              28
-          );
+          /* Bottom Barcode & Serial Number Strip */
+          const barY = gy + gh - 52;
+          const barX = gx + 24;
+          const barH = 24;
+          ctx.fillStyle = '#050505';
+          const pattern = [3, 2, 1, 4, 2, 1, 3, 1, 2, 4, 1, 3, 2, 1, 4, 2, 3, 1, 2, 1, 4, 3, 2, 1, 3, 2, 4, 1, 2, 3, 1, 4, 2, 1, 3];
+          let curX = barX;
+          for (let i = 0; i < pattern.length; i++) {
+            const w = pattern[i];
+            if (i % 2 === 0) {
+              ctx.fillRect(curX, barY, w * 1.8, barH);
+            }
+            curX += w * 2.8;
+          }
+          ctx.font = '700 13px monospace';
+          ctx.textBaseline = 'top';
+          ctx.fillText('SYS.ID: AR-8080 // CLOUD NATIVE', barX, gy + gh - 22);
         }
 
         /* =================================================

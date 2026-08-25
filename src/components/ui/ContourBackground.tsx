@@ -20,13 +20,12 @@ export default function ContourBackground() {
     const SCALE_DIV = 10000;
     const SPEED_DIV = 3000000;
 
-    // Exact configuration tuned from the interactive panel demo:
-    // Line spacing: 260 | Noise scale: 11 | Drift speed: 30 | Line opacity: 57 (0.57) | Line color: #D7FF00 | Background: #050505
+    // Tuned for ultra-fine aesthetic lines and low subtle opacity:
     const CONFIG = {
       bg: "#050505",
       lineRGB: "215, 255, 0", // Neon lime #D7FF00
-      lineAlpha: 0.57,
-      lineWidth: 1,
+      lineAlpha: 0.16,        // Low, subtle opacity
+      lineWidth: 0.75,        // Fine, razor-thin linework
       noiseScale: 11 / SCALE_DIV, // 11
       timeScale: 30 / SPEED_DIV,  // 30
       stepLength: 6,

@@ -98,7 +98,7 @@ export default function StatementSection() {
 
         {/* Masked Headline Lines with 1:1 Responsive SVG Anchor */}
         <div className="space-y-1 md:space-y-2 relative">
-          
+
           {/* Line 1: REDEFINING */}
           <div className="overflow-hidden">
             <h2 className="statement-line text-[clamp(2.5rem,7.5vw,8.5rem)] font-black uppercase tracking-[-0.05em] leading-[0.88] text-[#F5F5F0]">

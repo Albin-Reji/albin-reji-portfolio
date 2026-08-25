@@ -90,21 +90,27 @@ export default function Hero() {
       className="relative min-h-screen flex flex-col justify-between overflow-hidden bg-transparent border-b border-[#F5F5F0]/15"
     >
       {/* ═══ Main Viewport Composition (Tighter top spacing closer to navbar) ═══ */}
-      <div className="relative z-10 flex-1 flex items-center px-6 md:px-12 max-w-[1728px] mx-auto w-full pt-14 sm:pt-16 lg:pt-16 pb-6 sm:pb-8 lg:pb-10">
+      <div className="relative z-10 flex-1 flex items-center px-6 md:px-12 max-w-[1728px] mx-auto w-full pt-12 sm:pt-16 lg:pt-16 pb-6 sm:pb-8 lg:pb-10">
+
+        {/* Subtle Backdrop Quiet Gradient specifically softening contour lines behind text */}
+        <div className="absolute top-0 left-6 md:left-12 w-full max-w-3xl h-full bg-gradient-to-r from-[#050505]/95 via-[#050505]/85 to-transparent -z-10 blur-2xl pointer-events-none" />
+
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center w-full">
 
-          {/* Left Column: Oversized Typography & CTAs (Natural flow, 7 cols on Desktop) */}
+          {/* Left Column: Oversized Typography & CTAs (7 cols) */}
           <div
             ref={headlineRef}
             className="lg:col-span-7 space-y-6 max-w-2xl lg:max-w-none"
           >
             <div>
-              <div className="overflow-hidden">
-                <p className="hero-text-line font-mono text-xs md:text-sm font-semibold uppercase tracking-[0.35em] text-[#D7FF00] mb-3">
+              {/* Eyebrow */}
+              <div className="overflow-hidden mb-3">
+                <p className="hero-text-line font-mono text-xs md:text-sm font-semibold uppercase tracking-[0.35em] text-[#D7FF00]">
                   {"// "}{personalInfo.title}
                 </p>
               </div>
 
+              {/* Dominant Headline Anchor */}
               <div className="overflow-hidden">
                 <h1 className="hero-text-line text-[clamp(3.75rem,13vw,13.5rem)] font-black uppercase leading-[0.82] tracking-[-0.06em] text-[#F5F5F0]">
                   ALBIN
@@ -125,7 +131,7 @@ export default function Hero() {
               </p>
             </div>
 
-            {/* Action buttons */}
+            {/* Action Buttons */}
             <div className="pt-2 flex flex-wrap items-center gap-4 hero-fade">
               <a
                 href="#projects"
@@ -141,11 +147,14 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Right Column: Interactive 3D Lanyard Badge (5 cols on Desktop, stacked cleanly below CTAs on Mobile) */}
+          {/* Right Column: Interactive 3D Lanyard Badge (5 cols on Desktop) */}
           <div
             ref={imageContainerRef}
             className="lg:col-span-5 relative w-full max-w-[360px] sm:max-w-[440px] lg:max-w-none h-[440px] sm:h-[520px] lg:h-[620px] mx-auto flex items-center justify-center mt-4 lg:mt-0"
           >
+            {/* Subtle radial shadow behind lanyard badge to quiet lines behind face */}
+            <div className="absolute inset-0 bg-radial-[circle_at_center,rgba(5,5,5,0.85)_0%,transparent_70%] -z-10 pointer-events-none" />
+
             <div className="relative w-full h-full">
               <Lanyard
                 position={[0, 0, 18]}

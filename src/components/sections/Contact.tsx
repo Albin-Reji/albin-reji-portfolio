@@ -348,11 +348,10 @@ export default function Contact() {
                     type="text"
                     value={form.name}
                     onChange={(e) => handleChange("name", e.target.value)}
-                    className={`w-full border ${
-                      errors.name
+                    className={`w-full border ${errors.name
                         ? "border-[#D7FF00]"
                         : "border-[#F5F5F0]/20"
-                    } bg-transparent px-4 py-3.5 text-sm text-[#F5F5F0] placeholder:text-[#6A6A6A] focus:border-[#D7FF00] focus:outline-none transition-colors font-mono`}
+                      } bg-transparent px-4 py-3.5 text-sm text-[#F5F5F0] placeholder:text-[#6A6A6A] focus:border-[#D7FF00] focus:outline-none transition-colors font-mono`}
                     placeholder="Enter your full name"
                     autoComplete="name"
                   />
@@ -375,11 +374,10 @@ export default function Contact() {
                     type="email"
                     value={form.email}
                     onChange={(e) => handleChange("email", e.target.value)}
-                    className={`w-full border ${
-                      errors.email
+                    className={`w-full border ${errors.email
                         ? "border-[#D7FF00]"
                         : "border-[#F5F5F0]/20"
-                    } bg-transparent px-4 py-3.5 text-sm text-[#F5F5F0] placeholder:text-[#6A6A6A] focus:border-[#D7FF00] focus:outline-none transition-colors font-mono`}
+                      } bg-transparent px-4 py-3.5 text-sm text-[#F5F5F0] placeholder:text-[#6A6A6A] focus:border-[#D7FF00] focus:outline-none transition-colors font-mono`}
                     placeholder="your.email@company.com"
                     autoComplete="email"
                   />
@@ -402,11 +400,10 @@ export default function Contact() {
                     value={form.message}
                     onChange={(e) => handleChange("message", e.target.value)}
                     rows={5}
-                    className={`w-full border ${
-                      errors.message
+                    className={`w-full border ${errors.message
                         ? "border-[#D7FF00]"
                         : "border-[#F5F5F0]/20"
-                    } bg-transparent px-4 py-3.5 text-sm text-[#F5F5F0] placeholder:text-[#6A6A6A] focus:border-[#D7FF00] focus:outline-none transition-colors font-mono resize-y`}
+                      } bg-transparent px-4 py-3.5 text-sm text-[#F5F5F0] placeholder:text-[#6A6A6A] focus:border-[#D7FF00] focus:outline-none transition-colors font-mono resize-y`}
                     placeholder="Describe your engineering role, project scope, or opportunity..."
                   />
                   {errors.message && (
