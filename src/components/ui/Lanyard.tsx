@@ -890,6 +890,89 @@ function Band({
           ctx.font = '700 13px monospace';
           ctx.textBaseline = 'top';
           ctx.fillText('SYS.ID: AR-8080 // CLOUD NATIVE', barX, gy + gh - 22);
+        } else {
+          /* =============================================
+             CONVINCING REALISTIC BADGE BACK SIDE
+             ============================================= */
+          ctx.save();
+
+          /* Top Header Bar */
+          ctx.fillStyle = '#050505';
+          ctx.font = '800 18px monospace';
+          ctx.textBaseline = 'top';
+          ctx.fillText('IDENTITY CREDENTIAL', gx + 24, gy + 44);
+          ctx.font = '700 14px monospace';
+          ctx.fillText('ENCRYPTED NFC', gx + gw - 160, gy + 46);
+
+          /* Magnetic Stripe */
+          const magY = gy + 80;
+          const magH = 70;
+          ctx.fillStyle = '#111111';
+          ctx.fillRect(gx, magY, gw, magH);
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+          ctx.fillRect(gx, magY + 12, gw, 16);
+
+          /* Central Data Card Box */
+          const infoY = magY + magH + 28;
+          ctx.fillStyle = '#050505';
+          ctx.font = '900 28px monospace';
+          ctx.fillText('ALBIN REJI', gx + 28, infoY);
+
+          ctx.font = '700 14px monospace';
+          ctx.fillStyle = 'rgba(5, 5, 5, 0.8)';
+          ctx.fillText('FULL STACK ENGINEER', gx + 28, infoY + 36);
+          ctx.fillText('JAVA • SPRING BOOT • REACT', gx + 28, infoY + 58);
+          ctx.fillText('MICROSERVICES & DISTRIBUTED SYSTEMS', gx + 28, infoY + 80);
+
+          /* Tech Specs Box with Border */
+          const specBoxY = infoY + 115;
+          const specBoxH = 170;
+          ctx.strokeStyle = 'rgba(5, 5, 5, 0.35)';
+          ctx.lineWidth = 2;
+          drawRoundedRect(gx + 24, specBoxY, gw - 48, specBoxH, 12);
+          ctx.stroke();
+
+          ctx.font = '700 12px monospace';
+          ctx.fillStyle = '#050505';
+          ctx.fillText('AUTHORIZATION: ROOT // CLUSTER 01', gx + 40, specBoxY + 20);
+          ctx.fillText('ENCRYPTION: AES-256 / JWT SECURE', gx + 40, specBoxY + 44);
+          ctx.fillText('DATABASE: POSTGRESQL / MONGO / REDIS', gx + 40, specBoxY + 68);
+          ctx.fillText('DEV ENVIRONMENT: LINUX / DOCKER / K8S', gx + 40, specBoxY + 92);
+          ctx.fillText('CONTACT: albinrejim30@gmail.com', gx + 40, specBoxY + 116);
+          ctx.fillText('STATUS: VERIFIED & ACTIVE', gx + 40, specBoxY + 140);
+
+          /* 2D QR / Data Matrix Simulation */
+          const qrSize = 100;
+          const qrX = gx + gw - qrSize - 32;
+          const qrY = gy + gh - qrSize - 55;
+          ctx.fillStyle = '#050505';
+          drawRoundedRect(qrX - 6, qrY - 6, qrSize + 12, qrSize + 12, 8);
+          ctx.stroke();
+          // Procedural QR Pattern
+          const grid = 9;
+          const cellSize = qrSize / grid;
+          for (let r = 0; r < grid; r++) {
+            for (let c = 0; c < grid; c++) {
+              const isCornerFinder =
+                (r < 3 && c < 3) ||
+                (r < 3 && c >= grid - 3) ||
+                (r >= grid - 3 && c < 3);
+              const pseudoRandom = ((r * 13 + c * 7 + (r ^ c)) % 3) !== 0;
+              if (isCornerFinder || pseudoRandom) {
+                ctx.fillRect(qrX + c * cellSize, qrY + r * cellSize, cellSize - 1, cellSize - 1);
+              }
+            }
+          }
+
+          /* Bottom Serial Number & Disclaimer */
+          ctx.font = '700 11px monospace';
+          ctx.fillStyle = '#050505';
+          ctx.fillText('SYS.PASS: AR-2026 // PRODUCTION ACCESS', gx + 28, gy + gh - 46);
+          ctx.font = '600 9px monospace';
+          ctx.fillStyle = 'rgba(5, 5, 5, 0.7)';
+          ctx.fillText('PROPERTY OF ALBIN REJI • NOT TRANSFERABLE', gx + 28, gy + gh - 24);
+
+          ctx.restore();
         }
 
         /* =================================================
@@ -1057,13 +1140,11 @@ function Band({
          BACK
          ================================================= */
 
-      if (backImage) {
-        drawFace(
-          (backTex as any).image,
-          BACK_UV_RECT,
-          false
-        );
-      }
+      drawFace(
+        backImage ? (backTex as any).image : null,
+        BACK_UV_RECT,
+        false
+      );
 
       /* =================================================
          THREE TEXTURE
