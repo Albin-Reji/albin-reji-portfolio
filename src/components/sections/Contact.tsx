@@ -404,7 +404,7 @@ export default function Contact() {
                         ? "border-[#D7FF00]"
                         : "border-[#F5F5F0]/20"
                       } bg-transparent px-4 py-3.5 text-sm text-[#F5F5F0] placeholder:text-[#6A6A6A] focus:border-[#D7FF00] focus:outline-none transition-colors font-mono resize-y`}
-                    placeholder="Describe your engineering role, project scope, or opportunity..."
+                    placeholder="Message..."
                   />
                   {errors.message && (
                     <p className="font-mono text-[10px] text-[#D7FF00]">

@@ -194,13 +194,10 @@ export default function Lanyard({
 
   const responsiveCardScale =
     isMobile
-      ? cardScale * 0.82
+      ? cardScale * 1.18
       : cardScale;
 
-  const responsiveFov =
-    isMobile
-      ? fov + 2
-      : fov;
+  const responsiveFov = fov;
 
   return (
     <div
@@ -210,10 +207,8 @@ export default function Lanyard({
         h-full
         relative
         overflow-hidden
-        touch-none
-        select-none
       "
-      style={{ touchAction: 'none', userSelect: 'none', WebkitUserSelect: 'none' }}
+      style={{ touchAction: 'pan-y' }}
     >
       <Canvas
         camera={{
@@ -231,7 +226,7 @@ export default function Lanyard({
             : 2,
         ]}
 
-        style={{ touchAction: 'none' }}
+        style={{ touchAction: 'pan-y' }}
 
         gl={{
           alpha: transparent,
@@ -1229,6 +1224,30 @@ function Band({
   ]);
 
   /* =======================================================
+     GLOBAL DRAG RELEASE LISTENER
+     ======================================================= */
+
+  useEffect(() => {
+    if (!dragged) return;
+
+    const handlePointerRelease = () => {
+      drag(false);
+    };
+
+    window.addEventListener('pointerup', handlePointerRelease);
+    window.addEventListener('pointercancel', handlePointerRelease);
+    window.addEventListener('touchend', handlePointerRelease);
+    window.addEventListener('touchcancel', handlePointerRelease);
+
+    return () => {
+      window.removeEventListener('pointerup', handlePointerRelease);
+      window.removeEventListener('pointercancel', handlePointerRelease);
+      window.removeEventListener('touchend', handlePointerRelease);
+      window.removeEventListener('touchcancel', handlePointerRelease);
+    };
+  }, [dragged]);
+
+  /* =======================================================
      PHYSICS ANIMATION
      ======================================================= */
 
@@ -1259,11 +1278,11 @@ function Band({
           )
           .normalize();
 
-        vec.add(
-          dir.multiplyScalar(
-            state.camera.position.length()
-          )
-        );
+        // Exact intersection with the Z = 0 plane
+        if (Math.abs(dir.z) > 0.0001) {
+          const t = -state.camera.position.z / dir.z;
+          vec.copy(state.camera.position).addScaledVector(dir, t);
+        }
 
         [
           card,
@@ -1288,8 +1307,7 @@ function Band({
               dragged.y,
 
             z:
-              vec.z -
-              dragged.z,
+              0,
           }
         );
       }
@@ -1424,7 +1442,7 @@ function Band({
       <group
         position={[
           0,
-          3.6,
+          isMobile ? 4.15 : 3.6,
           0,
         ]}
       >
@@ -1549,7 +1567,7 @@ function Band({
               e: any
             ) => {
               try {
-                e.target.releasePointerCapture(
+                (e.nativeEvent?.target || e.target)?.releasePointerCapture?.(
                   e.pointerId
                 );
               } catch {}
@@ -1561,7 +1579,7 @@ function Band({
               e: any
             ) => {
               try {
-                e.target.releasePointerCapture(
+                (e.nativeEvent?.target || e.target)?.releasePointerCapture?.(
                   e.pointerId
                 );
               } catch {}
@@ -1574,18 +1592,17 @@ function Band({
             ) => {
               e.stopPropagation();
               try {
-                e.target.setPointerCapture(
+                (e.nativeEvent?.target || e.target)?.setPointerCapture?.(
                   e.pointerId
                 );
               } catch {}
 
+              const cardPos = card.current ? card.current.translation() : { x: 0, y: 0, z: 0 };
               drag(
                 new THREE.Vector3()
                   .copy(e.point)
                   .sub(
-                    vec.copy(
-                      card.current.translation()
-                    )
+                    vec.set(cardPos.x, cardPos.y, cardPos.z)
                   )
               );
             }}
