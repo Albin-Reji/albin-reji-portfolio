@@ -378,3 +378,28 @@
   user-select: none;
   pointer-events: none;
 }
+
+/* ─── Engineering Notes 3D Carousel ───────────────────────────────────────── */
+
+.notes-rail-container [style*="perspective"] {
+  -webkit-perspective: 1200px;
+}
+
+.notes-rail-container [style*="preserve-3d"] {
+  -webkit-transform-style: preserve-3d;
+}
+
+.notes-rail-container .absolute {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notes-rail-container .absolute {
+    transform: none !important;
+    opacity: 1 !important;
+    position: relative !important;
+    will-change: auto;
+  }
+}

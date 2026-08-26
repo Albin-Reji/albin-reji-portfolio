@@ -1397,101 +1397,93 @@ function Band({
          ROPE
          =================================================== */
 
-      if (fixed.current) {
-        [j1, j2].forEach(
-          ref => {
-            if (
-              !ref.current
-                .lerped
-            ) {
-              ref.current.lerped =
-                new THREE.Vector3().copy(
-                  ref.current.translation()
-                );
-            }
+      if (
+        fixed.current &&
+        j1.current &&
+        j2.current &&
+        j3.current &&
+        card.current &&
+        band.current?.geometry
+      ) {
+        try {
+          const tFixed = fixed.current.translation();
+          const tJ1 = j1.current.translation();
+          const tJ2 = j2.current.translation();
+          const tJ3 = j3.current.translation();
 
-            const clampedDistance =
-              Math.max(
-                0.1,
+          const isValidVec = (v: any) =>
+            v &&
+            typeof v.x === 'number' &&
+            !isNaN(v.x) &&
+            typeof v.y === 'number' &&
+            !isNaN(v.y) &&
+            typeof v.z === 'number' &&
+            !isNaN(v.z);
 
-                Math.min(
-                  1,
+          if (
+            isValidVec(tFixed) &&
+            isValidVec(tJ1) &&
+            isValidVec(tJ2) &&
+            isValidVec(tJ3)
+          ) {
+            [
+              { ref: j1, t: tJ1 },
+              { ref: j2, t: tJ2 },
+            ].forEach(({ ref, t }) => {
+              if (!ref.current.lerped || !isValidVec(ref.current.lerped)) {
+                ref.current.lerped = new THREE.Vector3(t.x, t.y, t.z);
+              }
 
-                  ref.current.lerped.distanceTo(
-                    ref.current.translation()
-                  )
-                )
+              const dist = ref.current.lerped.distanceTo(t);
+              const clampedDistance = Math.max(0.1, Math.min(1, isNaN(dist) ? 0.1 : dist));
+
+              ref.current.lerped.lerp(
+                t,
+                delta *
+                  (minSpeed +
+                    clampedDistance *
+                      (maxSpeed - minSpeed))
               );
+            });
 
-            ref.current.lerped.lerp(
-              ref.current.translation(),
+            if (isValidVec(j2.current.lerped) && isValidVec(j1.current.lerped)) {
+              /* =================================================
+                 CURVE POINTS
+                 ================================================= */
+              curve.points[0].set(tJ3.x, tJ3.y, tJ3.z);
+              curve.points[1].copy(j2.current.lerped);
+              curve.points[2].copy(j1.current.lerped);
+              curve.points[3].set(tFixed.x, tFixed.y, tFixed.z);
 
-              delta *
-              (
-                minSpeed +
-                clampedDistance *
-                (
-                  maxSpeed -
-                  minSpeed
-                )
-              )
-            );
+              /* =================================================
+                 UPDATE STRAP
+                 ================================================= */
+              const pts = curve.getPoints(isMobile ? 16 : 32);
+              const allValid = pts.every((p: any) => isValidVec(p));
+              if (allValid && band.current.geometry?.setPoints) {
+                band.current.geometry.setPoints(pts);
+              }
+            }
           }
-        );
 
-        /* =================================================
-           CURVE POINTS
-           ================================================= */
+          /* =================================================
+             CARD ROTATION
+             ================================================= */
+          const cAng = card.current.angvel();
+          const cRot = card.current.rotation();
+          if (isValidVec(cAng) && isValidVec(cRot)) {
+            ang.set(cAng.x, cAng.y, cAng.z);
+            rot.set(cRot.x, cRot.y, cRot.z);
 
-        curve.points[0].copy(
-          j3.current.translation()
-        );
-
-        curve.points[1].copy(
-          j2.current.lerped
-        );
-
-        curve.points[2].copy(
-          j1.current.lerped
-        );
-
-        curve.points[3].copy(
-          fixed.current.translation()
-        );
-
-        /* =================================================
-           UPDATE STRAP
-           ================================================= */
-
-        band.current.geometry.setPoints(
-          curve.getPoints(
-            isMobile
-              ? 16
-              : 32
-          )
-        );
-
-        /* =================================================
-           CARD ROTATION
-           ================================================= */
-
-        ang.copy(
-          card.current.angvel()
-        );
-
-        rot.copy(
-          card.current.rotation()
-        );
-
-        card.current.setAngvel({
-          x: ang.x,
-
-          y:
-            ang.y -
-            rot.y * 0.25,
-
-          z: ang.z,
-        });
+            card.current.setAngvel({
+              x: ang.x,
+              y: ang.y - rot.y * 0.25,
+              z: ang.z,
+            });
+          }
+        } catch {
+          // Ignore physics transient frame glitches
+        }
       }
     }
   );

@@ -3,93 +3,239 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Image from "next/image";
-import { ChevronLeft, ChevronRight, ArrowUpRight, Radio } from "lucide-react";
+import { ChevronLeft, ChevronRight, ArrowUpRight } from "lucide-react";
 import { XIcon } from "@/components/ui/Icons";
-import { engineeringNotes, personalInfo } from "@/data/portfolio";
+import EngineeringNoteCard from "@/components/ui/EngineeringNoteCard";
+import { engineeringNotes } from "@/data/engineeringNotesData";
 
 gsap.registerPlugin(ScrollTrigger);
 
+// ─── 3D Cylindrical Carousel Configuration ───────────────────────────────────
+// Faster dynamic auto-play cycle (~2.35s total)
+const AUTO_PLAY_PAUSE = 1800; // ms hold time on active card
+const TRANSITION_MS = 550; // ms for the smooth 3D cylindrical slide
+const INTERACTION_COOLDOWN = 4000; // ms to pause auto-play after user click/swipe
+
+// Desktop: Cylindrical geometry with slight, intentional card overlap
+const DESKTOP_PARAMS = {
+  radius: 630, // cylinder radius in px
+  angleStep: 27, // degrees per slot along cylinder (~285px displacement)
+  centerScale: 1.08, // center card prominence
+  sideScaleFactor: 0.86, // scale of adjacent cards
+  depthMultiplier: 1.25, // Z-depth pushback factor
+  sideOpacity: 0.68, // opacity of adjacent cards
+  farOpacity: 0.2, // opacity of cards 2 steps away
+  visibleRange: 2, // only render visible cylinder arc slots
+};
+
+// Mobile: Tailored cylindrical geometry with subtle overlap for narrow viewports (< 640px)
+const MOBILE_PARAMS = {
+  radius: 380,
+  angleStep: 32,
+  centerScale: 1.02,
+  sideScaleFactor: 0.83,
+  depthMultiplier: 1.15,
+  sideOpacity: 0.5,
+  farOpacity: 0.1,
+  visibleRange: 1,
+};
+
+const SM_BREAKPOINT = 640;
+
+// ─── Helper: Shortest circular modular offset ────────────────────────────────
+function wrapOffset(rawOffset: number, total: number): number {
+  let offset = rawOffset % total;
+  if (offset > total / 2) offset -= total;
+  if (offset < -total / 2) offset += total;
+  return offset;
+}
+
+// ─── Component ───────────────────────────────────────────────────────────────
 export default function EngineeringNotes() {
   const sectionRef = useRef<HTMLElement>(null);
-  const railRef = useRef<HTMLDivElement>(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeftState, setScrollLeftState] = useState(0);
-  const [dragMoved, setDragMoved] = useState(false);
+  const carouselRef = useRef<HTMLDivElement>(null);
 
-  // Check scroll boundary to enable/disable arrow buttons
-  const checkScrollBoundaries = useCallback(() => {
-    if (!railRef.current) return;
-    const { scrollLeft, scrollWidth, clientWidth } = railRef.current;
-    setCanScrollLeft(scrollLeft > 10);
-    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [dragMoved, setDragMoved] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  const dragRef = useRef({ startX: 0, isDragging: false });
+  const interactionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const totalCards = engineeringNotes.length;
+  const params = isMobile ? MOBILE_PARAMS : DESKTOP_PARAMS;
+
+  // ── Responsive breakpoint listener ──
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < SM_BREAKPOINT);
+    check();
+    window.addEventListener("resize", check, { passive: true });
+    return () => window.removeEventListener("resize", check);
   }, []);
 
+  // ── Reduced motion accessibility check ──
   useEffect(() => {
-    const el = railRef.current;
+    const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReducedMotion(mql.matches);
+    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
+    mql.addEventListener("change", handler);
+    return () => mql.removeEventListener("change", handler);
+  }, []);
+
+  // ── Compute true cylindrical 3D transform for each card slot ──
+  const getSlotStyle = useCallback(
+    (index: number): React.CSSProperties => {
+      const offset = wrapOffset(index - activeIndex, totalCards);
+      const absOffset = Math.abs(offset);
+
+      // Smoothly hide cards beyond active cylindrical arc
+      if (absOffset > params.visibleRange) {
+        const sign = offset >= 0 ? 1 : -1;
+        const rad = (params.angleStep * (params.visibleRange + 0.8) * Math.PI) / 180;
+        const hiddenX = Math.sin(rad) * params.radius * sign;
+        const hiddenZ = -(1 - Math.cos(rad)) * params.radius * params.depthMultiplier - 150;
+        const hiddenRotY = -sign * (params.angleStep * (params.visibleRange + 0.8));
+
+        return {
+          transform: `translateX(${hiddenX.toFixed(1)}px) translateZ(${hiddenZ.toFixed(1)}px) rotateY(${hiddenRotY.toFixed(1)}deg) scale(0.65)`,
+          opacity: 0,
+          pointerEvents: "none",
+          zIndex: 0,
+          transition: `transform ${TRANSITION_MS}ms cubic-bezier(0.25, 1, 0.35, 1), opacity ${TRANSITION_MS}ms cubic-bezier(0.25, 1, 0.35, 1)`,
+        };
+      }
+
+      const isCenter = absOffset === 0;
+
+      // Mathematical cylindrical projection:
+      // theta = angular position along cylinder arc
+      const thetaDeg = offset * params.angleStep;
+      const thetaRad = (thetaDeg * Math.PI) / 180;
+
+      // X displacement along cylindrical tangent
+      const x = Math.sin(thetaRad) * params.radius;
+
+      // Z depth displacement along cylindrical radius (pushes back into screen)
+      const z = -(1 - Math.cos(thetaRad)) * params.radius * params.depthMultiplier;
+
+      // Yaw rotation (faces inward towards viewer / center of cylinder curvature)
+      const rotY = -thetaDeg;
+
+      // Scale: center dominant with controlled falloff
+      const scale = isCenter
+        ? params.centerScale
+        : Math.pow(params.sideScaleFactor, absOffset);
+
+      // Opacity: center 100%, adjacent 68%, far 20%
+      const opacity = isCenter
+        ? 1
+        : absOffset === 1
+        ? params.sideOpacity
+        : params.farOpacity;
+
+      // Stacking order: center is highest (30), side cards are underneath (20, 10)
+      const zIndex = 30 - absOffset * 10;
+
+      return {
+        transform: `translateX(${x.toFixed(1)}px) translateZ(${z.toFixed(1)}px) rotateY(${rotY.toFixed(1)}deg) scale(${scale.toFixed(3)})`,
+        opacity,
+        zIndex,
+        pointerEvents: absOffset <= 1 ? "auto" : "none",
+        transition: `transform ${TRANSITION_MS}ms cubic-bezier(0.25, 1, 0.35, 1), opacity ${TRANSITION_MS}ms cubic-bezier(0.25, 1, 0.35, 1)`,
+      };
+    },
+    [activeIndex, params, totalCards]
+  );
+
+  // ── Auto-play: fast, dynamic cylindrical rotation ──
+  useEffect(() => {
+    if (isPaused || isHovered || prefersReducedMotion) return;
+
+    const timer = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % totalCards);
+    }, AUTO_PLAY_PAUSE + TRANSITION_MS);
+
+    return () => clearInterval(timer);
+  }, [isPaused, isHovered, prefersReducedMotion, totalCards]);
+
+  // ── Pause on tab blur to conserve GPU ──
+  useEffect(() => {
+    const handler = () => setIsPaused(document.hidden);
+    document.addEventListener("visibilitychange", handler);
+    return () => document.removeEventListener("visibilitychange", handler);
+  }, []);
+
+  // ── Pause auto-play temporarily after user interaction ──
+  const pauseForInteraction = useCallback(() => {
+    setIsPaused(true);
+    if (interactionTimerRef.current) clearTimeout(interactionTimerRef.current);
+    interactionTimerRef.current = setTimeout(() => {
+      setIsPaused(false);
+    }, INTERACTION_COOLDOWN);
+  }, []);
+
+  // ── Step navigation ──
+  const goTo = useCallback(
+    (direction: "left" | "right") => {
+      setActiveIndex((prev) => {
+        if (direction === "right") return (prev + 1) % totalCards;
+        return (prev - 1 + totalCards) % totalCards;
+      });
+      pauseForInteraction();
+    },
+    [totalCards, pauseForInteraction]
+  );
+
+  const goToIndex = useCallback(
+    (index: number) => {
+      setActiveIndex(index);
+      pauseForInteraction();
+    },
+    [pauseForInteraction]
+  );
+
+  // ── Keyboard arrow keys navigation ──
+  useEffect(() => {
+    const el = carouselRef.current;
     if (!el) return;
-    checkScrollBoundaries();
-    el.addEventListener("scroll", checkScrollBoundaries, { passive: true });
-    window.addEventListener("resize", checkScrollBoundaries);
-    return () => {
-      el.removeEventListener("scroll", checkScrollBoundaries);
-      window.removeEventListener("resize", checkScrollBoundaries);
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        goTo("left");
+      }
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        goTo("right");
+      }
     };
-  }, [checkScrollBoundaries]);
+    el.addEventListener("keydown", handleKey);
+    return () => el.removeEventListener("keydown", handleKey);
+  }, [goTo]);
 
-  // Scroll navigation helpers
-  const handleScrollBy = (direction: "left" | "right") => {
-    if (!railRef.current) return;
-    const cardWidth = 380;
-    const scrollAmount = direction === "left" ? -cardWidth * 1.5 : cardWidth * 1.5;
-    railRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
-  };
-
-  // Mouse drag to scroll
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (!railRef.current) return;
-    setIsDragging(true);
+  // ── Pointer / Swipe Drag ──
+  const handlePointerDown = (clientX: number) => {
+    dragRef.current = { startX: clientX, isDragging: true };
     setDragMoved(false);
-    setStartX(e.pageX - railRef.current.offsetLeft);
-    setScrollLeftState(railRef.current.scrollLeft);
   };
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging || !railRef.current) return;
-    e.preventDefault();
-    const x = e.pageX - railRef.current.offsetLeft;
-    const walk = (x - startX) * 1.4;
-    if (Math.abs(walk) > 5) {
+  const handlePointerUp = (clientX: number) => {
+    if (!dragRef.current.isDragging) return;
+    const dx = clientX - dragRef.current.startX;
+    if (Math.abs(dx) > 40) {
       setDragMoved(true);
+      goTo(dx > 0 ? "left" : "right");
     }
-    railRef.current.scrollLeft = scrollLeftState - walk;
+    dragRef.current.isDragging = false;
   };
 
-  const handleMouseUpOrLeave = () => {
-    setIsDragging(false);
-  };
-
-  // Mouse wheel horizontal translation
-  const handleWheel = (e: React.WheelEvent) => {
-    if (!railRef.current) return;
-    if (Math.abs(e.deltaY) > Math.abs(e.deltaX) && Math.abs(e.deltaY) > 4) {
-      railRef.current.scrollLeft += e.deltaY * 0.9;
-    }
-  };
-
-  // GSAP scroll trigger entrance
+  // ── Entrance GSAP ScrollTrigger ──
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-
     if (prefersReducedMotion || !sectionRef.current) return;
 
     const ctx = gsap.context(() => {
-      // Header reveal
       gsap.fromTo(
         ".notes-header",
         { opacity: 0, y: 25 },
@@ -106,7 +252,6 @@ export default function EngineeringNotes() {
         }
       );
 
-      // Card rail fade in
       gsap.fromTo(
         ".notes-rail-container",
         { opacity: 0, y: 35 },
@@ -125,6 +270,12 @@ export default function EngineeringNotes() {
     }, sectionRef);
 
     return () => ctx.revert();
+  }, [prefersReducedMotion]);
+
+  useEffect(() => {
+    return () => {
+      if (interactionTimerRef.current) clearTimeout(interactionTimerRef.current);
+    };
   }, []);
 
   return (
@@ -185,18 +336,16 @@ export default function EngineeringNotes() {
               {/* Desktop Nav Arrows */}
               <div className="hidden sm:flex items-center gap-2 font-mono">
                 <button
-                  onClick={() => handleScrollBy("left")}
-                  disabled={!canScrollLeft}
-                  className="p-2.5 border border-[#F5F5F0]/15 text-[#F5F5F0] hover:border-[#D7FF00] hover:text-[#D7FF00] disabled:opacity-20 disabled:pointer-events-none transition-colors cursor-pointer bg-[#000000]"
-                  aria-label="Scroll technical notes left"
+                  onClick={() => goTo("left")}
+                  className="p-2.5 border border-[#F5F5F0]/20 text-[#F5F5F0] hover:border-[#D7FF00] hover:text-[#D7FF00] transition-colors cursor-pointer bg-[#000000] rounded-sm active:scale-95"
+                  aria-label="Previous engineering note"
                 >
                   <ChevronLeft size={16} />
                 </button>
                 <button
-                  onClick={() => handleScrollBy("right")}
-                  disabled={!canScrollRight}
-                  className="p-2.5 border border-[#F5F5F0]/15 text-[#F5F5F0] hover:border-[#D7FF00] hover:text-[#D7FF00] disabled:opacity-20 disabled:pointer-events-none transition-colors cursor-pointer bg-[#000000]"
-                  aria-label="Scroll technical notes right"
+                  onClick={() => goTo("right")}
+                  className="p-2.5 border border-[#F5F5F0]/20 text-[#F5F5F0] hover:border-[#D7FF00] hover:text-[#D7FF00] transition-colors cursor-pointer bg-[#000000] rounded-sm active:scale-95"
+                  aria-label="Next engineering note"
                 >
                   <ChevronRight size={16} />
                 </button>
@@ -205,77 +354,79 @@ export default function EngineeringNotes() {
           </div>
         </div>
 
-        {/* ═══ Horizontally Scrollable X Post Card Rail ═══ */}
-        <div className="notes-rail-container -mx-6 md:-mx-12 px-6 md:px-12">
+        {/* ═══ 3D Cylindrical Orbiting Carousel ═══ */}
+        <div className="notes-rail-container -mx-6 md:-mx-12 px-6 md:px-12 relative overflow-hidden py-4">
           <div
-            ref={railRef}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUpOrLeave}
-            onMouseLeave={handleMouseUpOrLeave}
-            onWheel={handleWheel}
+            ref={carouselRef}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => {
+              setIsHovered(false);
+              if (dragRef.current.isDragging) {
+                dragRef.current.isDragging = false;
+              }
+            }}
+            onMouseDown={(e) => handlePointerDown(e.clientX)}
+            onMouseUp={(e) => handlePointerUp(e.clientX)}
+            onTouchStart={(e) => handlePointerDown(e.touches[0].clientX)}
+            onTouchEnd={(e) => handlePointerUp(e.changedTouches[0].clientX)}
             tabIndex={0}
             role="region"
-            aria-label="Technical engineering notes horizontal rail"
-            className={`flex gap-6 md:gap-8 overflow-x-auto snap-x snap-mandatory py-4 pb-8 focus:outline-none select-none ${
-              isDragging ? "cursor-grabbing scroll-auto" : "cursor-grab scroll-smooth"
-            }`}
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            aria-label="Technical engineering notes 3D cylindrical carousel"
+            aria-roledescription="carousel"
+            className="relative cursor-grab active:cursor-grabbing select-none focus:outline-none w-full"
+            style={{
+              perspective: isMobile ? "900px" : "1300px",
+              height: isMobile ? "490px" : "560px",
+            }}
           >
-            {engineeringNotes.map((post) => (
-              <a
-                key={post.id}
-                href={post.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => {
-                  if (dragMoved) e.preventDefault();
-                }}
-                aria-label={`${post.category}: ${post.title}. View technical post on X.`}
-                className="group w-[82vw] sm:w-[360px] md:w-[380px] shrink-0 snap-start border border-[#F5F5F0]/15 bg-[#000000] p-5 md:p-6 flex flex-col justify-between space-y-5 transition-all duration-300 hover:-translate-y-1.5 hover:border-[#D7FF00]/60 hover:shadow-[0_12px_30px_rgba(215,255,0,0.04)]"
-              >
-                <div className="space-y-4">
-                  {/* Card Thumbnail Image Area */}
-                  <div className="relative aspect-[16/10] w-full overflow-hidden border border-[#F5F5F0]/10 bg-[#111111]">
-                    <Image
-                      src={post.image}
-                      alt={post.title}
-                      fill
-                      className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
-                      sizes="(max-width: 640px) 85vw, 380px"
+            {/* 3D Cylindrical Stage */}
+            <div
+              className="absolute inset-0 flex items-center justify-center pointer-events-none"
+              style={{ transformStyle: "preserve-3d" }}
+            >
+              {engineeringNotes.map((post, index) => {
+                const offset = wrapOffset(index - activeIndex, totalCards);
+                const isActive = offset === 0;
+
+                return (
+                  <div
+                    key={post.id}
+                    className="absolute will-change-transform pointer-events-auto"
+                    style={getSlotStyle(index)}
+                    onClick={
+                      !isActive && Math.abs(offset) <= 1
+                        ? (e) => {
+                            e.stopPropagation();
+                            goToIndex(index);
+                          }
+                        : undefined
+                    }
+                    aria-hidden={!isActive}
+                  >
+                    <EngineeringNoteCard
+                      post={post}
+                      dragMoved={dragMoved || !isActive}
+                      isActive={isActive}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#000000]/90 via-[#000000]/30 to-transparent pointer-events-none" />
-
-                    {/* Small category tag badge on image */}
-                    <div className="absolute top-3 left-3 z-10 font-mono text-[9px] font-bold uppercase tracking-[0.2em] px-2 py-0.5 bg-[#050505]/90 border border-[#D7FF00]/40 text-[#D7FF00]">
-                      {post.category}
-                    </div>
-
-                    <div className="absolute bottom-3 right-3 z-10 text-[#F5F5F0]/60 group-hover:text-[#D7FF00] transition-colors">
-                      <XIcon width={14} height={14} />
-                    </div>
                   </div>
+                );
+              })}
+            </div>
+          </div>
 
-                  {/* Title & Description */}
-                  <div className="space-y-2">
-                    <h3 className="text-base sm:text-lg font-bold uppercase tracking-tight text-[#F5F5F0] leading-snug group-hover:text-[#D7FF00] transition-colors line-clamp-2">
-                      {post.title}
-                    </h3>
-                    <p className="text-xs text-[#B5B5B5] font-light leading-relaxed line-clamp-2">
-                      {post.description}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Card Meta & CTA Bar */}
-                <div className="border-t border-[#F5F5F0]/10 pt-3.5 flex items-center justify-between font-mono text-[10px] uppercase tracking-wider text-[#8A8A8A]">
-                  <span>{post.date}</span>
-                  <span className="inline-flex items-center gap-1 text-[#F5F5F0] group-hover:text-[#D7FF00] transition-colors font-semibold">
-                    <span>VIEW ON X</span>
-                    <span className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
-                  </span>
-                </div>
-              </a>
+          {/* ── Progress Indicators / Dots ── */}
+          <div className="flex justify-center items-center gap-2 mt-4 md:mt-6">
+            {engineeringNotes.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => goToIndex(i)}
+                className={`h-1.5 rounded-full transition-all duration-500 ease-out cursor-pointer ${
+                  i === activeIndex
+                    ? "w-8 bg-[#D7FF00] shadow-[0_0_10px_rgba(215,255,0,0.5)]"
+                    : "w-1.5 bg-[#F5F5F0]/20 hover:bg-[#F5F5F0]/40"
+                }`}
+                aria-label={`Go to note ${i + 1}: ${engineeringNotes[i].title}`}
+              />
             ))}
           </div>
         </div>
