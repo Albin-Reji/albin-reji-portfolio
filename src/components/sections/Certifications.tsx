@@ -103,7 +103,7 @@ export default function Certifications() {
     <section
       ref={sectionRef}
       id="certifications"
-      className="py-14 md:py-20 bg-transparent border-b border-[#F5F5F0]/12"
+      className="py-14 md:py-20 bg-transparent"
     >
       {/* ═══ Section Heading ═══ */}
       <div className="px-6 md:px-12 max-w-[1728px] mx-auto mb-10 md:mb-14">
@@ -136,8 +136,8 @@ export default function Certifications() {
                 {/* Card Container */}
                 <div
                   className={`relative w-full h-full rounded-2xl overflow-hidden border-2 transition-all duration-500 ${index === activeIndex
-                      ? "border-[#D7FF00]/50 shadow-[0_25px_60px_rgba(0,0,0,0.8),0_0_40px_rgba(215,255,0,0.08)]"
-                      : "border-[#F5F5F0]/10 shadow-[0_15px_40px_rgba(0,0,0,0.6)]"
+                    ? "border-[#D7FF00]/50 shadow-[0_25px_60px_rgba(0,0,0,0.8),0_0_40px_rgba(215,255,0,0.08)]"
+                    : "border-[#F5F5F0]/10 shadow-[0_15px_40px_rgba(0,0,0,0.6)]"
                     }`}
                 >
                   {/* Certificate Image */}
@@ -153,8 +153,8 @@ export default function Certifications() {
                   {/* Subtle dark overlay for depth on non-active cards */}
                   <div
                     className={`absolute inset-0 transition-opacity duration-500 pointer-events-none ${index === activeIndex
-                        ? "bg-transparent"
-                        : "bg-black/40"
+                      ? "bg-transparent"
+                      : "bg-black/40"
                       }`}
                   />
 
@@ -203,8 +203,8 @@ export default function Certifications() {
                   >
                     <div
                       className={`flex items-start gap-4 md:gap-6 py-4 px-4 md:px-5 rounded-xl border transition-all duration-400 ${isActive
-                          ? "border-[#D7FF00]/30 bg-[#D7FF00]/[0.04] shadow-[0_0_20px_rgba(215,255,0,0.06)]"
-                          : "border-transparent hover:border-[#F5F5F0]/10 hover:bg-[#F5F5F0]/[0.02]"
+                        ? "border-[#D7FF00]/30 bg-[#D7FF00]/[0.04] shadow-[0_0_20px_rgba(215,255,0,0.06)]"
+                        : "border-transparent hover:border-[#F5F5F0]/10 hover:bg-[#F5F5F0]/[0.02]"
                         }`}
                     >
                       {/* Number */}
@@ -218,8 +218,8 @@ export default function Certifications() {
                       {/* Connector line (visible only on active, desktop) */}
                       <div
                         className={`hidden lg:block w-12 shrink-0 mt-3 transition-all duration-500 ${isActive
-                            ? "opacity-100"
-                            : "opacity-0"
+                          ? "opacity-100"
+                          : "opacity-0"
                           }`}
                       >
                         <div className="h-[1px] w-full bg-gradient-to-r from-[#D7FF00]/60 to-[#D7FF00]/10" />
@@ -229,8 +229,8 @@ export default function Certifications() {
                       <div className="flex-1 min-w-0">
                         <h3
                           className={`text-lg md:text-xl font-bold uppercase tracking-tight leading-snug transition-colors duration-300 ${isActive
-                              ? "text-[#D7FF00]"
-                              : "text-[#F5F5F0] group-hover:text-[#F5F5F0]/80"
+                            ? "text-[#D7FF00]"
+                            : "text-[#F5F5F0] group-hover:text-[#F5F5F0]/80"
                             }`}
                         >
                           {cert.name}
@@ -239,8 +239,8 @@ export default function Certifications() {
                         {/* Active: show provider + View Certificate link */}
                         <div
                           className={`overflow-hidden transition-all duration-400 ${isActive
-                              ? "max-h-20 opacity-100 mt-2"
-                              : "max-h-0 opacity-0 mt-0"
+                            ? "max-h-20 opacity-100 mt-2"
+                            : "max-h-0 opacity-0 mt-0"
                             }`}
                         >
                           <div className="flex items-center justify-between gap-4 flex-wrap">

@@ -143,7 +143,7 @@ function StrikethroughSVG() {
       viewBox="0 0 440 36"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="contact-strikethrough"
+      className="contact-strikethrough max-w-full"
       aria-hidden="true"
     >
       <path
@@ -268,43 +268,43 @@ export default function Contact() {
     <section
       ref={sectionRef}
       id="contact"
-      className="contact-editorial-bg relative z-10 pb-20 md:pb-28 lg:pb-32"
+      className="contact-editorial-bg relative z-10 w-full max-w-full overflow-hidden pb-20 md:pb-28 lg:pb-32 box-border"
     >
       {/* ── Topographic contour pattern overlay ── */}
       <ContourPattern />
 
       {/* ── Section content layer ── */}
-      <div className="relative z-10">
+      <div className="relative z-10 w-full max-w-full box-border">
         {/* ═══ Top: Section Status & Label ═══ */}
-        <div className="contact-cta-trigger px-6 md:px-12 lg:px-20 max-w-[1728px] mx-auto pt-20 md:pt-28 lg:pt-36">
-          <div className="flex items-center gap-3 contact-section-label mb-4 pb-4 border-b border-[rgba(23,23,23,0.18)]">
+        <div className="contact-cta-trigger px-5 sm:px-8 md:px-12 lg:px-20 max-w-[1728px] mx-auto w-full pt-16 sm:pt-20 md:pt-24 lg:pt-28 box-border">
+          <div className="flex items-center gap-3 contact-section-label mb-4 pb-4 border-b border-[rgba(23,23,23,0.18)] flex-wrap">
             <span className="text-[#171717] font-bold">[07]</span>
             <span className="text-[rgba(23,23,23,0.65)]">CONTACT // DIRECT COMMS</span>
-            <span className="flex-1" />
+            <span className="flex-1 min-w-[20px]" />
             <span className="text-[#171717] font-bold hidden sm:inline">
               AVAILABLE FOR FULL-TIME ROLES
             </span>
           </div>
 
-          {/* ═══ Oversized Editorial Headline ═══ */}
-          <div className="space-y-1 md:space-y-2 relative mt-8 md:mt-12">
-            {/* Line 1: LET'S BUILD — Dark charcoal high contrast */}
-            <div className="overflow-hidden">
+          {/* ═══ Oversized Editorial Headline (Fluid & Responsive) ═══ */}
+          <div className="space-y-1 md:space-y-2 relative mt-8 md:mt-12 max-w-full">
+            {/* Line 1: LET'S BUILD */}
+            <div className="overflow-hidden max-w-full">
               <h2
-                className="contact-cta-line text-[clamp(2.75rem,8.5vw,9rem)] font-black uppercase leading-[0.85] tracking-[-0.06em] text-[#171717]"
+                className="contact-cta-line text-[clamp(1.75rem,7.5vw,8.5rem)] font-black uppercase leading-[0.88] tracking-[-0.05em] text-[#171717] break-normal"
               >
                 LET&apos;S BUILD
               </h2>
             </div>
 
             {/* Line 2: SOMETHING with anchored signature underline loop */}
-            <div className="overflow-visible relative">
-              <h2 className="contact-cta-line text-[clamp(2.75rem,8.5vw,9rem)] font-black uppercase leading-[0.85] tracking-[-0.06em] text-[#171717]">
-                <span className="relative inline-block">
+            <div className="overflow-visible relative max-w-full">
+              <h2 className="contact-cta-line text-[clamp(1.75rem,7.5vw,8.5rem)] font-black uppercase leading-[0.88] tracking-[-0.05em] text-[#171717] break-normal">
+                <span className="relative inline-block max-w-full">
                   SOMETHING
                   {/* Anchored SVG Vector Underline Loop */}
                   <span
-                    className="absolute -bottom-[22%] left-[-2%] w-[108%] pointer-events-none z-10 block"
+                    className="absolute -bottom-[22%] left-0 w-full pointer-events-none z-10 block max-w-full"
                     aria-hidden="true"
                   >
                     <SVGSignature delay={0.6} strokeWidth={4.5} />
@@ -314,9 +314,9 @@ export default function Contact() {
             </div>
 
             {/* Line 3: THAT SCALES. — Dark charcoal with hand-drawn lime strikethrough */}
-            <div className="overflow-visible pt-4 md:pt-6">
+            <div className="overflow-visible pt-3 sm:pt-4 md:pt-6 max-w-full">
               <h2
-                className="contact-cta-line text-[clamp(2.75rem,8.5vw,9rem)] font-black uppercase leading-[0.85] tracking-[-0.06em] text-[#171717] relative inline-block"
+                className="contact-cta-line text-[clamp(1.75rem,7.5vw,8.5rem)] font-black uppercase leading-[0.88] tracking-[-0.05em] text-[#171717] relative inline-block max-w-full break-normal"
               >
                 THAT SCALES.
                 <StrikethroughSVG />
@@ -325,7 +325,7 @@ export default function Contact() {
           </div>
 
           {/* Subtitle with expanding accent dash */}
-          <div className="mt-8 contact-cta-line flex items-center gap-4">
+          <div className="mt-8 contact-cta-line flex items-center gap-4 flex-wrap">
             <span className="cta-dash-line block w-10 h-[2px] bg-[#171717]" />
             <p className="text-base md:text-xl text-[#171717] font-medium leading-relaxed tracking-wide italic">
               Useful by design<span className="text-[#171717] not-italic font-bold mx-1">·</span>Built with intent<span className="text-[#171717] not-italic font-bold">.</span>
@@ -338,11 +338,11 @@ export default function Contact() {
         </div>
 
         {/* ═══ Content Grid: Direct Comms & Transmission Console ═══ */}
-        <div className="contact-content-grid px-6 md:px-12 lg:px-20 max-w-[1728px] mx-auto mt-16 md:mt-24">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-start">
+        <div className="contact-content-grid px-5 sm:px-8 md:px-12 lg:px-20 max-w-[1728px] mx-auto w-full mt-14 sm:mt-16 md:mt-24 box-border min-w-0">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-start w-full min-w-0">
 
-            {/* ── Left: Direct Comms (5 cols) ── */}
-            <div className="lg:col-span-5 space-y-10 contact-block-fade">
+            {/* ── Left: Direct Comms (5 cols on desktop, full width on mobile) ── */}
+            <div className="lg:col-span-5 space-y-10 contact-block-fade w-full min-w-0">
               <div className="space-y-7">
                 <span className="contact-section-label text-[#171717] font-bold block">
                   // DIRECT COMMS
@@ -351,7 +351,7 @@ export default function Contact() {
                 <div className="space-y-6">
                   {/* Primary Email */}
                   <div className="border-b border-[rgba(23,23,23,0.18)] pb-5 space-y-2">
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between gap-2">
                       <span className="contact-info-label">
                         PRIMARY EMAIL
                       </span>
@@ -376,7 +376,7 @@ export default function Contact() {
 
                     <a
                       href={`mailto:${personalInfo.email}`}
-                      className="text-xl sm:text-2xl md:text-3xl font-bold text-[#171717] hover:opacity-75 transition-opacity block break-all tracking-tight"
+                      className="text-lg sm:text-2xl md:text-3xl font-bold text-[#171717] hover:opacity-75 transition-opacity block break-all tracking-tight"
                       aria-label={`Send email to ${personalInfo.email}`}
                     >
                       {personalInfo.email}
@@ -390,7 +390,7 @@ export default function Contact() {
                     </span>
                     <a
                       href={`tel:${personalInfo.phone.replace(/[^+\d]/g, "")}`}
-                      className="text-lg sm:text-xl text-[#171717] hover:opacity-75 transition-opacity font-semibold block"
+                      className="text-base sm:text-xl text-[#171717] hover:opacity-75 transition-opacity font-semibold block"
                       aria-label={`Call phone number ${personalInfo.phone}`}
                     >
                       {personalInfo.phone}
@@ -412,12 +412,12 @@ export default function Contact() {
               </div>
 
               {/* ── Social Network Channels ── */}
-              <div className="pt-6 space-y-1">
+              <div className="pt-4 sm:pt-6 space-y-1 w-full min-w-0">
                 <span className="contact-section-label text-[rgba(23,23,23,0.65)] block mb-4">
                   NETWORK CHANNELS
                 </span>
 
-                <div>
+                <div className="w-full min-w-0 space-y-0.5">
                   {socialLinks.map((link) => {
                     const Icon = iconMap[link.icon];
                     return (
@@ -435,7 +435,7 @@ export default function Contact() {
                       >
                         <span className="social-row-label">
                           {Icon && <Icon size={16} />}
-                          {link.platform}
+                          <span className="truncate">{link.platform}</span>
                         </span>
                         <ArrowUpRight
                           size={17}
@@ -448,10 +448,10 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* ── Right: Transmission Console Form (7 cols) ── */}
-            <div className="lg:col-span-7 contact-block-fade">
+            {/* ── Right: Transmission Console Form (7 cols on desktop, full width on mobile) ── */}
+            <div className="lg:col-span-7 contact-block-fade w-full min-w-0">
               {submitted ? (
-                <div className="border-2 border-[#171717] p-8 md:p-12 bg-white/80 backdrop-blur-md text-center space-y-4 shadow-sm">
+                <div className="border-2 border-[#171717] p-6 sm:p-8 md:p-12 bg-white/80 backdrop-blur-md text-center space-y-4 shadow-sm w-full box-border">
                   <div className="inline-flex p-3.5 bg-[#DFFF35] text-[#171717] border border-[#171717]">
                     <Check size={24} />
                   </div>
@@ -475,14 +475,14 @@ export default function Contact() {
                 <form
                   onSubmit={handleSubmit}
                   noValidate
-                  className="space-y-7"
+                  className="space-y-6 sm:space-y-7 w-full min-w-0 box-border"
                 >
                   <div className="contact-section-label text-[#171717] font-bold pb-4 border-b border-[rgba(23,23,23,0.18)]">
                     TRANSMISSION CONSOLE // NEW MESSAGE
                   </div>
 
                   {/* Name */}
-                  <div className="space-y-2">
+                  <div className="space-y-2 w-full min-w-0">
                     <label
                       htmlFor="contact-name"
                       className="contact-info-label block text-[#171717] font-semibold"
@@ -506,7 +506,7 @@ export default function Contact() {
                   </div>
 
                   {/* Email */}
-                  <div className="space-y-2">
+                  <div className="space-y-2 w-full min-w-0">
                     <label
                       htmlFor="contact-email"
                       className="contact-info-label block text-[#171717] font-semibold"
@@ -530,7 +530,7 @@ export default function Contact() {
                   </div>
 
                   {/* Message */}
-                  <div className="space-y-2">
+                  <div className="space-y-2 w-full min-w-0">
                     <label
                       htmlFor="contact-message"
                       className="contact-info-label block text-[#171717] font-semibold"

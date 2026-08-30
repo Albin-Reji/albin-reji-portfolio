@@ -39,6 +39,8 @@
     -moz-osx-font-smoothing: grayscale;
     background-color: var(--color-bg);
     scrollbar-width: none;
+    overflow-x: hidden;
+    max-width: 100%;
   }
 
   html::-webkit-scrollbar {
@@ -50,6 +52,8 @@
     color: var(--color-text);
     font-family: var(--font-sans);
     overflow-x: hidden;
+    max-width: 100%;
+    width: 100%;
     line-height: 1.5;
   }
 
@@ -488,39 +492,42 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   Contact Section — Editorial Redesign (High Contrast Ink System)
+   Contact Section — Cinematic Atmospheric Transition & High Contrast
    ─────────────────────────────────────────────────────────────────────────
+   Top Transition:  #050505 -> #151515 -> #363632 -> #75756E -> #E2E2D8 -> #F7F6EE
    Primary Ink:     #171717 (Deep Near-Black Charcoal)
    Secondary Ink:   rgba(23, 23, 23, 0.65) (65% Dark Charcoal)
    Muted/Place:     rgba(23, 23, 23, 0.48) (48% Dark Charcoal)
    Lime Accent:     #DFFF35 / #D8FF3F (Fluorescent Lemon-Lime)
-   Background Top:  #F7F6EE (Warm Cream)
-   Background Mid:  #F0F0C8 (Subtle Pale Yellow / Parchment)
+   Background Main: #F7F6EE (Warm Cream)
    Background Bot:  #DFFF35 (Lemon-Lime Emerging Glow)
-   Contour Stroke:  #6F733F (Subtle Topographic lines at 0.08-0.10 opacity)
+   Contour Stroke:  #6F733F (Subtle Topographic lines at 0.08 opacity)
    ═══════════════════════════════════════════════════════════════════════════ */
 
 /* ── Atmospheric Multi-Layered Gradient Background ──────────────────────── */
 .contact-editorial-bg {
   position: relative;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
   background:
     /* Bottom fluorescent lime emergence */
-    radial-gradient(ellipse 130% 50% at 50% 110%, rgba(223, 255, 53, 0.45) 0%, transparent 65%),
-    radial-gradient(ellipse 90% 40% at 25% 95%, rgba(223, 255, 53, 0.22) 0%, transparent 55%),
-    radial-gradient(ellipse 80% 35% at 75% 98%, rgba(223, 255, 53, 0.18) 0%, transparent 50%),
-    /* Mid-section subtle warmth */
-    radial-gradient(ellipse 140% 60% at 50% 60%, rgba(240, 240, 200, 0.25) 0%, transparent 60%),
-    /* Smooth vertical progression: #F7F6EE -> #F0F0C8 -> #DFFF35 */
+    radial-gradient(ellipse 130% 45% at 50% 115%, rgba(223, 255, 53, 0.40) 0%, transparent 65%),
+    radial-gradient(ellipse 90% 35% at 25% 100%, rgba(223, 255, 53, 0.20) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 30% at 75% 100%, rgba(223, 255, 53, 0.16) 0%, transparent 50%),
+    /* Subtle seam transition at very top (0px-95px) — eliminates hard lines without casting dark shadows over text */
     linear-gradient(180deg,
-      #F7F6EE 0%,
-      #F5F4EC 18%,
-      #F2F1DF 36%,
-      #EEEECD 55%,
-      #E7EAC0 75%,
-      #DEECA0 90%,
-      #DFFF35 100%
-    );
-  overflow: hidden;
+      #050505 0px,
+      #181816 15px,
+      #40403a 35px,
+      #858578 55px,
+      #cfcfc4 75px,
+      #ecece2 90px,
+      #F7F6EE 105px,
+      #F7F6EE 82%,
+      #F2F0D8 91%,
+      #DFFF35 100%);
 }
 
 /* ── Topographic Contour Pattern Overlay ─────────────────────────────────── */
@@ -528,10 +535,12 @@
   position: absolute;
   inset: 0;
   width: 100%;
+  max-width: 100%;
   height: 100%;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.09;
+  opacity: 0.08;
+  overflow: hidden;
 }
 
 /* ── Social Link Row — High-Contrast Minimal Editorial ──────────────────── */
@@ -545,6 +554,10 @@
   position: relative;
   cursor: pointer;
   text-decoration: none;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .contact-social-row::after {
@@ -587,6 +600,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  min-width: 0;
 }
 
 .social-row-label svg {
@@ -600,9 +614,12 @@
   flex-shrink: 0;
 }
 
-/* ── Editorial Form Inputs (High Contrast) ───────────────────────────────── */
+/* ── Editorial Form Inputs (High Contrast & Fluid Bounds) ────────────────── */
 .contact-input-editorial {
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   background: rgba(255, 255, 255, 0.28);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
@@ -635,6 +652,9 @@
 /* ── Submit Button ───────────────────────────────────────────────────────── */
 .contact-submit-btn {
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -705,6 +725,7 @@
   background: rgba(255, 255, 255, 0.40);
   cursor: pointer;
   transition: all 0.25s ease;
+  flex-shrink: 0;
 }
 
 .contact-copy-btn:hover {
@@ -717,21 +738,31 @@
   color: #F7F6EE;
 }
 
-/* ── Strikethrough Effect ────────────────────────────────────────────────── */
+/* ── Strikethrough Effect (Contained within bounding box) ─────────────────── */
 .contact-strikethrough {
   position: absolute;
   top: 54%;
-  left: -3%;
-  width: 106%;
+  left: 0;
+  width: 100%;
+  max-width: 100%;
   pointer-events: none;
   z-index: 10;
+  overflow: visible;
 }
 
 /* ── Contour Drift Animation ─────────────────────────────────────────────── */
 @keyframes contact-contour-drift {
-  0% { transform: translate(0, 0); }
-  50% { transform: translate(-6px, 3px); }
-  100% { transform: translate(0, 0); }
+  0% {
+    transform: translate(0, 0);
+  }
+
+  50% {
+    transform: translate(-6px, 3px);
+  }
+
+  100% {
+    transform: translate(0, 0);
+  }
 }
 
 .contact-contour-animate {
@@ -755,4 +786,3 @@
     transform: none;
   }
 }
-
