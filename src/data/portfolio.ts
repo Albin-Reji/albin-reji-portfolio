@@ -108,6 +108,7 @@ export interface Project {
 export interface Certification {
   name: string;
   provider: string;
+  image: string;
   url?: string;
 }
 
@@ -376,19 +377,35 @@ export const projects: Project[] = [
 ];
 
 // ─── Certifications ──────────────────────────────────────────────────────────
+// Add new certifications here. The component will auto-adapt.
+// Each entry needs: name, provider, image, and optionally url.
+// ─────────────────────────────────────────────────────────────────────────────
 
 export const certifications: Certification[] = [
   {
     name: "Java Spring Framework 6 with Spring Boot 3",
     provider: "Udemy",
+    image: "/certificate-assets/sprinboot_certificate.jpg",
+    url: "https://ude.my/UC-fe840c60-03d7-482a-a052-569829261c50",
   },
   {
     name: "100 Days of Code: Python Bootcamp",
     provider: "Udemy",
+    image: "/certificate-assets/python-bootcamp.jpg",
+    url: "https://ude.my/UC-4455a1ca-89b6-447d-8229-7371c40d01b8",
+  },
+  {
+    name: "The Complete Machine Learning Course with Python",
+    provider: "Udemy",
+    image: "/certificate-assets/Machine_Learning_udemy.jpg",
+    url: "https://www.udemy.com/certificate/UC-b7d58726-c1ec-4b1e-be09-be981490dd78/",
   },
 ];
 
 // ─── Engineering Notes / Tech Dispatches (X Posts) ───────────────────────────
+// Add new engineering notes here. The carousel and component will auto-adapt.
+// Each entry needs: id, category, title, description, date, image, url.
+// ─────────────────────────────────────────────────────────────────────────────
 
 export interface EngineeringPost {
   id: string;
@@ -400,7 +417,8 @@ export interface EngineeringPost {
     | "WEB PERFORMANCE"
     | "ARCHITECTURE"
     | "OPEN SOURCE"
-    | "LEARNING";
+    | "LEARNING"
+    | "SECURITY";
   title: string;
   description: string;
   date: string;
@@ -412,82 +430,42 @@ export const engineeringNotes: EngineeringPost[] = [
   {
     id: "post-1",
     category: "SYSTEM DESIGN",
-    title: "Why I started designing backend systems around events",
+    title: "One Pattern. Many Names — Reverse Proxy Explained",
     description:
-      "A few lessons I learned while moving from request-driven logic to decoupled event-driven architecture with RabbitMQ and outbox patterns.",
-    date: "23 AUG 2026",
-    image: "/notes-event-arch.jpg",
-    url: "https://x.com/_AlbinReji_",
+      "CDN, Load Balancer, API Gateway — different infrastructure, same reverse-proxy idea. A single entry point that hides backend topology from the client.",
+    date: "19 AUG 2026",
+    image: "/twitter-assets/reverse_proxy.png",
+    url: "https://x.com/_AlbinReji_/status/2092902053529985150",
   },
   {
     id: "post-2",
-    category: "AI",
-    title: "Building low-latency LLM streaming pipelines with Spring Boot & Gemini",
+    category: "SECURITY",
+    title: "Spring Security Authentication Flow — End to End",
     description:
-      "How we optimized memory-efficient reactive token streaming and WebSocket channels for sub-50ms conversational response times.",
-    date: "19 AUG 2026",
-    image: "/project-02.jpg",
-    url: "https://x.com/_AlbinReji_",
+      "How SecurityFilterChain, AuthenticationManager, ProviderManager, and SecurityContext work together to authenticate a request from login to thread-local storage.",
+    date: "16 AUG 2026",
+    image: "/twitter-assets/spring_security.png",
+    url: "https://x.com/_AlbinReji_/status/2091880684570150351",
   },
   {
     id: "post-3",
     category: "BACKEND",
-    title: "PostgreSQL query profiling: Fixing a 1.2s bottleneck down to 4ms",
+    title: "Optimistic Locking — Solving Race Conditions at Write Time",
     description:
-      "Deconstructing EXPLAIN ANALYZE traces, index selection tradeoffs, and connection pool starvation with HikariCP.",
-    date: "14 AUG 2026",
-    image: "/about-code.jpg",
-    url: "https://x.com/_AlbinReji_",
+      "Both transactions read the same version, but only one can safely write. Understanding the race condition problem before any locking strategy kicks in.",
+    date: "13 AUG 2026",
+    image: "/twitter-assets/optimistic_locking.png",
+    url: "https://x.com/_AlbinReji_/status/2090080208464527612",
   },
   {
     id: "post-4",
     category: "ARCHITECTURE",
-    title: "Zero-Trust microservices security with Keycloak & JWT authorization",
+    title: "What is Keycloak? — Identity & Access Management Explained",
     description:
-      "Enforcing fine-grained RBAC tokens, stateless gateway verification, and secure service-to-service communication.",
-    date: "08 AUG 2026",
-    image: "/about-arch.jpg",
-    url: "https://x.com/_AlbinReji_",
-  },
-  {
-    id: "post-5",
-    category: "WEB PERFORMANCE",
-    title: "React 19 Server Actions & Optimistic UI: What actually speeds up apps",
-    description:
-      "Measuring DOM mutation overhead, state hydration cost, and real user interaction latency on high-throughput interfaces.",
-    date: "01 AUG 2026",
-    image: "/about-code.jpg",
-    url: "https://x.com/_AlbinReji_",
-  },
-  {
-    id: "post-6",
-    category: "DEVOPS",
-    title: "Containerizing Spring Boot 3 with GraalVM native images on Kubernetes",
-    description:
-      "Cutting memory footprint by 65% and achieving instant cold starts for auto-scaling cluster pods.",
-    date: "26 JUL 2026",
-    image: "/project-01.jpg",
-    url: "https://x.com/_AlbinReji_",
-  },
-  {
-    id: "post-7",
-    category: "OPEN SOURCE",
-    title: "Writing a lightweight Redis caching interceptor for Spring Data",
-    description:
-      "A small open-source utility for multi-tier cache invalidation with zero configuration overhead.",
-    date: "18 JUL 2026",
-    image: "/notes-event-arch.jpg",
-    url: "https://x.com/_AlbinReji_",
-  },
-  {
-    id: "post-8",
-    category: "LEARNING",
-    title: "Mental models for distributed state reconciliation and consensus",
-    description:
-      "Practical insights on eventual consistency, vector clocks, and idempotency guarantees in distributed nodes.",
-    date: "11 JUL 2026",
-    image: "/about-arch.jpg",
-    url: "https://x.com/_AlbinReji_",
+      "Centralized authentication, RBAC, SSO, and standard protocols (OIDC, OAuth2, SAML). How Keycloak architecture connects clients, microservices, and user federation.",
+    date: "12 AUG 2026",
+    image: "/twitter-assets/keycloak.png",
+    url: "https://x.com/_AlbinReji_/status/2089717880560742711",
   },
 ];
 
