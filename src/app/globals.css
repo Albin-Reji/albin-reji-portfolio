@@ -403,3 +403,80 @@
     will-change: auto;
   }
 }
+
+/* ─── Contact CTA Text Effects ───────────────────────────────────────────── */
+
+/* Outlined / Stroke text — transparent fill with visible border */
+.cta-text-outline {
+  color: transparent;
+  -webkit-text-stroke: 2px #F5F5F0;
+  text-shadow: none;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cta-text-outline:hover {
+  -webkit-text-stroke: 2px #D7FF00;
+  text-shadow: 0 0 40px rgba(215, 255, 0, 0.15);
+}
+
+@media (max-width: 768px) {
+  .cta-text-outline {
+    -webkit-text-stroke: 1.5px #F5F5F0;
+  }
+  .cta-text-outline:hover {
+    -webkit-text-stroke: 1.5px #D7FF00;
+  }
+}
+
+/* Glowing lime accent text with animated pulse */
+.cta-text-glow {
+  color: #D7FF00;
+  text-shadow:
+    0 0 20px rgba(215, 255, 0, 0.3),
+    0 0 60px rgba(215, 255, 0, 0.1);
+  animation: cta-glow-pulse 3s ease-in-out infinite;
+}
+
+.cta-text-glow .cta-no-glow {
+  text-shadow: none;
+  animation: none;
+}
+
+@keyframes cta-glow-pulse {
+  0%, 100% {
+    text-shadow:
+      0 0 20px rgba(215, 255, 0, 0.3),
+      0 0 60px rgba(215, 255, 0, 0.1);
+  }
+  50% {
+    text-shadow:
+      0 0 30px rgba(215, 255, 0, 0.5),
+      0 0 80px rgba(215, 255, 0, 0.2),
+      0 0 120px rgba(215, 255, 0, 0.05);
+  }
+}
+
+/* Animated expanding dash line */
+.cta-dash-line {
+  animation: cta-dash-expand 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.8s both;
+}
+
+@keyframes cta-dash-expand {
+  from {
+    width: 0;
+    opacity: 0;
+  }
+  to {
+    width: 2.5rem;
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta-text-glow {
+    animation: none;
+  }
+  .cta-dash-line {
+    animation: none;
+  }
+}

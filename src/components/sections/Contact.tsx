@@ -11,6 +11,7 @@ import {
   XIcon,
   MailIcon,
 } from "@/components/ui/Icons";
+
 import SVGSignature from "@/components/ui/SVGSignature";
 import {
   personalInfo,
@@ -91,7 +92,7 @@ export default function Contact() {
     if (prefersReducedMotion || !sectionRef.current) return;
 
     const ctx = gsap.context(() => {
-      // Header masked reveal
+      // Header masked reveal with wider stagger for dramatic effect
       gsap.fromTo(
         ".contact-cta-line",
         { y: "115%", opacity: 0, skewY: 3 },
@@ -99,8 +100,27 @@ export default function Contact() {
           y: "0%",
           opacity: 1,
           skewY: 0,
-          duration: 1.1,
-          stagger: 0.1,
+          duration: 1.2,
+          stagger: 0.18,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: ".contact-cta-trigger",
+            start: "top 80%",
+            once: true,
+          },
+        }
+      );
+
+
+      // Dash line expand animation (synced with text reveal)
+      gsap.fromTo(
+        ".cta-dash-line",
+        { width: 0, opacity: 0 },
+        {
+          width: "2.5rem",
+          opacity: 1,
+          duration: 0.8,
+          delay: 0.6,
           ease: "power3.out",
           scrollTrigger: {
             trigger: ".contact-cta-trigger",
@@ -170,29 +190,50 @@ export default function Contact() {
         </div>
 
         <div className="space-y-1 md:space-y-2 relative">
+          {/* Line 1: LET'S BUILD — Pure white */}
           <div className="overflow-hidden">
-            <h2 className="contact-cta-line text-[clamp(2.75rem,8.5vw,9rem)] font-black uppercase leading-[0.85] tracking-[-0.06em] text-[#F5F5F0]">
+            <h2
+              className="contact-cta-line text-[clamp(2.75rem,8.5vw,9rem)] font-black uppercase leading-[0.85] tracking-[-0.06em] text-[#F5F5F0]"
+            >
               LET&apos;S BUILD
             </h2>
           </div>
 
-          <div className="overflow-hidden relative">
+          {/* Line 2: SOMETHING with anchored SVG underline loop */}
+          <div className="overflow-visible relative">
             <h2 className="contact-cta-line text-[clamp(2.75rem,8.5vw,9rem)] font-black uppercase leading-[0.85] tracking-[-0.06em] text-[#F5F5F0]">
-              SOMETHING
+              <span className="relative inline-block">
+                SOMETHING
+                {/* 1:1 Ratio Anchored SVG Vector Underline Loop */}
+                <span
+                  className="absolute -bottom-[22%] left-[-2%] w-[108%] pointer-events-none z-10 block"
+                  aria-hidden="true"
+                >
+                  <SVGSignature delay={0.6} strokeWidth={4.5} />
+                </span>
+              </span>
             </h2>
-            <div className="absolute -bottom-4 md:-bottom-8 left-0 max-w-[280px] md:max-w-[420px] pointer-events-none z-10">
-              <SVGSignature delay={0.6} />
-            </div>
           </div>
 
+          {/* Line 3: THAT SCALES. — Lime accent */}
           <div className="overflow-hidden pt-4 md:pt-6">
-            <h2 className="contact-cta-line text-[clamp(2.75rem,8.5vw,9rem)] font-black uppercase leading-[0.85] tracking-[-0.06em] text-[#D7FF00]">
-              THAT MOVES<span className="text-[#F5F5F0]">.</span>
+            <h2
+              className="contact-cta-line text-[clamp(2.75rem,8.5vw,9rem)] font-black uppercase leading-[0.85] tracking-[-0.06em] text-[#D7FF00]"
+            >
+              THAT SCALES<span className="text-[#F5F5F0]">.</span>
             </h2>
           </div>
         </div>
 
-        <p className="mt-8 max-w-2xl text-base md:text-xl text-[#B5B5B5] font-light leading-relaxed contact-cta-line">
+        {/* Subtitle: Useful by design. Built with intent. */}
+        <div className="mt-8 contact-cta-line flex items-center gap-4">
+          <span className="cta-dash-line block w-10 h-[1px] bg-[#D7FF00]" />
+          <p className="text-base md:text-xl text-[#B5B5B5] font-light leading-relaxed tracking-wide italic">
+            Useful by design<span className="text-[#D7FF00] not-italic font-bold mx-1">·</span>Built with intent<span className="text-[#D7FF00] not-italic font-bold">.</span>
+          </p>
+        </div>
+
+        <p className="mt-4 max-w-2xl text-base md:text-lg text-[#8A8A8A] font-light leading-relaxed contact-cta-line">
           {contactSubtext}
         </p>
       </div>
@@ -349,8 +390,8 @@ export default function Contact() {
                     value={form.name}
                     onChange={(e) => handleChange("name", e.target.value)}
                     className={`w-full border ${errors.name
-                        ? "border-[#D7FF00]"
-                        : "border-[#F5F5F0]/20"
+                      ? "border-[#D7FF00]"
+                      : "border-[#F5F5F0]/20"
                       } bg-transparent px-4 py-3.5 text-sm text-[#F5F5F0] placeholder:text-[#6A6A6A] focus:border-[#D7FF00] focus:outline-none transition-colors font-mono`}
                     placeholder="Enter your full name"
                     autoComplete="name"
@@ -375,8 +416,8 @@ export default function Contact() {
                     value={form.email}
                     onChange={(e) => handleChange("email", e.target.value)}
                     className={`w-full border ${errors.email
-                        ? "border-[#D7FF00]"
-                        : "border-[#F5F5F0]/20"
+                      ? "border-[#D7FF00]"
+                      : "border-[#F5F5F0]/20"
                       } bg-transparent px-4 py-3.5 text-sm text-[#F5F5F0] placeholder:text-[#6A6A6A] focus:border-[#D7FF00] focus:outline-none transition-colors font-mono`}
                     placeholder="your.email@company.com"
                     autoComplete="email"
@@ -401,8 +442,8 @@ export default function Contact() {
                     onChange={(e) => handleChange("message", e.target.value)}
                     rows={5}
                     className={`w-full border ${errors.message
-                        ? "border-[#D7FF00]"
-                        : "border-[#F5F5F0]/20"
+                      ? "border-[#D7FF00]"
+                      : "border-[#F5F5F0]/20"
                       } bg-transparent px-4 py-3.5 text-sm text-[#F5F5F0] placeholder:text-[#6A6A6A] focus:border-[#D7FF00] focus:outline-none transition-colors font-mono resize-y`}
                     placeholder="Message..."
                   />
