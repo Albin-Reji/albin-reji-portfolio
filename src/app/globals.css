@@ -486,3 +486,273 @@
     animation: none;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Contact Section — Editorial Redesign (High Contrast Ink System)
+   ─────────────────────────────────────────────────────────────────────────
+   Primary Ink:     #171717 (Deep Near-Black Charcoal)
+   Secondary Ink:   rgba(23, 23, 23, 0.65) (65% Dark Charcoal)
+   Muted/Place:     rgba(23, 23, 23, 0.48) (48% Dark Charcoal)
+   Lime Accent:     #DFFF35 / #D8FF3F (Fluorescent Lemon-Lime)
+   Background Top:  #F7F6EE (Warm Cream)
+   Background Mid:  #F0F0C8 (Subtle Pale Yellow / Parchment)
+   Background Bot:  #DFFF35 (Lemon-Lime Emerging Glow)
+   Contour Stroke:  #6F733F (Subtle Topographic lines at 0.08-0.10 opacity)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Atmospheric Multi-Layered Gradient Background ──────────────────────── */
+.contact-editorial-bg {
+  position: relative;
+  background:
+    /* Bottom fluorescent lime emergence */
+    radial-gradient(ellipse 130% 50% at 50% 110%, rgba(223, 255, 53, 0.45) 0%, transparent 65%),
+    radial-gradient(ellipse 90% 40% at 25% 95%, rgba(223, 255, 53, 0.22) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 35% at 75% 98%, rgba(223, 255, 53, 0.18) 0%, transparent 50%),
+    /* Mid-section subtle warmth */
+    radial-gradient(ellipse 140% 60% at 50% 60%, rgba(240, 240, 200, 0.25) 0%, transparent 60%),
+    /* Smooth vertical progression: #F7F6EE -> #F0F0C8 -> #DFFF35 */
+    linear-gradient(180deg,
+      #F7F6EE 0%,
+      #F5F4EC 18%,
+      #F2F1DF 36%,
+      #EEEECD 55%,
+      #E7EAC0 75%,
+      #DEECA0 90%,
+      #DFFF35 100%
+    );
+  overflow: hidden;
+}
+
+/* ── Topographic Contour Pattern Overlay ─────────────────────────────────── */
+.contact-contour-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.09;
+}
+
+/* ── Social Link Row — High-Contrast Minimal Editorial ──────────────────── */
+.contact-social-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.125rem 0.25rem;
+  border-bottom: 1px solid rgba(23, 23, 23, 0.20);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.contact-social-row::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #171717;
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.contact-social-row:hover::after {
+  width: 100%;
+}
+
+.contact-social-row:hover {
+  padding-left: 8px;
+  background: rgba(223, 255, 53, 0.15);
+}
+
+.contact-social-row:hover .social-row-label {
+  color: #171717;
+}
+
+.contact-social-row:hover .social-row-arrow {
+  transform: translate(3px, -3px);
+  color: #171717;
+}
+
+.social-row-label {
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: #171717;
+  transition: color 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.social-row-label svg {
+  color: #171717;
+  flex-shrink: 0;
+}
+
+.social-row-arrow {
+  color: #171717;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease;
+  flex-shrink: 0;
+}
+
+/* ── Editorial Form Inputs (High Contrast) ───────────────────────────────── */
+.contact-input-editorial {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.28);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(23, 23, 23, 0.25);
+  padding: 1rem 1.25rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #171717;
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+  outline: none;
+  border-radius: 0;
+}
+
+.contact-input-editorial::placeholder {
+  color: rgba(23, 23, 23, 0.48);
+  font-weight: 400;
+}
+
+.contact-input-editorial:focus {
+  border-color: #171717;
+  box-shadow: 0 0 0 3px rgba(223, 255, 53, 0.50);
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.contact-input-editorial.has-error {
+  border-color: #C2410C;
+}
+
+/* ── Submit Button ───────────────────────────────────────────────────────── */
+.contact-submit-btn {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  background: #DFFF35;
+  color: #171717;
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  padding: 1.25rem 2rem;
+  border: 1px solid rgba(23, 23, 23, 0.15);
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.contact-submit-btn svg {
+  color: #171717;
+}
+
+.contact-submit-btn:hover {
+  background: #D2F520;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+}
+
+.contact-submit-btn:active {
+  transform: translateY(0) scale(0.99);
+}
+
+/* ── Section & Info Labels ───────────────────────────────────────────────── */
+.contact-section-label {
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: rgba(23, 23, 23, 0.65);
+}
+
+.contact-info-label {
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.20em;
+  color: rgba(23, 23, 23, 0.65);
+  margin-bottom: 0.375rem;
+}
+
+/* ── Copy Button ─────────────────────────────────────────────────────────── */
+.contact-copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.8rem;
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  border: 1px solid rgba(23, 23, 23, 0.30);
+  color: #171717;
+  background: rgba(255, 255, 255, 0.40);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.contact-copy-btn:hover {
+  border-color: #171717;
+  color: #F7F6EE;
+  background: #171717;
+}
+
+.contact-copy-btn:hover svg {
+  color: #F7F6EE;
+}
+
+/* ── Strikethrough Effect ────────────────────────────────────────────────── */
+.contact-strikethrough {
+  position: absolute;
+  top: 54%;
+  left: -3%;
+  width: 106%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ── Contour Drift Animation ─────────────────────────────────────────────── */
+@keyframes contact-contour-drift {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(-6px, 3px); }
+  100% { transform: translate(0, 0); }
+}
+
+.contact-contour-animate {
+  animation: contact-contour-drift 45s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-contour-animate {
+    animation: none;
+  }
+
+  .contact-submit-btn:hover {
+    transform: none;
+  }
+
+  .contact-social-row:hover {
+    padding-left: 0.25rem;
+  }
+
+  .contact-social-row:hover .social-row-arrow {
+    transform: none;
+  }
+}
+
