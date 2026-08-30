@@ -108,6 +108,7 @@ export interface Project {
 export interface Certification {
   name: string;
   provider: string;
+  image: string;
   url?: string;
 }
 
@@ -376,15 +377,28 @@ export const projects: Project[] = [
 ];
 
 // ─── Certifications ──────────────────────────────────────────────────────────
+// Add new certifications here. The component will auto-adapt.
+// Each entry needs: name, provider, image, and optionally url.
+// ─────────────────────────────────────────────────────────────────────────────
 
 export const certifications: Certification[] = [
   {
     name: "Java Spring Framework 6 with Spring Boot 3",
     provider: "Udemy",
+    image: "/certificate-assets/sprinboot_certificate.jpg",
+    url: "https://ude.my/UC-fe840c60-03d7-482a-a052-569829261c50",
   },
   {
     name: "100 Days of Code: Python Bootcamp",
     provider: "Udemy",
+    image: "/certificate-assets/python-bootcamp.jpg",
+    url: "https://ude.my/UC-4455a1ca-89b6-447d-8229-7371c40d01b8",
+  },
+  {
+    name: "The Complete Machine Learning Course with Python",
+    provider: "Udemy",
+    image: "/certificate-assets/Machine_Learning_udemy.jpg",
+    url: "https://www.udemy.com/certificate/UC-b7d58726-c1ec-4b1e-be09-be981490dd78/",
   },
 ];
 
