@@ -237,9 +237,8 @@ export default function Projects() {
           tabIndex={0}
           role="region"
           aria-label="Featured projects horizontal slider"
-          className={`flex gap-6 md:gap-10 overflow-x-auto snap-x snap-mandatory py-4 pb-8 focus:outline-none select-none ${
-            isDragging ? "cursor-grabbing scroll-auto" : "cursor-grab scroll-smooth"
-          }`}
+          className={`flex gap-6 md:gap-10 overflow-x-auto snap-x snap-mandatory py-4 pb-8 focus:outline-none select-none ${isDragging ? "cursor-grabbing scroll-auto" : "cursor-grab scroll-smooth"
+            }`}
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {projects.map((project, idx) => {
@@ -250,11 +249,10 @@ export default function Projects() {
             return (
               <article
                 key={project.name}
-                className={`w-[90vw] sm:w-[85vw] lg:w-[1240px] xl:w-[1360px] shrink-0 snap-center border border-[#F5F5F0]/15 bg-[#000000] p-6 md:p-10 transition-all duration-500 ${
-                  isActive
+                className={`w-[90vw] sm:w-[85vw] lg:w-[1240px] xl:w-[1360px] shrink-0 snap-center border border-[#F5F5F0]/15 bg-[#000000] p-6 md:p-10 transition-all duration-500 ${isActive
                     ? "border-[#D7FF00]/60 shadow-[0_0_40px_rgba(215,255,0,0.04)]"
                     : "opacity-60 hover:opacity-90"
-                }`}
+                  }`}
               >
                 {/* Project Header Bar */}
                 <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#F5F5F0]/15 pb-5 mb-8 font-mono">
@@ -279,11 +277,10 @@ export default function Projects() {
                         e.stopPropagation();
                         setActiveTabByProject((prev) => ({ ...prev, [idx]: "preview" }));
                       }}
-                      className={`px-3 py-1.5 transition-colors cursor-pointer flex items-center gap-1.5 ${
-                        currentTab === "preview"
+                      className={`px-3 py-1.5 transition-colors cursor-pointer flex items-center gap-1.5 ${currentTab === "preview"
                           ? "bg-[#D7FF00] text-[#050505] font-bold"
                           : "text-[#8A8A8A] hover:text-[#F5F5F0]"
-                      }`}
+                        }`}
                     >
                       <span>01 // Visual Preview</span>
                     </button>
@@ -292,11 +289,10 @@ export default function Projects() {
                         e.stopPropagation();
                         setActiveTabByProject((prev) => ({ ...prev, [idx]: "architecture" }));
                       }}
-                      className={`px-3 py-1.5 transition-colors cursor-pointer flex items-center gap-1.5 ${
-                        currentTab === "architecture"
+                      className={`px-3 py-1.5 transition-colors cursor-pointer flex items-center gap-1.5 ${currentTab === "architecture"
                           ? "bg-[#D7FF00] text-[#050505] font-bold"
                           : "text-[#8A8A8A] hover:text-[#F5F5F0]"
-                      }`}
+                        }`}
                     >
                       <Layers size={12} />
                       <span>02 // Architecture Mesh</span>
@@ -451,9 +447,8 @@ export default function Projects() {
               <button
                 key={p.name}
                 onClick={() => scrollToSlide(pIdx)}
-                className={`w-8 h-2 transition-colors cursor-pointer ${
-                  activeProjectIndex === pIdx ? "bg-[#D7FF00]" : "bg-[#1A1A1A] hover:bg-[#F5F5F0]/30"
-                }`}
+                className={`w-8 h-2 transition-colors cursor-pointer ${activeProjectIndex === pIdx ? "bg-[#D7FF00]" : "bg-[#1A1A1A] hover:bg-[#F5F5F0]/30"
+                  }`}
                 aria-label={`Go to slide ${pIdx + 1}: ${p.name}`}
               />
             ))}
