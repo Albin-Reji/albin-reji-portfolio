@@ -303,7 +303,7 @@ export default function EngineeringNotes() {
 
               {/* Post Count */}
               <span className="text-[#8A8A8A] text-[11px]">
-                08 SELECTED POSTS
+                {String(engineeringNotes.length).padStart(2, "0")} SELECTED POSTS
               </span>
             </div>
           </div>
