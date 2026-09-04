@@ -29,6 +29,14 @@ export default function CustomCursor() {
     const onMouseMove = (e: MouseEvent) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
+
+      // Hide the dot entirely when hovering inside the contact form card
+      const formCard = (e.target as Element)?.closest?.(".contact-form-card, .cf-fields, .cf-field, .cf-field-body");
+      if (formCard) {
+        cursor.style.opacity = "0";
+      } else {
+        cursor.style.opacity = "1";
+      }
     };
 
     const animate = () => {
@@ -41,7 +49,11 @@ export default function CustomCursor() {
       rafId = requestAnimationFrame(animate);
     };
 
-    const onMouseEnterInteractive = () => {
+    const onMouseEnterInteractive = (e: Event) => {
+      // Don't expand when over inputs/textareas inside the contact form
+      const target = e.target as Element;
+      const isInsideForm = target.closest(".contact-form-card, .cf-fields");
+      if (isInsideForm) return;
       cursor.classList.add("is-active");
     };
 
