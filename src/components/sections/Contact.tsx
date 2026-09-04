@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, type FormEvent } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowUpRight, Send, Check, Copy, Mail } from "lucide-react";
+import { ArrowUpRight, Send, Check, Copy, AlertCircle, Loader2 } from "lucide-react";
 import {
   GitHubIcon,
   LinkedInIcon,
@@ -55,6 +55,8 @@ interface FormErrors {
   message?: string;
 }
 
+type SubmitStatus = "idle" | "loading" | "success" | "error";
+
 function validateForm(form: FormState): FormErrors {
   const errors: FormErrors = {};
   if (!form.name.trim()) errors.name = "Name is required";
@@ -67,7 +69,7 @@ function validateForm(form: FormState): FormErrors {
   return errors;
 }
 
-/* ── Inline SVG Topographic Contour Pattern (Subtle Ambient) ─────────────── */
+/* ── Inline SVG Topographic Contour Pattern (Subtle Ambient) ─────────────────── */
 function ContourPattern() {
   return (
     <svg
@@ -78,7 +80,6 @@ function ContourPattern() {
       aria-hidden="true"
     >
       <g fill="none" stroke="#6F733F" strokeWidth="0.75">
-        {/* Layer 1 - Flowing elevation contours */}
         <path d="M-40 110 C220 70, 420 150, 640 110 S920 50, 1140 120 S1320 170, 1500 90" />
         <path d="M-40 190 C190 230, 390 170, 590 210 S800 270, 1000 190 S1220 150, 1480 230" />
         <path d="M-40 300 C170 260, 370 320, 570 280 S770 240, 970 310 S1180 360, 1480 280" />
@@ -88,7 +89,6 @@ function ContourPattern() {
         <path d="M-40 670 C230 630, 430 690, 630 650 S830 610, 1030 680 S1230 720, 1480 660" />
         <path d="M-40 760 C210 800, 410 740, 610 780 S810 820, 1010 750 S1210 710, 1480 790" />
         <path d="M-40 840 C250 800, 450 860, 650 820 S850 780, 1050 850 S1290 890, 1480 830" />
-        {/* Layer 2 - Intermediate ridges */}
         <path d="M-40 150 C250 120, 450 180, 650 140 S870 100, 1070 160 S1290 200, 1480 140" opacity="0.6" />
         <path d="M-40 340 C210 370, 410 310, 610 350 S810 390, 1010 330 S1230 290, 1480 360" opacity="0.6" />
         <path d="M-40 530 C250 500, 450 560, 650 520 S850 480, 1050 540 S1270 580, 1480 520" opacity="0.6" />
@@ -98,7 +98,7 @@ function ContourPattern() {
   );
 }
 
-/* ── Expressive Hand-drawn Strike-through SVG ─────────────────────────────── */
+/* ── Hand-drawn Strike-through SVG ───────────────────────────────────────── */
 function StrikethroughSVG() {
   const pathRef = useRef<SVGPathElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
@@ -107,33 +107,18 @@ function StrikethroughSVG() {
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
-
     if (prefersReducedMotion || !pathRef.current || !svgRef.current) return;
-
     const path = pathRef.current;
     const length = path.getTotalLength();
-
-    gsap.set(path, {
-      strokeDasharray: length,
-      strokeDashoffset: length,
-      opacity: 0,
-    });
-
+    gsap.set(path, { strokeDasharray: length, strokeDashoffset: length, opacity: 0 });
     const trigger = ScrollTrigger.create({
       trigger: svgRef.current,
       start: "top 80%",
       once: true,
       onEnter: () => {
-        gsap.to(path, {
-          strokeDashoffset: 0,
-          opacity: 1,
-          duration: 0.9,
-          delay: 1.1,
-          ease: "power2.out",
-        });
+        gsap.to(path, { strokeDashoffset: 0, opacity: 1, duration: 0.9, delay: 1.1, ease: "power2.out" });
       },
     });
-
     return () => trigger.kill();
   }, []);
 
@@ -158,15 +143,79 @@ function StrikethroughSVG() {
   );
 }
 
+/* ── Compact Numbered Form Field ─────────────────────────────────────────── */
+function CompactField({
+  id,
+  fieldNum,
+  label,
+  type = "text",
+  value,
+  onChange,
+  error,
+  isTextarea = false,
+  autoComplete,
+  placeholder,
+}: {
+  id: string;
+  fieldNum: string;
+  label: string;
+  type?: string;
+  value: string;
+  onChange: (v: string) => void;
+  error?: string;
+  isTextarea?: boolean;
+  autoComplete?: string;
+  placeholder?: string;
+}) {
+  return (
+    <div className={`cf-field${error ? " cf-field--error" : ""}`}>
+      <div className="cf-field-head">
+        <span className="cf-field-num" aria-hidden="true">{fieldNum}</span>
+        <label htmlFor={id} className="cf-field-lbl">
+          {label}<span className="cf-req">*</span>
+        </label>
+      </div>
+      <div className="cf-field-body">
+        {isTextarea ? (
+          <textarea
+            id={id}
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            className="cf-input cf-textarea"
+            placeholder={placeholder}
+            aria-invalid={!!error}
+            aria-describedby={error ? `${id}-error` : undefined}
+          />
+        ) : (
+          <input
+            id={id}
+            type={type}
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            className="cf-input"
+            placeholder={placeholder}
+            autoComplete={autoComplete}
+            aria-invalid={!!error}
+            aria-describedby={error ? `${id}-error` : undefined}
+          />
+        )}
+      </div>
+      {error && (
+        <p id={`${id}-error`} className="cf-field-err" role="alert">
+          <AlertCircle size={10} aria-hidden="true" />
+          {error}
+        </p>
+      )}
+    </div>
+  );
+}
+
 export default function Contact() {
   const sectionRef = useRef<HTMLElement>(null);
-  const [form, setForm] = useState<FormState>({
-    name: "",
-    email: "",
-    message: "",
-  });
+  const [form, setForm] = useState<FormState>({ name: "", email: "", message: "" });
   const [errors, setErrors] = useState<FormErrors>({});
-  const [submitted, setSubmitted] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<SubmitStatus>("idle");
+  const [serverError, setServerError] = useState<string>("");
   const [copiedEmail, setCopiedEmail] = useState(false);
 
   const handleCopyEmail = () => {
@@ -176,65 +225,32 @@ export default function Contact() {
   };
 
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReducedMotion || !sectionRef.current) return;
 
     const ctx = gsap.context(() => {
-      // Header masked reveal with stagger
       gsap.fromTo(
         ".contact-cta-line",
         { y: "115%", opacity: 0, skewY: 3 },
         {
-          y: "0%",
-          opacity: 1,
-          skewY: 0,
-          duration: 1.2,
-          stagger: 0.18,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: ".contact-cta-trigger",
-            start: "top 80%",
-            once: true,
-          },
+          y: "0%", opacity: 1, skewY: 0, duration: 1.2, stagger: 0.18, ease: "power3.out",
+          scrollTrigger: { trigger: ".contact-cta-trigger", start: "top 80%", once: true },
         }
       );
-
-      // Dash line expand animation
       gsap.fromTo(
         ".cta-dash-line",
         { width: 0, opacity: 0 },
         {
-          width: "2.5rem",
-          opacity: 1,
-          duration: 0.8,
-          delay: 0.6,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: ".contact-cta-trigger",
-            start: "top 80%",
-            once: true,
-          },
+          width: "2.5rem", opacity: 1, duration: 0.8, delay: 0.6, ease: "power3.out",
+          scrollTrigger: { trigger: ".contact-cta-trigger", start: "top 80%", once: true },
         }
       );
-
-      // Content blocks staggered fade-in
       gsap.fromTo(
         ".contact-block-fade",
         { y: 35, opacity: 0 },
         {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          stagger: 0.12,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: ".contact-content-grid",
-            start: "top 75%",
-            once: true,
-          },
+          y: 0, opacity: 1, duration: 0.8, stagger: 0.12, ease: "power3.out",
+          scrollTrigger: { trigger: ".contact-content-grid", start: "top 75%", once: true },
         }
       );
     }, sectionRef);
@@ -242,7 +258,15 @@ export default function Contact() {
     return () => ctx.revert();
   }, []);
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleChange = (field: keyof FormState, value: string) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+    if (errors[field]) {
+      setErrors((prev) => { const next = { ...prev }; delete next[field]; return next; });
+    }
+    if (serverError) setServerError("");
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const validationErrors = validateForm(form);
     if (Object.keys(validationErrors).length > 0) {
@@ -250,18 +274,33 @@ export default function Contact() {
       return;
     }
     setErrors({});
-    setSubmitted(true);
+    setServerError("");
+    setSubmitStatus("loading");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: form.name.trim(), email: form.email.trim(), message: form.message.trim() }),
+      });
+      const data = (await res.json()) as { ok?: boolean; error?: string };
+      if (!res.ok || !data.ok) {
+        setServerError(data.error ?? "Something went wrong. Please try again.");
+        setSubmitStatus("error");
+        return;
+      }
+      setSubmitStatus("success");
+    } catch {
+      setServerError("Network error — please check your connection and retry.");
+      setSubmitStatus("error");
+    }
   };
 
-  const handleChange = (field: keyof FormState, value: string) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
-    if (errors[field]) {
-      setErrors((prev) => {
-        const next = { ...prev };
-        delete next[field];
-        return next;
-      });
-    }
+  const handleReset = () => {
+    setSubmitStatus("idle");
+    setForm({ name: "", email: "", message: "" });
+    setErrors({});
+    setServerError("");
   };
 
   return (
@@ -270,110 +309,75 @@ export default function Contact() {
       id="contact"
       className="contact-editorial-bg relative z-10 w-full max-w-full overflow-hidden pb-20 md:pb-28 lg:pb-32 box-border"
     >
-      {/* ── Topographic contour pattern overlay ── */}
       <ContourPattern />
 
-      {/* ── Section content layer ── */}
       <div className="relative z-10 w-full max-w-full box-border">
-        {/* ═══ Top: Section Status & Label ═══ */}
+        {/* ═══ Section Label ═══ */}
         <div className="contact-cta-trigger px-5 sm:px-8 md:px-12 lg:px-20 max-w-[1728px] mx-auto w-full pt-16 sm:pt-20 md:pt-24 lg:pt-28 box-border">
           <div className="flex items-center gap-3 contact-section-label mb-4 pb-4 border-b border-[rgba(23,23,23,0.18)] flex-wrap">
             <span className="text-[#171717] font-bold">[07]</span>
             <span className="text-[rgba(23,23,23,0.65)]">CONTACT // DIRECT COMMS</span>
             <span className="flex-1 min-w-[20px]" />
-            <span className="text-[#171717] font-bold hidden sm:inline">
-              AVAILABLE FOR FULL-TIME ROLES
-            </span>
+            <span className="text-[#171717] font-bold hidden sm:inline">AVAILABLE FOR FULL-TIME ROLES</span>
           </div>
 
-          {/* ═══ Oversized Editorial Headline (Fluid & Responsive) ═══ */}
+          {/* ═══ Editorial Headline ═══ */}
           <div className="space-y-1 md:space-y-2 relative mt-8 md:mt-12 max-w-full">
-            {/* Line 1: LET'S BUILD */}
             <div className="overflow-hidden max-w-full">
-              <h2
-                className="contact-cta-line text-[clamp(1.75rem,7.5vw,8.5rem)] font-black uppercase leading-[0.88] tracking-[-0.05em] text-[#171717] break-normal"
-              >
+              <h2 className="contact-cta-line text-[clamp(1.75rem,7.5vw,8.5rem)] font-black uppercase leading-[0.88] tracking-[-0.05em] text-[#171717] break-normal">
                 LET&apos;S BUILD
               </h2>
             </div>
-
-            {/* Line 2: SOMETHING with anchored signature underline loop */}
             <div className="overflow-visible relative max-w-full">
               <h2 className="contact-cta-line text-[clamp(1.75rem,7.5vw,8.5rem)] font-black uppercase leading-[0.88] tracking-[-0.05em] text-[#171717] break-normal">
                 <span className="relative inline-block max-w-full">
                   SOMETHING
-                  {/* Anchored SVG Vector Underline Loop */}
-                  <span
-                    className="absolute -bottom-[22%] left-0 w-full pointer-events-none z-10 block max-w-full"
-                    aria-hidden="true"
-                  >
+                  <span className="absolute -bottom-[22%] left-0 w-full pointer-events-none z-10 block max-w-full" aria-hidden="true">
                     <SVGSignature delay={0.6} strokeWidth={4.5} />
                   </span>
                 </span>
               </h2>
             </div>
-
-            {/* Line 3: THAT SCALES. — Dark charcoal with hand-drawn lime strikethrough */}
             <div className="overflow-visible pt-3 sm:pt-4 md:pt-6 max-w-full">
-              <h2
-                className="contact-cta-line text-[clamp(1.75rem,7.5vw,8.5rem)] font-black uppercase leading-[0.88] tracking-[-0.05em] text-[#171717] relative inline-block max-w-full break-normal"
-              >
+              <h2 className="contact-cta-line text-[clamp(1.75rem,7.5vw,8.5rem)] font-black uppercase leading-[0.88] tracking-[-0.05em] text-[#171717] relative inline-block max-w-full break-normal">
                 THAT SCALES.
                 <StrikethroughSVG />
               </h2>
             </div>
           </div>
 
-          {/* Subtitle with expanding accent dash */}
           <div className="mt-8 contact-cta-line flex items-center gap-4 flex-wrap">
             <span className="cta-dash-line block w-10 h-[2px] bg-[#171717]" />
             <p className="text-base md:text-xl text-[#171717] font-medium leading-relaxed tracking-wide italic">
               Useful by design<span className="text-[#171717] not-italic font-bold mx-1">·</span>Built with intent<span className="text-[#171717] not-italic font-bold">.</span>
             </p>
           </div>
-
           <p className="mt-4 max-w-2xl text-base md:text-lg text-[rgba(23,23,23,0.75)] font-normal leading-relaxed contact-cta-line">
             {contactSubtext}
           </p>
         </div>
 
-        {/* ═══ Content Grid: Direct Comms & Transmission Console ═══ */}
+        {/* ═══ Content Grid ═══ */}
         <div className="contact-content-grid px-5 sm:px-8 md:px-12 lg:px-20 max-w-[1728px] mx-auto w-full mt-14 sm:mt-16 md:mt-24 box-border min-w-0">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-start w-full min-w-0">
 
-            {/* ── Left: Direct Comms (5 cols on desktop, full width on mobile) ── */}
+            {/* ── Left: Direct Comms ── */}
             <div className="lg:col-span-5 space-y-10 contact-block-fade w-full min-w-0">
               <div className="space-y-7">
-                <span className="contact-section-label text-[#171717] font-bold block">
-                  // DIRECT COMMS
-                </span>
-
+                <span className="contact-section-label text-[#171717] font-bold block">// DIRECT COMMS</span>
                 <div className="space-y-6">
                   {/* Primary Email */}
                   <div className="border-b border-[rgba(23,23,23,0.18)] pb-5 space-y-2">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="contact-info-label">
-                        PRIMARY EMAIL
-                      </span>
-                      <button
-                        onClick={handleCopyEmail}
-                        className="contact-copy-btn"
-                        aria-label="Copy email address to clipboard"
-                      >
+                      <span className="contact-info-label">PRIMARY EMAIL</span>
+                      <button onClick={handleCopyEmail} className="contact-copy-btn" aria-label="Copy email address to clipboard">
                         {copiedEmail ? (
-                          <>
-                            <Check size={12} className="text-[#16A34A]" />
-                            <span className="text-[#16A34A] font-bold">COPIED!</span>
-                          </>
+                          <><Check size={12} className="text-[#16A34A]" /><span className="text-[#16A34A] font-bold">COPIED!</span></>
                         ) : (
-                          <>
-                            <Copy size={12} />
-                            <span>COPY ADDRESS</span>
-                          </>
+                          <><Copy size={12} /><span>COPY ADDRESS</span></>
                         )}
                       </button>
                     </div>
-
                     <a
                       href={`mailto:${personalInfo.email}`}
                       className="text-lg sm:text-2xl md:text-3xl font-bold text-[#171717] hover:opacity-75 transition-opacity block break-all tracking-tight"
@@ -382,12 +386,9 @@ export default function Contact() {
                       {personalInfo.email}
                     </a>
                   </div>
-
-                  {/* Phone / WhatsApp */}
+                  {/* Phone */}
                   <div className="border-b border-[rgba(23,23,23,0.18)] pb-5">
-                    <span className="contact-info-label block">
-                      PHONE // WHATSAPP
-                    </span>
+                    <span className="contact-info-label block">PHONE // WHATSAPP</span>
                     <a
                       href={`tel:${personalInfo.phone.replace(/[^+\d]/g, "")}`}
                       className="text-base sm:text-xl text-[#171717] hover:opacity-75 transition-opacity font-semibold block"
@@ -396,12 +397,9 @@ export default function Contact() {
                       {personalInfo.phone}
                     </a>
                   </div>
-
-                  {/* Base Headquarters */}
+                  {/* Location */}
                   <div className="pb-2">
-                    <span className="contact-info-label block">
-                      BASE HEADQUARTERS
-                    </span>
+                    <span className="contact-info-label block">BASE HEADQUARTERS</span>
                     <div className="text-base sm:text-lg text-[#171717] font-semibold flex items-center gap-2 flex-wrap">
                       <span>{personalInfo.location}</span>
                       <span className="text-[rgba(23,23,23,0.4)] font-normal">/</span>
@@ -411,12 +409,9 @@ export default function Contact() {
                 </div>
               </div>
 
-              {/* ── Social Network Channels ── */}
+              {/* Social Links */}
               <div className="pt-4 sm:pt-6 space-y-1 w-full min-w-0">
-                <span className="contact-section-label text-[rgba(23,23,23,0.65)] block mb-4">
-                  NETWORK CHANNELS
-                </span>
-
+                <span className="contact-section-label text-[rgba(23,23,23,0.65)] block mb-4">NETWORK CHANNELS</span>
                 <div className="w-full min-w-0 space-y-0.5">
                   {socialLinks.map((link) => {
                     const Icon = iconMap[link.icon];
@@ -425,11 +420,7 @@ export default function Contact() {
                         key={link.platform}
                         href={link.url}
                         target={link.icon === "mail" ? undefined : "_blank"}
-                        rel={
-                          link.icon === "mail"
-                            ? undefined
-                            : "noopener noreferrer"
-                        }
+                        rel={link.icon === "mail" ? undefined : "noopener noreferrer"}
                         aria-label={`Open ${link.platform} link`}
                         className="contact-social-row"
                       >
@@ -437,10 +428,7 @@ export default function Contact() {
                           {Icon && <Icon size={16} />}
                           <span className="truncate">{link.platform}</span>
                         </span>
-                        <ArrowUpRight
-                          size={17}
-                          className="social-row-arrow"
-                        />
+                        <ArrowUpRight size={17} className="social-row-arrow" />
                       </a>
                     );
                   })}
@@ -448,118 +436,111 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* ── Right: Transmission Console Form (7 cols on desktop, full width on mobile) ── */}
+            {/* ── Right: Transmission Console ── */}
             <div className="lg:col-span-7 contact-block-fade w-full min-w-0">
-              {submitted ? (
-                <div className="border-2 border-[#171717] p-6 sm:p-8 md:p-12 bg-white/80 backdrop-blur-md text-center space-y-4 shadow-sm w-full box-border">
-                  <div className="inline-flex p-3.5 bg-[#DFFF35] text-[#171717] border border-[#171717]">
-                    <Check size={24} />
+              {submitStatus === "success" ? (
+                /* ── Success State ── */
+                <div className="contact-success-card">
+                  <div className="contact-success-icon-wrap">
+                    <Check size={24} aria-hidden="true" />
                   </div>
-                  <h3 className="text-[clamp(1.5rem,3.5vw,2.75rem)] font-bold uppercase tracking-tight text-[#171717]">
-                    TRANSMISSION COMPLETE
-                  </h3>
-                  <p className="text-[#171717] max-w-md mx-auto text-sm font-mono leading-relaxed">
-                    Thank you for reaching out. Direct inbox monitored continuously at {personalInfo.email}.
+                  <h3 className="contact-success-heading">TRANSMISSION COMPLETE</h3>
+                  <p className="contact-success-body">
+                    Message received. Expect a reply at{" "}
+                    <strong className="text-[#171717]">{form.email}</strong>
+                    {" "}— direct inbox monitored continuously.
                   </p>
-                  <button
-                    onClick={() => {
-                      setSubmitted(false);
-                      setForm({ name: "", email: "", message: "" });
-                    }}
-                    className="btn-editorial mt-4 cursor-pointer border-[#171717] text-[#171717] hover:bg-[#171717] hover:text-[#F7F6EE]"
-                  >
+                  <button onClick={handleReset} className="contact-success-reset">
                     <span>SEND ANOTHER MESSAGE</span>
+                    <ArrowUpRight size={13} aria-hidden="true" />
                   </button>
                 </div>
               ) : (
-                <form
-                  onSubmit={handleSubmit}
-                  noValidate
-                  className="space-y-6 sm:space-y-7 w-full min-w-0 box-border"
-                >
-                  <div className="contact-section-label text-[#171717] font-bold pb-4 border-b border-[rgba(23,23,23,0.18)]">
-                    TRANSMISSION CONSOLE // NEW MESSAGE
+                /* ── Form ── */
+                <form onSubmit={handleSubmit} noValidate className="w-full min-w-0 box-border">
+                  {/* Header with LIVE indicator */}
+                  <div className="contact-form-header">
+                    <span className="contact-form-header-accent" aria-hidden="true" />
+                    <span className="contact-section-label" style={{ color: "#171717", fontWeight: "700" }}>
+                      TRANSMISSION CONSOLE // NEW MESSAGE
+                    </span>
+                    <span className="cf-live-badge" aria-hidden="true">
+                      <span className="cf-live-dot" />
+                      LIVE
+                    </span>
                   </div>
 
-                  {/* Name */}
-                  <div className="space-y-2 w-full min-w-0">
-                    <label
-                      htmlFor="contact-name"
-                      className="contact-info-label block text-[#171717] font-semibold"
-                    >
-                      NAME / RECRUITER / CLIENT <span className="text-[#171717] font-bold">*</span>
-                    </label>
-                    <input
-                      id="contact-name"
-                      type="text"
-                      value={form.name}
-                      onChange={(e) => handleChange("name", e.target.value)}
-                      className={`contact-input-editorial ${errors.name ? "has-error" : ""}`}
-                      placeholder="Enter your full name"
-                      autoComplete="name"
-                    />
-                    {errors.name && (
-                      <p className="font-mono text-xs text-[#C2410C] font-semibold">
-                        {errors.name}
-                      </p>
-                    )}
+                  {/* Unified card with grid background */}
+                  <div className="contact-form-card">
+                    <span className="contact-form-card-accent" aria-hidden="true" />
+                    <div className="cf-fields">
+                      <CompactField
+                        id="contact-name"
+                        fieldNum="01"
+                        label="NAME · RECRUITER · CLIENT"
+                        value={form.name}
+                        onChange={(v) => handleChange("name", v)}
+                        error={errors.name}
+                        placeholder="Your full name"
+                        autoComplete="name"
+                      />
+                      <CompactField
+                        id="contact-email"
+                        fieldNum="02"
+                        label="RETURN EMAIL"
+                        type="email"
+                        value={form.email}
+                        onChange={(v) => handleChange("email", v)}
+                        error={errors.email}
+                        placeholder="your@email.com"
+                        autoComplete="email"
+                      />
+                      <CompactField
+                        id="contact-message"
+                        fieldNum="03"
+                        label="SCOPE OF WORK · MESSAGE"
+                        isTextarea
+                        value={form.message}
+                        onChange={(v) => handleChange("message", v)}
+                        error={errors.message}
+                        placeholder="Describe your project, role, or collaboration..."
+                      />
+                    </div>
                   </div>
 
-                  {/* Email */}
-                  <div className="space-y-2 w-full min-w-0">
-                    <label
-                      htmlFor="contact-email"
-                      className="contact-info-label block text-[#171717] font-semibold"
-                    >
-                      RETURN EMAIL <span className="text-[#171717] font-bold">*</span>
-                    </label>
-                    <input
-                      id="contact-email"
-                      type="email"
-                      value={form.email}
-                      onChange={(e) => handleChange("email", e.target.value)}
-                      className={`contact-input-editorial ${errors.email ? "has-error" : ""}`}
-                      placeholder="your.email@company.com"
-                      autoComplete="email"
-                    />
-                    {errors.email && (
-                      <p className="font-mono text-xs text-[#C2410C] font-semibold">
-                        {errors.email}
-                      </p>
-                    )}
-                  </div>
+                  {/* Server error */}
+                  {submitStatus === "error" && serverError && (
+                    <div className="contact-server-error" role="alert">
+                      <AlertCircle size={14} aria-hidden="true" />
+                      <span>{serverError}</span>
+                    </div>
+                  )}
 
-                  {/* Message */}
-                  <div className="space-y-2 w-full min-w-0">
-                    <label
-                      htmlFor="contact-message"
-                      className="contact-info-label block text-[#171717] font-semibold"
-                    >
-                      SCOPE OF WORK / MESSAGE <span className="text-[#171717] font-bold">*</span>
-                    </label>
-                    <textarea
-                      id="contact-message"
-                      value={form.message}
-                      onChange={(e) => handleChange("message", e.target.value)}
-                      rows={5}
-                      className={`contact-input-editorial resize-y ${errors.message ? "has-error" : ""}`}
-                      placeholder="Message..."
-                    />
-                    {errors.message && (
-                      <p className="font-mono text-xs text-[#C2410C] font-semibold">
-                        {errors.message}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Submit CTA */}
+                  {/* Submit */}
                   <button
+                    id="contact-submit-btn"
                     type="submit"
-                    className="contact-submit-btn"
+                    disabled={submitStatus === "loading"}
+                    className={`contact-submit-btn${submitStatus === "loading" ? " contact-submit-btn--loading" : ""}${submitStatus === "error" ? " contact-submit-btn--error" : ""}`}
                   >
-                    <Send size={15} />
-                    <span>SEND MESSAGE</span>
-                    <ArrowUpRight size={16} />
+                    {submitStatus === "loading" ? (
+                      <>
+                        <Loader2 size={15} className="contact-submit-spinner" aria-hidden="true" />
+                        <span>TRANSMITTING...</span>
+                      </>
+                    ) : submitStatus === "error" ? (
+                      <>
+                        <AlertCircle size={15} aria-hidden="true" />
+                        <span>RETRY TRANSMISSION</span>
+                        <ArrowUpRight size={15} aria-hidden="true" />
+                      </>
+                    ) : (
+                      <>
+                        <Send size={14} aria-hidden="true" />
+                        <span>SEND MESSAGE</span>
+                        <ArrowUpRight size={15} aria-hidden="true" />
+                      </>
+                    )}
                   </button>
                 </form>
               )}
