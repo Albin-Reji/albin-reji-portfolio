@@ -151,10 +151,13 @@ function CompactField({
   type = "text",
   value,
   onChange,
+  onBlur,
   error,
   isTextarea = false,
   autoComplete,
   placeholder,
+  headerExtra,
+  footerExtra,
 }: {
   id: string;
   fieldNum: string;
@@ -162,10 +165,13 @@ function CompactField({
   type?: string;
   value: string;
   onChange: (v: string) => void;
+  onBlur?: () => void;
   error?: string;
   isTextarea?: boolean;
   autoComplete?: string;
   placeholder?: string;
+  headerExtra?: React.ReactNode;
+  footerExtra?: React.ReactNode;
 }) {
   return (
     <div className={`cf-field${error ? " cf-field--error" : ""}`}>
@@ -174,6 +180,7 @@ function CompactField({
         <label htmlFor={id} className="cf-field-lbl">
           {label}<span className="cf-req">*</span>
         </label>
+        {headerExtra}
       </div>
       <div className="cf-field-body">
         {isTextarea ? (
@@ -181,6 +188,7 @@ function CompactField({
             id={id}
             value={value}
             onChange={(e) => onChange(e.target.value)}
+            onBlur={onBlur}
             className="cf-input cf-textarea"
             placeholder={placeholder}
             aria-invalid={!!error}
@@ -192,6 +200,7 @@ function CompactField({
             type={type}
             value={value}
             onChange={(e) => onChange(e.target.value)}
+            onBlur={onBlur}
             className="cf-input"
             placeholder={placeholder}
             autoComplete={autoComplete}
@@ -199,6 +208,7 @@ function CompactField({
             aria-describedby={error ? `${id}-error` : undefined}
           />
         )}
+        {footerExtra}
       </div>
       {error && (
         <p id={`${id}-error`} className="cf-field-err" role="alert">
@@ -210,6 +220,14 @@ function CompactField({
   );
 }
 
+type EmailVerifyStatus = "idle" | "checking" | "valid" | "invalid";
+
+interface EmailVerifyState {
+  status: EmailVerifyStatus;
+  suggestion: string | null;
+  message: string | null;
+}
+
 export default function Contact() {
   const sectionRef = useRef<HTMLElement>(null);
   const [form, setForm] = useState<FormState>({ name: "", email: "", message: "" });
@@ -218,10 +236,81 @@ export default function Contact() {
   const [serverError, setServerError] = useState<string>("");
   const [copiedEmail, setCopiedEmail] = useState(false);
 
+  const [emailVerify, setEmailVerify] = useState<EmailVerifyState>({
+    status: "idle",
+    suggestion: null,
+    message: null,
+  });
+  const emailVerifyTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const lastVerifiedEmailRef = useRef<string>("");
+
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(personalInfo.email);
     setCopiedEmail(true);
     setTimeout(() => setCopiedEmail(false), 2200);
+  };
+
+  const performEmailVerification = async (emailToVerify: string): Promise<boolean> => {
+    const trimmed = emailToVerify.trim();
+    if (!trimmed || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+      setEmailVerify({ status: "idle", suggestion: null, message: null });
+      return false;
+    }
+
+    if (lastVerifiedEmailRef.current === trimmed && emailVerify.status === "valid") {
+      return true;
+    }
+
+    setEmailVerify((prev) => ({ ...prev, status: "checking" }));
+
+    try {
+      const res = await fetch(`/api/verify-email?email=${encodeURIComponent(trimmed)}`);
+      const data = (await res.json()) as {
+        valid: boolean;
+        error?: string | null;
+        suggestion?: string | null;
+      };
+
+      lastVerifiedEmailRef.current = trimmed;
+
+      if (data.valid) {
+        setEmailVerify({
+          status: "valid",
+          suggestion: null,
+          message: null,
+        });
+        setErrors((prev) => {
+          const next = { ...prev };
+          delete next.email;
+          return next;
+        });
+        return true;
+      } else {
+        setEmailVerify({
+          status: "invalid",
+          suggestion: data.suggestion || null,
+          message: data.error || "The email address is invalid.",
+        });
+        setErrors((prev) => ({
+          ...prev,
+          email: data.error || "The email address is invalid.",
+        }));
+        return false;
+      }
+    } catch {
+      setEmailVerify({ status: "idle", suggestion: null, message: null });
+      return true;
+    }
+  };
+
+  const handleApplySuggestion = (suggestion: string) => {
+    setForm((prev) => ({ ...prev, email: suggestion }));
+    setErrors((prev) => {
+      const next = { ...prev };
+      delete next.email;
+      return next;
+    });
+    performEmailVerification(suggestion);
   };
 
   useEffect(() => {
@@ -264,6 +353,35 @@ export default function Contact() {
       setErrors((prev) => { const next = { ...prev }; delete next[field]; return next; });
     }
     if (serverError) setServerError("");
+
+    if (field === "email") {
+      const trimmed = value.trim();
+      if (emailVerifyTimeoutRef.current) {
+        clearTimeout(emailVerifyTimeoutRef.current);
+      }
+
+      if (trimmed !== lastVerifiedEmailRef.current) {
+        setEmailVerify({ status: "idle", suggestion: null, message: null });
+      }
+
+      if (/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(trimmed)) {
+        emailVerifyTimeoutRef.current = setTimeout(() => {
+          performEmailVerification(trimmed);
+        }, 700);
+      }
+    }
+  };
+
+  const handleEmailBlur = () => {
+    const trimmed = form.email.trim();
+    if (trimmed && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+      if (trimmed !== lastVerifiedEmailRef.current || emailVerify.status !== "valid") {
+        if (emailVerifyTimeoutRef.current) {
+          clearTimeout(emailVerifyTimeoutRef.current);
+        }
+        performEmailVerification(trimmed);
+      }
+    }
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -273,9 +391,26 @@ export default function Contact() {
       setErrors(validationErrors);
       return;
     }
+
+    if (emailVerify.status === "invalid") {
+      setErrors((prev) => ({
+        ...prev,
+        email: emailVerify.message || "Please provide a valid, existing return email.",
+      }));
+      return;
+    }
+
     setErrors({});
     setServerError("");
     setSubmitStatus("loading");
+
+    if (emailVerify.status !== "valid" || lastVerifiedEmailRef.current !== form.email.trim()) {
+      const isDomainValid = await performEmailVerification(form.email.trim());
+      if (!isDomainValid) {
+        setSubmitStatus("idle");
+        return;
+      }
+    }
 
     try {
       const res = await fetch("/api/contact", {
@@ -301,6 +436,8 @@ export default function Contact() {
     setForm({ name: "", email: "", message: "" });
     setErrors({});
     setServerError("");
+    setEmailVerify({ status: "idle", suggestion: null, message: null });
+    lastVerifiedEmailRef.current = "";
   };
 
   return (
@@ -491,9 +628,27 @@ export default function Contact() {
                         type="email"
                         value={form.email}
                         onChange={(v) => handleChange("email", v)}
+                        onBlur={handleEmailBlur}
                         error={errors.email}
                         placeholder="your@email.com"
                         autoComplete="email"
+
+                        footerExtra={
+                          emailVerify.suggestion ? (
+                            <div className="cf-suggestion-box">
+                              <span>
+                                Did you mean <strong className="text-[#171717]">{emailVerify.suggestion}</strong>?
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => handleApplySuggestion(emailVerify.suggestion!)}
+                                className="cf-suggestion-btn"
+                              >
+                                APPLY
+                              </button>
+                            </div>
+                          ) : null
+                        }
                       />
                       <CompactField
                         id="contact-message"

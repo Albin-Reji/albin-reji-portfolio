@@ -1,5 +1,6 @@
 import { Resend } from "resend";
 import { NextResponse } from "next/server";
+import { verifyEmail } from "@/lib/emailVerifier";
 
 // ── Initialise Resend with the server-side-only API key ───────────────────────
 // process.env.RESEND_API_KEY is NEVER sent to the browser — this file is a
@@ -7,11 +8,6 @@ import { NextResponse } from "next/server";
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 const RECIPIENT = "albinrejim30@gmail.com";
-
-// ── Input validation ──────────────────────────────────────────────────────────
-function isValidEmail(email: string): boolean {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
 
 // ── POST /api/contact ─────────────────────────────────────────────────────────
 export async function POST(request: Request) {
@@ -30,9 +26,12 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
-    if (!isValidEmail(email.trim())) {
+
+    // Verify whether the return email format, domain, and MX records exist
+    const emailVerification = await verifyEmail(email.trim());
+    if (!emailVerification.valid) {
       return NextResponse.json(
-        { error: "Please provide a valid email address." },
+        { error: emailVerification.error ?? "Please provide a valid return email address." },
         { status: 400 }
       );
     }
