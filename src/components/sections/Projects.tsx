@@ -301,10 +301,10 @@ export default function Projects() {
                 </div>
 
                 {/* Main Slide Grid */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-                  {/* Left Column: Visual Media / Architecture Diagram (6 cols) */}
-                  <div className="lg:col-span-6 space-y-4">
-                    {currentTab === "preview" ? (
+                {currentTab === "preview" ? (
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+                    {/* Left Column: Visual Media (6 cols) */}
+                    <div className="lg:col-span-6 space-y-4">
                       <div className="relative aspect-[16/10] overflow-hidden border border-[#F5F5F0]/15 bg-[#111111] group">
                         <Image
                           src={PROJECT_IMAGES[idx] || PROJECT_IMAGES[0]}
@@ -324,105 +324,167 @@ export default function Projects() {
                           <span className="text-[#D7FF00]">{project.techStack[0]}</span>
                         </div>
                       </div>
-                    ) : (
-                      <div className="border border-[#F5F5F0]/15 bg-[#050505] p-2">
-                        <div className="px-3 py-2 border-b border-[#F5F5F0]/10 flex items-center justify-between font-mono text-[10px] uppercase text-[#8A8A8A]">
-                          <span>DISTRIBUTED TOPOLOGY</span>
-                          <span className="text-[#D7FF00]">
-                            {project.architecture.nodes.length} NODES
-                          </span>
-                        </div>
-                        <ArchitectureDiagram
-                          nodes={project.architecture.nodes || []}
-                          connections={project.architecture.connections || []}
-                        />
-                      </div>
-                    )}
 
-                    {/* Tech Badges Strip below preview */}
-                    <div className="flex flex-wrap gap-2 pt-2">
-                      {project.techStack.map((tech) => (
-                        <span
-                          key={tech}
-                          className="font-mono text-[10px] uppercase tracking-[0.15em] border border-[#F5F5F0]/15 px-3 py-1 text-[#F5F5F0] bg-[#050505]"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Right Column: Architectural Highlights & Specs (6 cols) */}
-                  <div className="lg:col-span-6 space-y-6 flex flex-col justify-between h-full">
-                    {/* System Overview */}
-                    <div className="space-y-2">
-                      <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#8A8A8A] block">
-                        // SYSTEM OVERVIEW
-                      </span>
-                      <p className="text-sm md:text-base text-[#B5B5B5] leading-relaxed font-light">
-                        {project.description}
-                      </p>
-                    </div>
-
-                    {/* Engineering Highlights */}
-                    <div className="border-t border-[#F5F5F0]/15 pt-5 space-y-3">
-                      <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#D7FF00] block">
-                        // ARCHITECTURAL HIGHLIGHTS
-                      </span>
-                      <ul className="space-y-2.5">
-                        {project.highlights.map((hl, hIdx) => (
-                          <li
-                            key={hIdx}
-                            className="text-xs md:text-sm text-[#F5F5F0]/90 pl-3.5 border-l-2 border-[#D7FF00]/50 leading-relaxed font-normal hover:border-[#D7FF00] transition-colors"
+                      {/* Tech Badges Strip below preview */}
+                      <div className="flex flex-wrap gap-2 pt-2">
+                        {project.techStack.map((tech) => (
+                          <span
+                            key={tech}
+                            className="font-mono text-[10px] uppercase tracking-[0.15em] border border-[#F5F5F0]/15 px-3 py-1 text-[#F5F5F0] bg-[#050505]"
                           >
-                            {hl}
-                          </li>
+                            {tech}
+                          </span>
                         ))}
-                      </ul>
+                      </div>
                     </div>
 
-                    {/* Action Links */}
-                    <div className="pt-4 border-t border-[#F5F5F0]/15 flex flex-wrap items-center gap-4">
-                      {project.githubUrl ? (
-                        <a
-                          href={project.githubUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="btn-editorial"
-                          aria-label={`View source repository for ${project.name}`}
-                          onClick={(e) => {
-                            if (dragDistance > 10) e.preventDefault();
-                          }}
-                        >
-                          <GitHubIcon width={14} height={14} />
-                          <span>SOURCE CODE</span>
-                          <ArrowUpRight size={14} className="arrow" />
-                        </a>
-                      ) : (
-                        <span className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-wider text-[#8A8A8A] border border-[#F5F5F0]/10 px-4 py-3 cursor-default">
-                          <GitHubIcon width={14} height={14} />
-                          <span>PROPRIETARY REPO</span>
+                    {/* Right Column: Architectural Highlights & Specs (6 cols) */}
+                    <div className="lg:col-span-6 space-y-6 flex flex-col justify-between h-full">
+                      {/* System Overview */}
+                      <div className="space-y-2">
+                        <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#8A8A8A] block">
+                          // SYSTEM OVERVIEW
                         </span>
-                      )}
+                        <p className="text-sm md:text-base text-[#B5B5B5] leading-relaxed font-light">
+                          {project.description}
+                        </p>
+                      </div>
 
-                      {project.liveUrl && (
-                        <a
-                          href={project.liveUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="btn-editorial bg-[#D7FF00] text-[#050505] font-bold border-[#D7FF00]"
-                          aria-label={`View live demo of ${project.name}`}
-                          onClick={(e) => {
-                            if (dragDistance > 10) e.preventDefault();
-                          }}
-                        >
-                          <span>LIVE DEMO</span>
-                          <ArrowUpRight size={14} className="arrow" />
-                        </a>
-                      )}
+                      {/* Engineering Highlights */}
+                      <div className="border-t border-[#F5F5F0]/15 pt-5 space-y-3">
+                        <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#D7FF00] block">
+                          // ARCHITECTURAL HIGHLIGHTS
+                        </span>
+                        <ul className="space-y-2.5">
+                          {project.highlights.map((hl, hIdx) => (
+                            <li
+                              key={hIdx}
+                              className="text-xs md:text-sm text-[#F5F5F0]/90 pl-3.5 border-l-2 border-[#D7FF00]/50 leading-relaxed font-normal hover:border-[#D7FF00] transition-colors"
+                            >
+                              {hl}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {/* Action Links */}
+                      <div className="pt-4 border-t border-[#F5F5F0]/15 flex flex-wrap items-center gap-4">
+                        {project.githubUrl ? (
+                          <a
+                            href={project.githubUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn-editorial"
+                            aria-label={`View source repository for ${project.name}`}
+                            onClick={(e) => {
+                              if (dragDistance > 10) e.preventDefault();
+                            }}
+                          >
+                            <GitHubIcon width={14} height={14} />
+                            <span>SOURCE CODE</span>
+                            <ArrowUpRight size={14} className="arrow" />
+                          </a>
+                        ) : (
+                          <span className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-wider text-[#8A8A8A] border border-[#F5F5F0]/10 px-4 py-3 cursor-default">
+                            <GitHubIcon width={14} height={14} />
+                            <span>PROPRIETARY REPO</span>
+                          </span>
+                        )}
+
+                        {project.liveUrl && (
+                          <a
+                            href={project.liveUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn-editorial bg-[#D7FF00] text-[#050505] font-bold border-[#D7FF00]"
+                            aria-label={`View live demo of ${project.name}`}
+                            onClick={(e) => {
+                              if (dragDistance > 10) e.preventDefault();
+                            }}
+                          >
+                            <span>LIVE DEMO</span>
+                            <ArrowUpRight size={14} className="arrow" />
+                          </a>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
+                ) : (
+                  /* Full-width Architecture Mesh view */
+                  <div className="space-y-6">
+                    <ArchitectureDiagram
+                      nodes={project.architecture.nodes || []}
+                      connections={project.architecture.connections || []}
+                      title={`${project.name} // ARCHITECTURAL TOPOLOGY`}
+                    />
+
+                    {/* Bottom Specs & Highlights */}
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-4 border-t border-[#F5F5F0]/15 items-start">
+                      <div className="lg:col-span-5 space-y-3">
+                        <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#8A8A8A] block">
+                          // ARCHITECTURAL SUMMARY
+                        </span>
+                        <p className="text-xs md:text-sm text-[#B5B5B5] leading-relaxed font-light">
+                          {project.description}
+                        </p>
+                        <div className="flex flex-wrap gap-2 pt-1">
+                          {project.techStack.map((tech) => (
+                            <span
+                              key={tech}
+                              className="font-mono text-[9px] uppercase tracking-[0.15em] border border-[#F5F5F0]/15 px-2.5 py-1 text-[#F5F5F0] bg-[#050505]"
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="lg:col-span-5 space-y-2">
+                        <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#D7FF00] block">
+                          // ENGINEERING & RESILIENCE HIGHLIGHTS
+                        </span>
+                        <ul className="space-y-2">
+                          {project.highlights.map((hl, hIdx) => (
+                            <li
+                              key={hIdx}
+                              className="text-xs text-[#F5F5F0]/90 pl-3 border-l border-[#D7FF00]/50 leading-relaxed font-normal"
+                            >
+                              {hl}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      <div className="lg:col-span-2 flex lg:flex-col justify-end gap-3 pt-2">
+                        {project.githubUrl && (
+                          <a
+                            href={project.githubUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn-editorial text-[10px] justify-center"
+                            aria-label={`View source repository for ${project.name}`}
+                          >
+                            <GitHubIcon width={13} height={13} />
+                            <span>CODE REPO</span>
+                            <ArrowUpRight size={13} className="arrow" />
+                          </a>
+                        )}
+                        {project.liveUrl && (
+                          <a
+                            href={project.liveUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn-editorial bg-[#D7FF00] text-[#050505] font-bold border-[#D7FF00] text-[10px] justify-center"
+                            aria-label={`View live demo of ${project.name}`}
+                          >
+                            <span>LIVE DEMO</span>
+                            <ArrowUpRight size={13} className="arrow" />
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </article>
             );
           })}
