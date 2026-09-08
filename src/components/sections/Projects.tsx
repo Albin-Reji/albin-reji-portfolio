@@ -7,9 +7,8 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowUpRight,
-  ChevronLeft,
-  ChevronRight,
-  MoveHorizontal,
+  ArrowLeft,
+  ArrowRight,
   Layers,
 } from "lucide-react";
 import { GitHubIcon } from "@/components/ui/Icons";
@@ -130,167 +129,187 @@ export default function Projects() {
     <section
       ref={sectionRef}
       id="projects"
-      className="py-14 md:py-20 bg-transparent border-b border-[#F5F5F0]/15 overflow-hidden"
+      className="pt-6 md:pt-10 pb-8 md:pb-12 bg-transparent border-b border-[#F5F5F0]/15 overflow-hidden"
     >
-      {/* ═══ Section Heading & Navigation Controls ═══ */}
-      <div className="projects-header-trigger px-6 md:px-12 max-w-[1728px] mx-auto mb-8 md:mb-10">
-        <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-[#8A8A8A] mb-4 border-b border-[#F5F5F0]/15 pb-3">
+      {/* ═══ Section Heading & Meta ═══ */}
+      <div className="projects-header-trigger px-4 sm:px-6 md:px-12 max-w-[1728px] mx-auto mb-4 md:mb-5">
+        <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-[#8A8A8A] mb-2 border-b border-[#F5F5F0]/15 pb-2">
           <span className="text-[#D7FF00] font-bold">[WORK // 03]</span>
-          <span>ON TRACK // SELECTED SYSTEMS</span>
+          <span>SELECTED PRODUCTION SYSTEMS</span>
           <span className="flex-1" />
-          <span>{projects.length} CASE STUDIES</span>
+          <span className="hidden sm:inline">{projects.length} ARCHITECTURAL CASE STUDIES</span>
         </div>
 
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
-          <div>
-            <div className="overflow-hidden">
-              <h2 className="projects-heading-line text-[clamp(2.5rem,7vw,7.5rem)] font-black uppercase leading-[0.85] tracking-[-0.05em] text-[#F5F5F0]">
-                FEATURED
-              </h2>
-            </div>
-            <div className="overflow-hidden">
-              <h2 className="projects-heading-line text-[clamp(2.5rem,7vw,7.5rem)] font-black uppercase leading-[0.85] tracking-[-0.05em] text-[#D7FF00]">
-                PROJECTS<span className="text-[#F5F5F0]">.</span>
-              </h2>
-            </div>
+        <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
+          <div className="overflow-hidden">
+            <h2 className="projects-heading-line text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black uppercase tracking-[-0.03em] text-[#F5F5F0]">
+              FEATURED <span className="text-[#D7FF00]">PROJECTS.</span>
+            </h2>
           </div>
 
-          {/* Interactive Carousel Controls & Indicators */}
-          <div className="flex flex-wrap items-center gap-6 font-mono text-xs">
-            <div className="flex items-center gap-2 text-[#8A8A8A]">
-              <MoveHorizontal size={14} className="text-[#D7FF00]" />
-              <span className="text-[10px] uppercase tracking-widest hidden sm:inline">
-                USE ARROW KEYS OR BUTTONS
-              </span>
-            </div>
-
-            {/* Slide Position Counter */}
-            <div className="px-3 py-1.5 border border-[#F5F5F0]/15 bg-[#000000] text-[11px] uppercase tracking-wider text-[#F5F5F0]">
-              <span className="text-[#D7FF00] font-bold">
-                0{activeProjectIndex + 1}
-              </span>{" "}
-              / 0{projects.length}
-            </div>
-
-            {/* Prev / Next Buttons */}
-            <div className="flex items-center gap-2">
-              <button
-                onClick={handlePrev}
-                disabled={activeProjectIndex === 0}
-                className="p-3 border border-[#F5F5F0]/15 text-[#F5F5F0] hover:border-[#D7FF00] hover:text-[#D7FF00] disabled:opacity-30 disabled:pointer-events-none transition-colors cursor-pointer"
-                aria-label="Previous project"
-              >
-                <ChevronLeft size={16} />
-              </button>
-              <button
-                onClick={handleNext}
-                disabled={activeProjectIndex === projects.length - 1}
-                className="p-3 border border-[#F5F5F0]/15 text-[#F5F5F0] hover:border-[#D7FF00] hover:text-[#D7FF00] disabled:opacity-30 disabled:pointer-events-none transition-colors cursor-pointer"
-                aria-label="Next project"
-              >
-                <ChevronRight size={16} />
-              </button>
-            </div>
+          <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-[#8A8A8A]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#D7FF00] animate-pulse" />
+            <span className="text-[#8A8A8A]">KEYBOARD:</span>
+            <span className="text-[#F5F5F0] border border-[#F5F5F0]/20 px-1.5 py-0.5 text-[9px]">←</span>
+            <span className="text-[#F5F5F0] border border-[#F5F5F0]/20 px-1.5 py-0.5 text-[9px]">→</span>
           </div>
         </div>
       </div>
 
       {/* ═══ Active Project Viewport ═══ */}
-      <div className="projects-carousel-container px-6 md:px-12 max-w-[1728px] mx-auto">
+      <div className="projects-carousel-container px-4 sm:px-6 md:px-12 max-w-[1728px] mx-auto">
         <AnimatePresence mode="wait">
           <motion.article
             key={`${activeProjectIndex}-${currentTab}`}
-            initial={{ opacity: 0, y: 14 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -14 }}
-            transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
-            className="w-full border border-[#D7FF00]/60 bg-[#000000] p-6 md:p-10 shadow-[0_0_40px_rgba(215,255,0,0.04)] transition-colors"
+            className="w-full border border-[#D7FF00]/60 bg-[#000000] p-4 sm:p-5 md:p-6 lg:p-7 shadow-[0_0_40px_rgba(215,255,0,0.04)] transition-colors"
           >
-            {/* Project Header Bar */}
-            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#F5F5F0]/15 pb-5 mb-8 font-mono">
-              <div className="flex items-baseline gap-4">
-                <span className="text-3xl md:text-5xl font-black text-[#D7FF00]">
+            {/* ═══ Project Card Primary Header Bar: Title, Navigation & Switcher ═══ */}
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 md:gap-4 border-b border-[#F5F5F0]/15 pb-3 mb-4 md:mb-5 font-mono">
+              {/* Left: Project Number & Name */}
+              <div className="flex items-center gap-3 md:gap-4 min-w-0">
+                <span className="text-2xl md:text-3xl lg:text-4xl font-black text-[#D7FF00] tracking-tight shrink-0">
                   {num}
                 </span>
-                <div>
-                  <h3 className="text-2xl md:text-4xl font-bold uppercase tracking-tight text-[#F5F5F0]">
+                <div className="min-w-0">
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold uppercase tracking-tight text-[#F5F5F0] truncate">
                     {project.name}
                   </h3>
-                  <span className="text-[10px] uppercase tracking-[0.2em] text-[#8A8A8A]">
+                  <span className="text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-[#8A8A8A] block truncate">
                     DISTRIBUTED SYSTEMS // CASE STUDY {num}
                   </span>
                 </div>
               </div>
 
-              {/* Visual / Blueprint Switcher */}
-              <div className="flex items-center gap-1 bg-[#111111] p-1 border border-[#F5F5F0]/10 text-[10px] uppercase">
-                <button
-                  onClick={() => {
-                    setActiveTabByProject((prev) => ({
-                      ...prev,
-                      [activeProjectIndex]: "preview",
-                    }));
-                  }}
-                  className={`px-3 py-1.5 transition-colors cursor-pointer flex items-center gap-1.5 ${
-                    currentTab === "preview"
-                      ? "bg-[#D7FF00] text-[#050505] font-bold"
-                      : "text-[#8A8A8A] hover:text-[#F5F5F0]"
-                  }`}
+              {/* Right: Integrated Navigation Controls & Blueprint Switcher */}
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3 shrink-0">
+                {/* ─── PRIMARY PROJECT NAVIGATION CONTROLLER ─── */}
+                <div
+                  className="flex items-stretch border border-[#F5F5F0]/25 bg-[#050505] shadow-[0_0_20px_rgba(0,0,0,0.6)]"
+                  role="group"
+                  aria-label="Project Navigation Controls"
                 >
-                  <span>01 // Visual Preview</span>
-                </button>
-                <button
-                  onClick={() => {
-                    setActiveTabByProject((prev) => ({
-                      ...prev,
-                      [activeProjectIndex]: "architecture",
-                    }));
-                  }}
-                  className={`px-3 py-1.5 transition-colors cursor-pointer flex items-center gap-1.5 ${
-                    currentTab === "architecture"
-                      ? "bg-[#D7FF00] text-[#050505] font-bold"
-                      : "text-[#8A8A8A] hover:text-[#F5F5F0]"
-                  }`}
-                >
-                  <Layers size={12} />
-                  <span>02 // Architecture Mesh</span>
-                </button>
+                  {/* Previous Project Button */}
+                  <button
+                    onClick={handlePrev}
+                    disabled={activeProjectIndex === 0}
+                    className="group flex items-center gap-1.5 px-3 sm:px-3.5 py-2 text-[#F5F5F0] hover:text-[#D7FF00] hover:bg-[#D7FF00]/10 disabled:opacity-25 disabled:cursor-not-allowed transition-all cursor-pointer border-r border-[#F5F5F0]/15 select-none min-h-[38px] text-[10.5px] sm:text-[11px] font-bold uppercase tracking-wider focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#D7FF00]"
+                    aria-label="Previous project"
+                    title="Previous project (or Left arrow key)"
+                  >
+                    <ArrowLeft
+                      size={13}
+                      className="text-[#D7FF00] group-hover:-translate-x-0.5 group-disabled:translate-x-0 transition-transform"
+                    />
+                    <span className="inline">PREV</span>
+                  </button>
+
+                  {/* Integrated Project Counter */}
+                  <div
+                    className="px-3 sm:px-3.5 py-2 flex items-center gap-1.5 bg-[#000000] text-[10.5px] sm:text-[11px] uppercase tracking-widest border-r border-[#F5F5F0]/15 select-none font-mono min-h-[38px]"
+                    aria-label={`Project ${activeProjectIndex + 1} of ${projects.length}`}
+                  >
+                    <span className="text-[#D7FF00] font-black text-xs sm:text-sm">
+                      0{activeProjectIndex + 1}
+                    </span>
+                    <span className="text-[#8A8A8A] text-[10px]">/</span>
+                    <span className="text-[#8A8A8A] font-medium text-[10px] sm:text-xs">
+                      0{projects.length}
+                    </span>
+                  </div>
+
+                  {/* Next Project Button */}
+                  <button
+                    onClick={handleNext}
+                    disabled={activeProjectIndex === projects.length - 1}
+                    className="group flex items-center gap-1.5 px-3 sm:px-3.5 py-2 text-[#F5F5F0] hover:text-[#D7FF00] hover:bg-[#D7FF00]/10 disabled:opacity-25 disabled:cursor-not-allowed transition-all cursor-pointer bg-[#D7FF00]/5 hover:bg-[#D7FF00]/15 select-none min-h-[38px] text-[10.5px] sm:text-[11px] font-bold uppercase tracking-wider focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#D7FF00]"
+                    aria-label="Next project"
+                    title="Next project (or Right arrow key)"
+                  >
+                    <span className="inline text-[#F5F5F0] group-hover:text-[#D7FF00] transition-colors">
+                      NEXT
+                    </span>
+                    <ArrowRight
+                      size={13}
+                      className="text-[#D7FF00] group-hover:translate-x-0.5 group-disabled:translate-x-0 transition-transform"
+                    />
+                  </button>
+                </div>
+
+                {/* ─── VISUAL / BLUEPRINT SWITCHER ─── */}
+                <div className="flex items-center bg-[#111111] p-0.5 sm:p-1 border border-[#F5F5F0]/10 text-[10px] uppercase">
+                  <button
+                    onClick={() => {
+                      setActiveTabByProject((prev) => ({
+                        ...prev,
+                        [activeProjectIndex]: "preview",
+                      }));
+                    }}
+                    className={`px-2.5 sm:px-3 py-1.5 transition-colors cursor-pointer flex items-center gap-1.5 min-h-[36px] ${
+                      currentTab === "preview"
+                        ? "bg-[#D7FF00] text-[#050505] font-bold"
+                        : "text-[#8A8A8A] hover:text-[#F5F5F0]"
+                    }`}
+                  >
+                    <span>01 // Visual Preview</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setActiveTabByProject((prev) => ({
+                        ...prev,
+                        [activeProjectIndex]: "architecture",
+                      }));
+                    }}
+                    className={`px-2.5 sm:px-3 py-1.5 transition-colors cursor-pointer flex items-center gap-1.5 min-h-[36px] ${
+                      currentTab === "architecture"
+                        ? "bg-[#D7FF00] text-[#050505] font-bold"
+                        : "text-[#8A8A8A] hover:text-[#F5F5F0]"
+                    }`}
+                  >
+                    <Layers size={12} />
+                    <span>02 // Architecture Mesh</span>
+                  </button>
+                </div>
               </div>
             </div>
 
-            {/* Main Content Area */}
+            {/* ═══ Main Content Area ═══ */}
             {currentTab === "preview" ? (
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-8 items-start">
                 {/* Left Column: Visual Media (6 cols) */}
-                <div className="lg:col-span-6 space-y-4">
-                  <div className="relative aspect-[16/10] overflow-hidden border border-[#F5F5F0]/15 bg-[#111111] group">
+                <div className="lg:col-span-6 space-y-3">
+                  <div className="relative aspect-[16/9] max-h-[260px] sm:max-h-[300px] lg:max-h-[330px] overflow-hidden border border-[#F5F5F0]/15 bg-[#111111] group">
                     <Image
                       src={PROJECT_IMAGES[activeProjectIndex] || PROJECT_IMAGES[0]}
                       alt={`${project.name} visual preview`}
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
                       sizes="(max-width: 1024px) 100vw, 50vw"
+                      priority
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#000000]/80 via-transparent to-transparent pointer-events-none" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#000000]/85 via-transparent to-transparent pointer-events-none" />
 
-                    <div className="absolute top-4 left-4 z-20 font-mono text-[9px] uppercase tracking-[0.25em] text-[#D7FF00] px-2.5 py-1 bg-[#050505]/85 border border-[#F5F5F0]/15">
+                    <div className="absolute top-3 left-3 z-20 font-mono text-[9px] uppercase tracking-[0.25em] text-[#D7FF00] px-2 py-0.5 bg-[#050505]/90 border border-[#F5F5F0]/15">
                       SYSTEM RUNTIME // ACTIVE
                     </div>
 
-                    <div className="absolute bottom-4 left-4 right-4 z-20 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.2em] text-[#F5F5F0]/90 pointer-events-none">
+                    <div className="absolute bottom-3 left-3 right-3 z-20 flex items-center justify-between font-mono text-[9.5px] uppercase tracking-[0.18em] text-[#F5F5F0]/90 pointer-events-none">
                       <span>{project.name}</span>
-                      <span className="text-[#D7FF00]">{project.techStack[0]}</span>
+                      <span className="text-[#D7FF00] font-bold">{project.techStack[0]}</span>
                     </div>
                   </div>
 
                   {/* Tech Badges Strip below preview */}
-                  <div className="flex flex-wrap gap-2 pt-2">
+                  <div className="flex flex-wrap gap-1.5 pt-0.5">
                     {project.techStack.map((tech) => (
                       <span
                         key={tech}
-                        className="font-mono text-[10px] uppercase tracking-[0.15em] border border-[#F5F5F0]/15 px-3 py-1 text-[#F5F5F0] bg-[#050505]"
+                        className="font-mono text-[9.5px] uppercase tracking-[0.12em] border border-[#F5F5F0]/15 px-2.5 py-0.5 text-[#F5F5F0] bg-[#050505]"
                       >
                         {tech}
                       </span>
@@ -299,27 +318,27 @@ export default function Projects() {
                 </div>
 
                 {/* Right Column: Architectural Highlights & Specs (6 cols) */}
-                <div className="lg:col-span-6 space-y-6 flex flex-col">
+                <div className="lg:col-span-6 space-y-3 md:space-y-3.5 flex flex-col">
                   {/* System Overview */}
-                  <div className="space-y-2">
-                    <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#8A8A8A] block">
+                  <div className="space-y-1">
+                    <span className="font-mono text-[9.5px] uppercase tracking-[0.25em] text-[#8A8A8A] block">
                       // SYSTEM OVERVIEW
                     </span>
-                    <p className="text-sm md:text-base text-[#B5B5B5] leading-relaxed font-light">
+                    <p className="text-xs md:text-[13.5px] text-[#B5B5B5] leading-relaxed font-light">
                       {project.description}
                     </p>
                   </div>
 
                   {/* Engineering Highlights */}
-                  <div className="border-t border-[#F5F5F0]/15 pt-5 space-y-3">
-                    <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#D7FF00] block">
+                  <div className="border-t border-[#F5F5F0]/15 pt-2.5 space-y-1.5">
+                    <span className="font-mono text-[9.5px] uppercase tracking-[0.25em] text-[#D7FF00] block">
                       // ARCHITECTURAL HIGHLIGHTS
                     </span>
-                    <ul className="space-y-2.5">
+                    <ul className="space-y-1.5">
                       {project.highlights.map((hl, hIdx) => (
                         <li
                           key={hIdx}
-                          className="text-xs md:text-sm text-[#F5F5F0]/90 pl-3.5 border-l-2 border-[#D7FF00]/50 leading-relaxed font-normal hover:border-[#D7FF00] transition-colors"
+                          className="text-xs md:text-[13px] text-[#F5F5F0]/90 pl-3 border-l-2 border-[#D7FF00]/50 leading-snug font-normal hover:border-[#D7FF00] transition-colors"
                         >
                           {hl}
                         </li>
@@ -328,22 +347,22 @@ export default function Projects() {
                   </div>
 
                   {/* Action Links */}
-                  <div className="pt-4 border-t border-[#F5F5F0]/15 flex flex-wrap items-center gap-4">
+                  <div className="pt-2 border-t border-[#F5F5F0]/15 flex flex-wrap items-center gap-3">
                     {project.githubUrl ? (
                       <a
                         href={project.githubUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="btn-editorial"
+                        className="btn-editorial !py-2 !px-4 !min-h-[36px] text-[10px]"
                         aria-label={`View source repository for ${project.name}`}
                       >
-                        <GitHubIcon width={14} height={14} />
+                        <GitHubIcon width={13} height={13} />
                         <span>SOURCE CODE</span>
-                        <ArrowUpRight size={14} className="arrow" />
+                        <ArrowUpRight size={13} className="arrow" />
                       </a>
                     ) : (
-                      <span className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-wider text-[#8A8A8A] border border-[#F5F5F0]/10 px-4 py-3 cursor-default">
-                        <GitHubIcon width={14} height={14} />
+                      <span className="inline-flex items-center gap-1.5 font-mono text-[9.5px] uppercase tracking-wider text-[#8A8A8A] border border-[#F5F5F0]/10 px-3 py-1.5 cursor-default">
+                        <GitHubIcon width={13} height={13} />
                         <span>PROPRIETARY REPO</span>
                       </span>
                     )}
@@ -353,11 +372,11 @@ export default function Projects() {
                         href={project.liveUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="btn-editorial bg-[#D7FF00] text-[#050505] font-bold border-[#D7FF00]"
+                        className="btn-editorial bg-[#D7FF00] text-[#050505] font-bold border-[#D7FF00] !py-2 !px-4 !min-h-[36px] text-[10px]"
                         aria-label={`View live demo of ${project.name}`}
                       >
                         <span>LIVE DEMO</span>
-                        <ArrowUpRight size={14} className="arrow" />
+                        <ArrowUpRight size={13} className="arrow" />
                       </a>
                     )}
                   </div>
@@ -365,7 +384,7 @@ export default function Projects() {
               </div>
             ) : (
               /* Full-width Architecture Mesh view */
-              <div className="space-y-6">
+              <div className="space-y-4">
                 <ArchitectureDiagram
                   nodes={project.architecture.nodes || []}
                   connections={project.architecture.connections || []}
@@ -373,19 +392,19 @@ export default function Projects() {
                 />
 
                 {/* Bottom Specs & Highlights */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-4 border-t border-[#F5F5F0]/15 items-start">
-                  <div className="lg:col-span-5 space-y-3">
-                    <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#8A8A8A] block">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 pt-3 border-t border-[#F5F5F0]/15 items-start">
+                  <div className="lg:col-span-5 space-y-2">
+                    <span className="font-mono text-[9.5px] uppercase tracking-[0.25em] text-[#8A8A8A] block">
                       // ARCHITECTURAL SUMMARY
                     </span>
-                    <p className="text-xs md:text-sm text-[#B5B5B5] leading-relaxed font-light">
+                    <p className="text-xs text-[#B5B5B5] leading-relaxed font-light">
                       {project.description}
                     </p>
-                    <div className="flex flex-wrap gap-2 pt-1">
+                    <div className="flex flex-wrap gap-1.5 pt-1">
                       {project.techStack.map((tech) => (
                         <span
                           key={tech}
-                          className="font-mono text-[9px] uppercase tracking-[0.15em] border border-[#F5F5F0]/15 px-2.5 py-1 text-[#F5F5F0] bg-[#050505]"
+                          className="font-mono text-[9px] uppercase tracking-[0.12em] border border-[#F5F5F0]/15 px-2 py-0.5 text-[#F5F5F0] bg-[#050505]"
                         >
                           {tech}
                         </span>
@@ -393,15 +412,15 @@ export default function Projects() {
                     </div>
                   </div>
 
-                  <div className="lg:col-span-5 space-y-2">
-                    <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#D7FF00] block">
+                  <div className="lg:col-span-5 space-y-1.5">
+                    <span className="font-mono text-[9.5px] uppercase tracking-[0.25em] text-[#D7FF00] block">
                       // ENGINEERING & RESILIENCE HIGHLIGHTS
                     </span>
-                    <ul className="space-y-2">
+                    <ul className="space-y-1.5">
                       {project.highlights.map((hl, hIdx) => (
                         <li
                           key={hIdx}
-                          className="text-xs text-[#F5F5F0]/90 pl-3 border-l border-[#D7FF00]/50 leading-relaxed font-normal"
+                          className="text-[11.5px] text-[#F5F5F0]/90 pl-2.5 border-l border-[#D7FF00]/50 leading-snug font-normal"
                         >
                           {hl}
                         </li>
@@ -409,18 +428,18 @@ export default function Projects() {
                     </ul>
                   </div>
 
-                  <div className="lg:col-span-2 flex lg:flex-col justify-end gap-3 pt-2">
+                  <div className="lg:col-span-2 flex lg:flex-col justify-end gap-2 pt-1">
                     {project.githubUrl && (
                       <a
                         href={project.githubUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="btn-editorial text-[10px] justify-center"
+                        className="btn-editorial !py-2 !px-3 !min-h-[34px] text-[9.5px] justify-center"
                         aria-label={`View source repository for ${project.name}`}
                       >
-                        <GitHubIcon width={13} height={13} />
+                        <GitHubIcon width={12} height={12} />
                         <span>CODE REPO</span>
-                        <ArrowUpRight size={13} className="arrow" />
+                        <ArrowUpRight size={12} className="arrow" />
                       </a>
                     )}
                     {project.liveUrl && (
@@ -428,11 +447,11 @@ export default function Projects() {
                         href={project.liveUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="btn-editorial bg-[#D7FF00] text-[#050505] font-bold border-[#D7FF00] text-[10px] justify-center"
+                        className="btn-editorial bg-[#D7FF00] text-[#050505] font-bold border-[#D7FF00] !py-2 !px-3 !min-h-[34px] text-[9.5px] justify-center"
                         aria-label={`View live demo of ${project.name}`}
                       >
                         <span>LIVE DEMO</span>
-                        <ArrowUpRight size={13} className="arrow" />
+                        <ArrowUpRight size={12} className="arrow" />
                       </a>
                     )}
                   </div>
@@ -442,11 +461,11 @@ export default function Projects() {
           </motion.article>
         </AnimatePresence>
 
-        {/* Carousel Pagination Progress Bar */}
-        <div className="mt-8 flex items-center justify-between border-t border-[#F5F5F0]/15 pt-4 font-mono text-[10px] uppercase tracking-widest text-[#8A8A8A]">
-          <div className="flex items-center gap-2">
+        {/* ═══ Carousel Pagination Progress Bar & Quick Navigation Pills ═══ */}
+        <div className="mt-4 md:mt-5 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-[#F5F5F0]/15 pt-3 font-mono text-[10px] uppercase tracking-widest text-[#8A8A8A]">
+          <div className="flex items-center gap-2.5">
             <span>PROGRESS</span>
-            <div className="w-24 md:w-48 h-1 bg-[#1A1A1A] overflow-hidden">
+            <div className="w-24 md:w-36 h-1 bg-[#1A1A1A] overflow-hidden">
               <div
                 className="h-full bg-[#D7FF00] transition-all duration-300"
                 style={{
@@ -454,18 +473,29 @@ export default function Projects() {
                 }}
               />
             </div>
+            <span className="text-[#D7FF00] font-bold text-[9.5px]">
+              0{activeProjectIndex + 1} / 0{projects.length}
+            </span>
           </div>
 
-          <div className="flex items-center gap-2">
+          {/* Direct Project Jump Pills */}
+          <div className="flex items-center gap-1.5">
             {projects.map((p, pIdx) => (
               <button
                 key={p.name}
                 onClick={() => setActiveProjectIndex(pIdx)}
-                className={`w-8 h-2 transition-colors cursor-pointer ${
-                  activeProjectIndex === pIdx ? "bg-[#D7FF00]" : "bg-[#1A1A1A] hover:bg-[#F5F5F0]/30"
+                className={`px-2.5 py-1 text-[9px] border transition-colors cursor-pointer font-mono uppercase tracking-wider flex items-center gap-1.5 ${
+                  activeProjectIndex === pIdx
+                    ? "bg-[#D7FF00] text-[#050505] border-[#D7FF00] font-bold"
+                    : "bg-[#0A0A0A] text-[#8A8A8A] border-[#F5F5F0]/10 hover:text-[#F5F5F0] hover:border-[#F5F5F0]/30"
                 }`}
-                aria-label={`Go to project ${pIdx + 1}: ${p.name}`}
-              />
+                aria-label={`Switch directly to project ${pIdx + 1}: ${p.name}`}
+              >
+                <span className={activeProjectIndex === pIdx ? "text-[#050505]" : "text-[#D7FF00]"}>
+                  0{pIdx + 1}
+                </span>
+                <span className="hidden sm:inline truncate max-w-[140px]">{p.name}</span>
+              </button>
             ))}
           </div>
         </div>
