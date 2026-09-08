@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowUpRight,
   ChevronLeft,
@@ -21,89 +22,56 @@ const PROJECT_IMAGES = ["/project-01.jpg", "/project-02.jpg"];
 
 export default function Projects() {
   const sectionRef = useRef<HTMLElement>(null);
-  const carouselRef = useRef<HTMLDivElement>(null);
   const [activeProjectIndex, setActiveProjectIndex] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeftState, setScrollLeftState] = useState(0);
-  const [dragDistance, setDragDistance] = useState(0);
   const [activeTabByProject, setActiveTabByProject] = useState<Record<number, "preview" | "architecture">>({
     0: "preview",
     1: "preview",
   });
 
-  // Handle scroll position detection to track active slide
-  const handleScroll = useCallback(() => {
-    if (!carouselRef.current) return;
-    const { scrollLeft, clientWidth } = carouselRef.current;
-    const index = Math.round(scrollLeft / (clientWidth * 0.85 || 1));
-    const clamped = Math.max(0, Math.min(projects.length - 1, index));
-    setActiveProjectIndex(clamped);
+  const handlePrev = useCallback(() => {
+    setActiveProjectIndex((prev) => Math.max(0, prev - 1));
   }, []);
 
-  // Programmatic scroll to index
-  const scrollToSlide = (index: number) => {
-    if (!carouselRef.current) return;
-    const children = carouselRef.current.children;
-    if (children[index]) {
-      (children[index] as HTMLElement).scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-        inline: "center",
-      });
-    }
-  };
-
-  const handlePrev = () => {
-    const nextIdx = Math.max(0, activeProjectIndex - 1);
-    scrollToSlide(nextIdx);
-  };
-
-  const handleNext = () => {
-    const nextIdx = Math.min(projects.length - 1, activeProjectIndex + 1);
-    scrollToSlide(nextIdx);
-  };
+  const handleNext = useCallback(() => {
+    setActiveProjectIndex((prev) => Math.min(projects.length - 1, prev + 1));
+  }, []);
 
   // Keyboard navigation
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "ArrowLeft") {
-      e.preventDefault();
-      handlePrev();
-    } else if (e.key === "ArrowRight") {
-      e.preventDefault();
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (
+        document.activeElement?.tagName === "INPUT" ||
+        document.activeElement?.tagName === "TEXTAREA"
+      ) {
+        return;
+      }
+      if (e.key === "ArrowLeft") {
+        handlePrev();
+      } else if (e.key === "ArrowRight") {
+        handleNext();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [handlePrev, handleNext]);
+
+  // Touch Swipe for mobile / tablet
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStartX(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX === null) return;
+    const touchEndX = e.changedTouches[0].clientX;
+    const diff = touchStartX - touchEndX;
+    if (diff > 50) {
       handleNext();
+    } else if (diff < -50) {
+      handlePrev();
     }
-  };
-
-  // Mouse Drag to Scroll
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (!carouselRef.current) return;
-    setIsDragging(true);
-    setStartX(e.pageX - carouselRef.current.offsetLeft);
-    setScrollLeftState(carouselRef.current.scrollLeft);
-    setDragDistance(0);
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging || !carouselRef.current) return;
-    e.preventDefault();
-    const x = e.pageX - carouselRef.current.offsetLeft;
-    const walk = (x - startX) * 1.5;
-    carouselRef.current.scrollLeft = scrollLeftState - walk;
-    setDragDistance(Math.abs(walk));
-  };
-
-  const handleMouseUpOrLeave = () => {
-    setIsDragging(false);
-  };
-
-  // Mouse Wheel horizontal translation
-  const handleWheel = (e: React.WheelEvent) => {
-    if (!carouselRef.current) return;
-    if (Math.abs(e.deltaY) > Math.abs(e.deltaX) && Math.abs(e.deltaY) > 4) {
-      // Translate vertical mouse wheel to horizontal scroll smoothly
-      carouselRef.current.scrollLeft += e.deltaY * 0.85;
-    }
+    setTouchStartX(null);
   };
 
   useEffect(() => {
@@ -154,6 +122,10 @@ export default function Projects() {
     return () => ctx.revert();
   }, []);
 
+  const project = projects[activeProjectIndex];
+  const num = String(activeProjectIndex + 1).padStart(2, "0");
+  const currentTab = activeTabByProject[activeProjectIndex] || "preview";
+
   return (
     <section
       ref={sectionRef}
@@ -188,7 +160,7 @@ export default function Projects() {
             <div className="flex items-center gap-2 text-[#8A8A8A]">
               <MoveHorizontal size={14} className="text-[#D7FF00]" />
               <span className="text-[10px] uppercase tracking-widest hidden sm:inline">
-                DRAG OR USE ARROW KEYS
+                USE ARROW KEYS OR BUTTONS
               </span>
             </div>
 
@@ -223,272 +195,252 @@ export default function Projects() {
         </div>
       </div>
 
-      {/* ═══ Horizontal Scroll Carousel Viewport ═══ */}
+      {/* ═══ Active Project Viewport ═══ */}
       <div className="projects-carousel-container px-6 md:px-12 max-w-[1728px] mx-auto">
-        <div
-          ref={carouselRef}
-          onScroll={handleScroll}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUpOrLeave}
-          onMouseLeave={handleMouseUpOrLeave}
-          onWheel={handleWheel}
-          onKeyDown={handleKeyDown}
-          tabIndex={0}
-          role="region"
-          aria-label="Featured projects horizontal slider"
-          className={`flex gap-6 md:gap-10 overflow-x-auto snap-x snap-mandatory py-4 pb-8 focus:outline-none select-none ${isDragging ? "cursor-grabbing scroll-auto" : "cursor-grab scroll-smooth"
-            }`}
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-        >
-          {projects.map((project, idx) => {
-            const num = String(idx + 1).padStart(2, "0");
-            const isActive = activeProjectIndex === idx;
-            const currentTab = activeTabByProject[idx] || "preview";
+        <AnimatePresence mode="wait">
+          <motion.article
+            key={`${activeProjectIndex}-${currentTab}`}
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -14 }}
+            transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            className="w-full border border-[#D7FF00]/60 bg-[#000000] p-6 md:p-10 shadow-[0_0_40px_rgba(215,255,0,0.04)] transition-colors"
+          >
+            {/* Project Header Bar */}
+            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#F5F5F0]/15 pb-5 mb-8 font-mono">
+              <div className="flex items-baseline gap-4">
+                <span className="text-3xl md:text-5xl font-black text-[#D7FF00]">
+                  {num}
+                </span>
+                <div>
+                  <h3 className="text-2xl md:text-4xl font-bold uppercase tracking-tight text-[#F5F5F0]">
+                    {project.name}
+                  </h3>
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-[#8A8A8A]">
+                    DISTRIBUTED SYSTEMS // CASE STUDY {num}
+                  </span>
+                </div>
+              </div>
 
-            return (
-              <article
-                key={project.name}
-                className={`w-[90vw] sm:w-[85vw] lg:w-[1240px] xl:w-[1360px] shrink-0 snap-center border border-[#F5F5F0]/15 bg-[#000000] p-6 md:p-10 transition-all duration-500 ${isActive
-                    ? "border-[#D7FF00]/60 shadow-[0_0_40px_rgba(215,255,0,0.04)]"
-                    : "opacity-60 hover:opacity-90"
+              {/* Visual / Blueprint Switcher */}
+              <div className="flex items-center gap-1 bg-[#111111] p-1 border border-[#F5F5F0]/10 text-[10px] uppercase">
+                <button
+                  onClick={() => {
+                    setActiveTabByProject((prev) => ({
+                      ...prev,
+                      [activeProjectIndex]: "preview",
+                    }));
+                  }}
+                  className={`px-3 py-1.5 transition-colors cursor-pointer flex items-center gap-1.5 ${
+                    currentTab === "preview"
+                      ? "bg-[#D7FF00] text-[#050505] font-bold"
+                      : "text-[#8A8A8A] hover:text-[#F5F5F0]"
                   }`}
-              >
-                {/* Project Header Bar */}
-                <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#F5F5F0]/15 pb-5 mb-8 font-mono">
-                  <div className="flex items-baseline gap-4">
-                    <span className="text-3xl md:text-5xl font-black text-[#D7FF00]">
-                      {num}
-                    </span>
-                    <div>
-                      <h3 className="text-2xl md:text-4xl font-bold uppercase tracking-tight text-[#F5F5F0]">
-                        {project.name}
-                      </h3>
-                      <span className="text-[10px] uppercase tracking-[0.2em] text-[#8A8A8A]">
-                        DISTRIBUTED SYSTEMS // CASE STUDY {num}
-                      </span>
+                >
+                  <span>01 // Visual Preview</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setActiveTabByProject((prev) => ({
+                      ...prev,
+                      [activeProjectIndex]: "architecture",
+                    }));
+                  }}
+                  className={`px-3 py-1.5 transition-colors cursor-pointer flex items-center gap-1.5 ${
+                    currentTab === "architecture"
+                      ? "bg-[#D7FF00] text-[#050505] font-bold"
+                      : "text-[#8A8A8A] hover:text-[#F5F5F0]"
+                  }`}
+                >
+                  <Layers size={12} />
+                  <span>02 // Architecture Mesh</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Main Content Area */}
+            {currentTab === "preview" ? (
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+                {/* Left Column: Visual Media (6 cols) */}
+                <div className="lg:col-span-6 space-y-4">
+                  <div className="relative aspect-[16/10] overflow-hidden border border-[#F5F5F0]/15 bg-[#111111] group">
+                    <Image
+                      src={PROJECT_IMAGES[activeProjectIndex] || PROJECT_IMAGES[0]}
+                      alt={`${project.name} visual preview`}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#000000]/80 via-transparent to-transparent pointer-events-none" />
+
+                    <div className="absolute top-4 left-4 z-20 font-mono text-[9px] uppercase tracking-[0.25em] text-[#D7FF00] px-2.5 py-1 bg-[#050505]/85 border border-[#F5F5F0]/15">
+                      SYSTEM RUNTIME // ACTIVE
+                    </div>
+
+                    <div className="absolute bottom-4 left-4 right-4 z-20 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.2em] text-[#F5F5F0]/90 pointer-events-none">
+                      <span>{project.name}</span>
+                      <span className="text-[#D7FF00]">{project.techStack[0]}</span>
                     </div>
                   </div>
 
-                  {/* Visual / Blueprint Switcher */}
-                  <div className="flex items-center gap-1 bg-[#111111] p-1 border border-[#F5F5F0]/10 text-[10px] uppercase">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setActiveTabByProject((prev) => ({ ...prev, [idx]: "preview" }));
-                      }}
-                      className={`px-3 py-1.5 transition-colors cursor-pointer flex items-center gap-1.5 ${currentTab === "preview"
-                          ? "bg-[#D7FF00] text-[#050505] font-bold"
-                          : "text-[#8A8A8A] hover:text-[#F5F5F0]"
-                        }`}
-                    >
-                      <span>01 // Visual Preview</span>
-                    </button>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setActiveTabByProject((prev) => ({ ...prev, [idx]: "architecture" }));
-                      }}
-                      className={`px-3 py-1.5 transition-colors cursor-pointer flex items-center gap-1.5 ${currentTab === "architecture"
-                          ? "bg-[#D7FF00] text-[#050505] font-bold"
-                          : "text-[#8A8A8A] hover:text-[#F5F5F0]"
-                        }`}
-                    >
-                      <Layers size={12} />
-                      <span>02 // Architecture Mesh</span>
-                    </button>
+                  {/* Tech Badges Strip below preview */}
+                  <div className="flex flex-wrap gap-2 pt-2">
+                    {project.techStack.map((tech) => (
+                      <span
+                        key={tech}
+                        className="font-mono text-[10px] uppercase tracking-[0.15em] border border-[#F5F5F0]/15 px-3 py-1 text-[#F5F5F0] bg-[#050505]"
+                      >
+                        {tech}
+                      </span>
+                    ))}
                   </div>
                 </div>
 
-                {/* Main Slide Grid */}
-                {currentTab === "preview" ? (
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-                    {/* Left Column: Visual Media (6 cols) */}
-                    <div className="lg:col-span-6 space-y-4">
-                      <div className="relative aspect-[16/10] overflow-hidden border border-[#F5F5F0]/15 bg-[#111111] group">
-                        <Image
-                          src={PROJECT_IMAGES[idx] || PROJECT_IMAGES[0]}
-                          alt={`${project.name} visual preview`}
-                          fill
-                          className="object-cover transition-transform duration-700 group-hover:scale-105"
-                          sizes="(max-width: 1024px) 100vw, 50vw"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#000000]/80 via-transparent to-transparent pointer-events-none" />
+                {/* Right Column: Architectural Highlights & Specs (6 cols) */}
+                <div className="lg:col-span-6 space-y-6 flex flex-col">
+                  {/* System Overview */}
+                  <div className="space-y-2">
+                    <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#8A8A8A] block">
+                      // SYSTEM OVERVIEW
+                    </span>
+                    <p className="text-sm md:text-base text-[#B5B5B5] leading-relaxed font-light">
+                      {project.description}
+                    </p>
+                  </div>
 
-                        <div className="absolute top-4 left-4 z-20 font-mono text-[9px] uppercase tracking-[0.25em] text-[#D7FF00] px-2.5 py-1 bg-[#050505]/85 border border-[#F5F5F0]/15">
-                          SYSTEM RUNTIME // ACTIVE
-                        </div>
+                  {/* Engineering Highlights */}
+                  <div className="border-t border-[#F5F5F0]/15 pt-5 space-y-3">
+                    <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#D7FF00] block">
+                      // ARCHITECTURAL HIGHLIGHTS
+                    </span>
+                    <ul className="space-y-2.5">
+                      {project.highlights.map((hl, hIdx) => (
+                        <li
+                          key={hIdx}
+                          className="text-xs md:text-sm text-[#F5F5F0]/90 pl-3.5 border-l-2 border-[#D7FF00]/50 leading-relaxed font-normal hover:border-[#D7FF00] transition-colors"
+                        >
+                          {hl}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
 
-                        <div className="absolute bottom-4 left-4 right-4 z-20 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.2em] text-[#F5F5F0]/90 pointer-events-none">
-                          <span>{project.name}</span>
-                          <span className="text-[#D7FF00]">{project.techStack[0]}</span>
-                        </div>
-                      </div>
+                  {/* Action Links */}
+                  <div className="pt-4 border-t border-[#F5F5F0]/15 flex flex-wrap items-center gap-4">
+                    {project.githubUrl ? (
+                      <a
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn-editorial"
+                        aria-label={`View source repository for ${project.name}`}
+                      >
+                        <GitHubIcon width={14} height={14} />
+                        <span>SOURCE CODE</span>
+                        <ArrowUpRight size={14} className="arrow" />
+                      </a>
+                    ) : (
+                      <span className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-wider text-[#8A8A8A] border border-[#F5F5F0]/10 px-4 py-3 cursor-default">
+                        <GitHubIcon width={14} height={14} />
+                        <span>PROPRIETARY REPO</span>
+                      </span>
+                    )}
 
-                      {/* Tech Badges Strip below preview */}
-                      <div className="flex flex-wrap gap-2 pt-2">
-                        {project.techStack.map((tech) => (
-                          <span
-                            key={tech}
-                            className="font-mono text-[10px] uppercase tracking-[0.15em] border border-[#F5F5F0]/15 px-3 py-1 text-[#F5F5F0] bg-[#050505]"
-                          >
-                            {tech}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
+                    {project.liveUrl && (
+                      <a
+                        href={project.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn-editorial bg-[#D7FF00] text-[#050505] font-bold border-[#D7FF00]"
+                        aria-label={`View live demo of ${project.name}`}
+                      >
+                        <span>LIVE DEMO</span>
+                        <ArrowUpRight size={14} className="arrow" />
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              /* Full-width Architecture Mesh view */
+              <div className="space-y-6">
+                <ArchitectureDiagram
+                  nodes={project.architecture.nodes || []}
+                  connections={project.architecture.connections || []}
+                  title={`${project.name} // ARCHITECTURAL TOPOLOGY`}
+                />
 
-                    {/* Right Column: Architectural Highlights & Specs (6 cols) */}
-                    <div className="lg:col-span-6 space-y-6 flex flex-col justify-between h-full">
-                      {/* System Overview */}
-                      <div className="space-y-2">
-                        <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#8A8A8A] block">
-                          // SYSTEM OVERVIEW
+                {/* Bottom Specs & Highlights */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-4 border-t border-[#F5F5F0]/15 items-start">
+                  <div className="lg:col-span-5 space-y-3">
+                    <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#8A8A8A] block">
+                      // ARCHITECTURAL SUMMARY
+                    </span>
+                    <p className="text-xs md:text-sm text-[#B5B5B5] leading-relaxed font-light">
+                      {project.description}
+                    </p>
+                    <div className="flex flex-wrap gap-2 pt-1">
+                      {project.techStack.map((tech) => (
+                        <span
+                          key={tech}
+                          className="font-mono text-[9px] uppercase tracking-[0.15em] border border-[#F5F5F0]/15 px-2.5 py-1 text-[#F5F5F0] bg-[#050505]"
+                        >
+                          {tech}
                         </span>
-                        <p className="text-sm md:text-base text-[#B5B5B5] leading-relaxed font-light">
-                          {project.description}
-                        </p>
-                      </div>
-
-                      {/* Engineering Highlights */}
-                      <div className="border-t border-[#F5F5F0]/15 pt-5 space-y-3">
-                        <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#D7FF00] block">
-                          // ARCHITECTURAL HIGHLIGHTS
-                        </span>
-                        <ul className="space-y-2.5">
-                          {project.highlights.map((hl, hIdx) => (
-                            <li
-                              key={hIdx}
-                              className="text-xs md:text-sm text-[#F5F5F0]/90 pl-3.5 border-l-2 border-[#D7FF00]/50 leading-relaxed font-normal hover:border-[#D7FF00] transition-colors"
-                            >
-                              {hl}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      {/* Action Links */}
-                      <div className="pt-4 border-t border-[#F5F5F0]/15 flex flex-wrap items-center gap-4">
-                        {project.githubUrl ? (
-                          <a
-                            href={project.githubUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="btn-editorial"
-                            aria-label={`View source repository for ${project.name}`}
-                            onClick={(e) => {
-                              if (dragDistance > 10) e.preventDefault();
-                            }}
-                          >
-                            <GitHubIcon width={14} height={14} />
-                            <span>SOURCE CODE</span>
-                            <ArrowUpRight size={14} className="arrow" />
-                          </a>
-                        ) : (
-                          <span className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-wider text-[#8A8A8A] border border-[#F5F5F0]/10 px-4 py-3 cursor-default">
-                            <GitHubIcon width={14} height={14} />
-                            <span>PROPRIETARY REPO</span>
-                          </span>
-                        )}
-
-                        {project.liveUrl && (
-                          <a
-                            href={project.liveUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="btn-editorial bg-[#D7FF00] text-[#050505] font-bold border-[#D7FF00]"
-                            aria-label={`View live demo of ${project.name}`}
-                            onClick={(e) => {
-                              if (dragDistance > 10) e.preventDefault();
-                            }}
-                          >
-                            <span>LIVE DEMO</span>
-                            <ArrowUpRight size={14} className="arrow" />
-                          </a>
-                        )}
-                      </div>
+                      ))}
                     </div>
                   </div>
-                ) : (
-                  /* Full-width Architecture Mesh view */
-                  <div className="space-y-6">
-                    <ArchitectureDiagram
-                      nodes={project.architecture.nodes || []}
-                      connections={project.architecture.connections || []}
-                      title={`${project.name} // ARCHITECTURAL TOPOLOGY`}
-                    />
 
-                    {/* Bottom Specs & Highlights */}
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-4 border-t border-[#F5F5F0]/15 items-start">
-                      <div className="lg:col-span-5 space-y-3">
-                        <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#8A8A8A] block">
-                          // ARCHITECTURAL SUMMARY
-                        </span>
-                        <p className="text-xs md:text-sm text-[#B5B5B5] leading-relaxed font-light">
-                          {project.description}
-                        </p>
-                        <div className="flex flex-wrap gap-2 pt-1">
-                          {project.techStack.map((tech) => (
-                            <span
-                              key={tech}
-                              className="font-mono text-[9px] uppercase tracking-[0.15em] border border-[#F5F5F0]/15 px-2.5 py-1 text-[#F5F5F0] bg-[#050505]"
-                            >
-                              {tech}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="lg:col-span-5 space-y-2">
-                        <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#D7FF00] block">
-                          // ENGINEERING & RESILIENCE HIGHLIGHTS
-                        </span>
-                        <ul className="space-y-2">
-                          {project.highlights.map((hl, hIdx) => (
-                            <li
-                              key={hIdx}
-                              className="text-xs text-[#F5F5F0]/90 pl-3 border-l border-[#D7FF00]/50 leading-relaxed font-normal"
-                            >
-                              {hl}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      <div className="lg:col-span-2 flex lg:flex-col justify-end gap-3 pt-2">
-                        {project.githubUrl && (
-                          <a
-                            href={project.githubUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="btn-editorial text-[10px] justify-center"
-                            aria-label={`View source repository for ${project.name}`}
-                          >
-                            <GitHubIcon width={13} height={13} />
-                            <span>CODE REPO</span>
-                            <ArrowUpRight size={13} className="arrow" />
-                          </a>
-                        )}
-                        {project.liveUrl && (
-                          <a
-                            href={project.liveUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="btn-editorial bg-[#D7FF00] text-[#050505] font-bold border-[#D7FF00] text-[10px] justify-center"
-                            aria-label={`View live demo of ${project.name}`}
-                          >
-                            <span>LIVE DEMO</span>
-                            <ArrowUpRight size={13} className="arrow" />
-                          </a>
-                        )}
-                      </div>
-                    </div>
+                  <div className="lg:col-span-5 space-y-2">
+                    <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#D7FF00] block">
+                      // ENGINEERING & RESILIENCE HIGHLIGHTS
+                    </span>
+                    <ul className="space-y-2">
+                      {project.highlights.map((hl, hIdx) => (
+                        <li
+                          key={hIdx}
+                          className="text-xs text-[#F5F5F0]/90 pl-3 border-l border-[#D7FF00]/50 leading-relaxed font-normal"
+                        >
+                          {hl}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                )}
-              </article>
-            );
-          })}
-        </div>
+
+                  <div className="lg:col-span-2 flex lg:flex-col justify-end gap-3 pt-2">
+                    {project.githubUrl && (
+                      <a
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn-editorial text-[10px] justify-center"
+                        aria-label={`View source repository for ${project.name}`}
+                      >
+                        <GitHubIcon width={13} height={13} />
+                        <span>CODE REPO</span>
+                        <ArrowUpRight size={13} className="arrow" />
+                      </a>
+                    )}
+                    {project.liveUrl && (
+                      <a
+                        href={project.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn-editorial bg-[#D7FF00] text-[#050505] font-bold border-[#D7FF00] text-[10px] justify-center"
+                        aria-label={`View live demo of ${project.name}`}
+                      >
+                        <span>LIVE DEMO</span>
+                        <ArrowUpRight size={13} className="arrow" />
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+          </motion.article>
+        </AnimatePresence>
 
         {/* Carousel Pagination Progress Bar */}
         <div className="mt-8 flex items-center justify-between border-t border-[#F5F5F0]/15 pt-4 font-mono text-[10px] uppercase tracking-widest text-[#8A8A8A]">
@@ -508,10 +460,11 @@ export default function Projects() {
             {projects.map((p, pIdx) => (
               <button
                 key={p.name}
-                onClick={() => scrollToSlide(pIdx)}
-                className={`w-8 h-2 transition-colors cursor-pointer ${activeProjectIndex === pIdx ? "bg-[#D7FF00]" : "bg-[#1A1A1A] hover:bg-[#F5F5F0]/30"
-                  }`}
-                aria-label={`Go to slide ${pIdx + 1}: ${p.name}`}
+                onClick={() => setActiveProjectIndex(pIdx)}
+                className={`w-8 h-2 transition-colors cursor-pointer ${
+                  activeProjectIndex === pIdx ? "bg-[#D7FF00]" : "bg-[#1A1A1A] hover:bg-[#F5F5F0]/30"
+                }`}
+                aria-label={`Go to project ${pIdx + 1}: ${p.name}`}
               />
             ))}
           </div>

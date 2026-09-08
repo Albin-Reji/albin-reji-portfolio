@@ -262,9 +262,16 @@ export default function ArchitectureDiagram({
     return connections.filter((c) => c.from === activeFocusId);
   }, [activeFocusId, connections]);
 
-  // Dynamic canvas bounds
-  const maxX = Math.max(...nodes.map((n) => n.x + (n.width ?? 180)), 960) + 35;
-  const maxY = Math.max(...nodes.map((n) => n.y + (n.height ?? 46)), 520) + 40;
+  // Dynamic canvas bounds calculated tightly from node coordinates
+  const maxX = useMemo(() => {
+    if (!nodes.length) return 960;
+    return Math.max(...nodes.map((n) => n.x + (n.width ?? 180))) + 25;
+  }, [nodes]);
+
+  const maxY = useMemo(() => {
+    if (!nodes.length) return 460;
+    return Math.max(...nodes.map((n) => n.y + (n.height ?? 46))) + 25;
+  }, [nodes]);
 
   // Filtered connections list
   const filteredConnections = useMemo(() => {
@@ -276,7 +283,7 @@ export default function ArchitectureDiagram({
   const renderDiagramSvg = (isModal = false) => (
     <svg
       viewBox={`0 0 ${maxX} ${maxY}`}
-      className={`w-full ${isModal ? "h-[68vh]" : "h-auto max-h-[580px]"} select-none`}
+      className={`w-full ${isModal ? "h-[68vh]" : "h-auto"} select-none`}
       role="img"
       aria-label="Interactive Architecture Diagram"
     >
