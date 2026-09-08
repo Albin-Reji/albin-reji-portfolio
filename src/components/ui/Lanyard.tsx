@@ -1199,10 +1199,10 @@ function Band({
     useMemo(() => {
       const c =
         new THREE.CatmullRomCurve3([
-          new THREE.Vector3(),
-          new THREE.Vector3(),
-          new THREE.Vector3(),
-          new THREE.Vector3(),
+          new THREE.Vector3(0, 0, 0),
+          new THREE.Vector3(0.1, 0.5, 0),
+          new THREE.Vector3(0.2, 1.0, 0),
+          new THREE.Vector3(0.3, 1.5, 0),
         ]);
 
       c.curveType =
@@ -1411,14 +1411,14 @@ function Band({
           const tJ2 = j2.current.translation();
           const tJ3 = j3.current.translation();
 
+          const isValidNum = (n: any): n is number =>
+            typeof n === 'number' && !isNaN(n) && Number.isFinite(n);
+
           const isValidVec = (v: any) =>
             v &&
-            typeof v.x === 'number' &&
-            !isNaN(v.x) &&
-            typeof v.y === 'number' &&
-            !isNaN(v.y) &&
-            typeof v.z === 'number' &&
-            !isNaN(v.z);
+            isValidNum(v.x) &&
+            isValidNum(v.y) &&
+            isValidNum(v.z);
 
           if (
             isValidVec(tFixed) &&
@@ -1426,6 +1426,8 @@ function Band({
             isValidVec(tJ2) &&
             isValidVec(tJ3)
           ) {
+            const safeDelta = Math.min(delta, 0.033);
+
             [
               { ref: j1, t: tJ1 },
               { ref: j2, t: tJ2 },
@@ -1435,15 +1437,11 @@ function Band({
               }
 
               const dist = ref.current.lerped.distanceTo(t);
-              const clampedDistance = Math.max(0.1, Math.min(1, isNaN(dist) ? 0.1 : dist));
+              const clampedDistance = Math.max(0.1, Math.min(1, isValidNum(dist) ? dist : 0.1));
+              const rawAlpha = safeDelta * (minSpeed + clampedDistance * (maxSpeed - minSpeed));
+              const alpha = Math.max(0, Math.min(1, isValidNum(rawAlpha) ? rawAlpha : 0.1));
 
-              ref.current.lerped.lerp(
-                t,
-                delta *
-                (minSpeed +
-                  clampedDistance *
-                  (maxSpeed - minSpeed))
-              );
+              ref.current.lerped.lerp(t, alpha);
             });
 
             if (isValidVec(j2.current.lerped) && isValidVec(j1.current.lerped)) {
@@ -1455,13 +1453,28 @@ function Band({
               curve.points[2].copy(j1.current.lerped);
               curve.points[3].set(tFixed.x, tFixed.y, tFixed.z);
 
+              // Avoid coincident points in Catmull-Rom spline
+              for (let i = 0; i < 3; i++) {
+                if (curve.points[i].distanceToSquared(curve.points[i + 1]) < 1e-6) {
+                  curve.points[i].x += 0.001;
+                }
+              }
+
               /* =================================================
                  UPDATE STRAP
                  ================================================= */
               const pts = curve.getPoints(isMobile ? 16 : 32);
-              const allValid = pts.every((p: any) => isValidVec(p));
+              const allValid = pts.length >= 2 && pts.every((p: any) => isValidVec(p));
               if (allValid && band.current.geometry?.setPoints) {
-                band.current.geometry.setPoints(pts);
+                // Pass flat Float32Array so meshline does not rely on `instanceof THREE.Vector3`
+                // (which fails across dual bundler module instances) and avoids pushing [object Object] into geometry
+                const flatPoints = new Float32Array(pts.length * 3);
+                for (let i = 0; i < pts.length; i++) {
+                  flatPoints[i * 3] = pts[i].x;
+                  flatPoints[i * 3 + 1] = pts[i].y;
+                  flatPoints[i * 3 + 2] = pts[i].z;
+                }
+                band.current.geometry.setPoints(flatPoints);
               }
             }
           }
