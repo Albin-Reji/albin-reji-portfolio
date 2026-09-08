@@ -1337,79 +1337,85 @@ function Band({
       state,
       delta
     ) => {
-      /* ===================================================
-         DRAGGING
-         =================================================== */
+      try {
+        /* ===================================================
+           DRAGGING
+           =================================================== */
 
-      if (dragged) {
-        vec
-          .set(
-            state.pointer.x,
-            state.pointer.y,
-            0.5
-          )
-          .unproject(
-            state.camera
+        if (dragged) {
+          vec
+            .set(
+              state.pointer.x,
+              state.pointer.y,
+              0.5
+            )
+            .unproject(
+              state.camera
+            );
+
+          dir
+            .copy(vec)
+            .sub(
+              state.camera.position
+            )
+            .normalize();
+
+          // Exact intersection with the Z = 0 plane
+          if (Math.abs(dir.z) > 0.0001) {
+            const t = -state.camera.position.z / dir.z;
+            vec.copy(state.camera.position).addScaledVector(dir, t);
+          }
+
+          [
+            card,
+            j1,
+            j2,
+            j3,
+            fixed,
+          ].forEach(
+            ref => {
+              ref.current?.wakeUp?.();
+            }
           );
 
-        dir
-          .copy(vec)
-          .sub(
-            state.camera.position
-          )
-          .normalize();
-
-        // Exact intersection with the Z = 0 plane
-        if (Math.abs(dir.z) > 0.0001) {
-          const t = -state.camera.position.z / dir.z;
-          vec.copy(state.camera.position).addScaledVector(dir, t);
+          if (card.current) {
+            try {
+              card.current.setNextKinematicTranslation?.({
+                x: vec.x - dragged.x,
+                y: vec.y - dragged.y,
+                z: 0,
+              });
+            } catch {
+              try {
+                card.current.setTranslation?.(
+                  {
+                    x: vec.x - dragged.x,
+                    y: vec.y - dragged.y,
+                    z: 0,
+                  },
+                  true
+                );
+              } catch {}
+            }
+          }
         }
 
-        [
-          card,
-          j1,
-          j2,
-          j3,
-          fixed,
-        ].forEach(
-          ref => {
-            ref.current?.wakeUp();
-          }
-        );
+        /* ===================================================
+           ROPE
+           =================================================== */
 
-        card.current?.setNextKinematicTranslation(
-          {
-            x:
-              vec.x -
-              dragged.x,
-
-            y:
-              vec.y -
-              dragged.y,
-
-            z:
-              0,
-          }
-        );
-      }
-
-      /* ===================================================
-         ROPE
-         =================================================== */
-
-      if (
-        fixed.current &&
-        j1.current &&
-        j2.current &&
-        j3.current &&
-        card.current &&
-        band.current?.geometry
-      ) {
-        try {
-          const tFixed = fixed.current.translation();
-          const tJ1 = j1.current.translation();
-          const tJ2 = j2.current.translation();
-          const tJ3 = j3.current.translation();
+        if (
+          fixed.current &&
+          j1.current &&
+          j2.current &&
+          j3.current &&
+          card.current &&
+          band.current?.geometry
+        ) {
+          const tFixed = fixed.current.translation?.();
+          const tJ1 = j1.current.translation?.();
+          const tJ2 = j2.current.translation?.();
+          const tJ3 = j3.current.translation?.();
 
           const isValidVec = (v: any) =>
             v &&
@@ -1469,21 +1475,21 @@ function Band({
           /* =================================================
              CARD ROTATION
              ================================================= */
-          const cAng = card.current.angvel();
-          const cRot = card.current.rotation();
+          const cAng = card.current.angvel?.();
+          const cRot = card.current.rotation?.();
           if (isValidVec(cAng) && isValidVec(cRot)) {
             ang.set(cAng.x, cAng.y, cAng.z);
             rot.set(cRot.x, cRot.y, cRot.z);
 
-            card.current.setAngvel({
+            card.current.setAngvel?.({
               x: ang.x,
               y: ang.y - rot.y * 0.25,
               z: ang.z,
             });
           }
-        } catch {
-          // Ignore physics transient frame glitches
         }
+      } catch {
+        // Ignore physics transient frame glitches
       }
     }
   );
