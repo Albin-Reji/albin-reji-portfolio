@@ -250,8 +250,8 @@ export default function Projects() {
               <article
                 key={project.name}
                 className={`w-[90vw] sm:w-[85vw] lg:w-[1240px] xl:w-[1360px] shrink-0 snap-center border border-[#F5F5F0]/15 bg-[#000000] p-6 md:p-10 transition-all duration-500 ${isActive
-                    ? "border-[#D7FF00]/60 shadow-[0_0_40px_rgba(215,255,0,0.04)]"
-                    : "opacity-60 hover:opacity-90"
+                  ? "border-[#D7FF00]/60 shadow-[0_0_40px_rgba(215,255,0,0.04)]"
+                  : "opacity-60 hover:opacity-90"
                   }`}
               >
                 {/* Project Header Bar */}
@@ -278,8 +278,8 @@ export default function Projects() {
                         setActiveTabByProject((prev) => ({ ...prev, [idx]: "preview" }));
                       }}
                       className={`px-3 py-1.5 transition-colors cursor-pointer flex items-center gap-1.5 ${currentTab === "preview"
-                          ? "bg-[#D7FF00] text-[#050505] font-bold"
-                          : "text-[#8A8A8A] hover:text-[#F5F5F0]"
+                        ? "bg-[#D7FF00] text-[#050505] font-bold"
+                        : "text-[#8A8A8A] hover:text-[#F5F5F0]"
                         }`}
                     >
                       <span>01 // Visual Preview</span>
@@ -290,8 +290,8 @@ export default function Projects() {
                         setActiveTabByProject((prev) => ({ ...prev, [idx]: "architecture" }));
                       }}
                       className={`px-3 py-1.5 transition-colors cursor-pointer flex items-center gap-1.5 ${currentTab === "architecture"
-                          ? "bg-[#D7FF00] text-[#050505] font-bold"
-                          : "text-[#8A8A8A] hover:text-[#F5F5F0]"
+                        ? "bg-[#D7FF00] text-[#050505] font-bold"
+                        : "text-[#8A8A8A] hover:text-[#F5F5F0]"
                         }`}
                     >
                       <Layers size={12} />

@@ -1440,9 +1440,9 @@ function Band({
               ref.current.lerped.lerp(
                 t,
                 delta *
-                  (minSpeed +
-                    clampedDistance *
-                      (maxSpeed - minSpeed))
+                (minSpeed +
+                  clampedDistance *
+                  (maxSpeed - minSpeed))
               );
             });
 
@@ -1643,7 +1643,7 @@ function Band({
                 (e.nativeEvent?.target || e.target)?.releasePointerCapture?.(
                   e.pointerId
                 );
-              } catch {}
+              } catch { }
 
               drag(false);
             }}
@@ -1655,7 +1655,7 @@ function Band({
                 (e.nativeEvent?.target || e.target)?.releasePointerCapture?.(
                   e.pointerId
                 );
-              } catch {}
+              } catch { }
 
               drag(false);
             }}
@@ -1668,7 +1668,7 @@ function Band({
                 (e.nativeEvent?.target || e.target)?.setPointerCapture?.(
                   e.pointerId
                 );
-              } catch {}
+              } catch { }
 
               const cardPos = card.current ? card.current.translation() : { x: 0, y: 0, z: 0 };
               drag(

@@ -288,8 +288,8 @@
 
 /* ── Hide custom cursor blob inside the Transmission Console ─────────────── */
 /* Targets any input or textarea inside the contact form card */
-.contact-form-card:has(input:focus) ~ .cursor-dot,
-.contact-form-card:has(textarea:focus) ~ .cursor-dot {
+.contact-form-card:has(input:focus)~.cursor-dot,
+.contact-form-card:has(textarea:focus)~.cursor-dot {
   opacity: 0;
 }
 
@@ -668,10 +668,13 @@
 }
 
 @keyframes cf-live-pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 1;
     box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.5);
   }
+
   55% {
     opacity: 0.75;
     box-shadow: 0 0 0 5px rgba(22, 163, 74, 0);
@@ -1021,12 +1024,10 @@
   left: -80%;
   width: 55%;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.32),
-    transparent
-  );
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.32),
+      transparent);
   transform: skewX(-18deg);
   z-index: 1;
   pointer-events: none;
@@ -1050,7 +1051,7 @@
     0 0 28px rgba(223, 255, 53, 0.15);
 }
 
-.contact-submit-btn > * {
+.contact-submit-btn>* {
   position: relative;
   z-index: 2;
   flex-shrink: 0;
@@ -1102,7 +1103,9 @@
 
 /* Spinner keyframe */
 @keyframes contact-spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .contact-submit-spinner {
@@ -1129,6 +1132,7 @@
     opacity: 0;
     transform: translateY(12px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

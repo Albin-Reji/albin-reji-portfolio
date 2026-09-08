@@ -385,14 +385,14 @@ export default function ArchitectureDiagram({
         const strokeColor = isHighlighted
           ? "#D7FF00"
           : protoCfg
-          ? protoCfg.stroke
-          : "rgba(245, 245, 240, 0.25)";
+            ? protoCfg.stroke
+            : "rgba(245, 245, 240, 0.25)";
 
         const markerId = isHighlighted
           ? "url(#arrow-active)"
           : conn.type
-          ? `url(#arrow-${conn.type})`
-          : "url(#arrow-default)";
+            ? `url(#arrow-${conn.type})`
+            : "url(#arrow-default)";
 
         const pathD = buildSmoothPath(fromNode, toNode);
 
@@ -479,8 +479,8 @@ export default function ArchitectureDiagram({
                 isFocused
                   ? "#D7FF00"
                   : isConnected
-                  ? "rgba(215, 255, 0, 0.5)"
-                  : "rgba(245, 245, 240, 0.2)"
+                    ? "rgba(215, 255, 0, 0.5)"
+                    : "rgba(245, 245, 240, 0.2)"
               }
               strokeWidth={1}
               rx={1}
@@ -570,11 +570,10 @@ export default function ArchitectureDiagram({
         <div className="flex flex-wrap items-center gap-1 font-mono text-[9px] uppercase">
           <button
             onClick={() => setActiveProtocol("ALL")}
-            className={`px-2 py-1 border transition-colors cursor-pointer ${
-              activeProtocol === "ALL"
+            className={`px-2 py-1 border transition-colors cursor-pointer ${activeProtocol === "ALL"
                 ? "bg-[#D7FF00] text-[#050505] border-[#D7FF00] font-bold"
                 : "border-[#F5F5F0]/10 text-[#8A8A8A] hover:text-[#F5F5F0]"
-            }`}
+              }`}
           >
             ALL
           </button>
@@ -585,11 +584,10 @@ export default function ArchitectureDiagram({
               <button
                 key={proto}
                 onClick={() => setActiveProtocol(isActive ? "ALL" : proto)}
-                className={`px-2 py-1 border transition-colors cursor-pointer flex items-center gap-1 ${
-                  isActive
+                className={`px-2 py-1 border transition-colors cursor-pointer flex items-center gap-1 ${isActive
                     ? "bg-[#D7FF00] text-[#050505] border-[#D7FF00] font-bold"
                     : "border-[#F5F5F0]/10 text-[#8A8A8A] hover:text-[#F5F5F0]"
-                }`}
+                  }`}
               >
                 <span
                   className="w-1.5 h-1.5 rounded-full"
@@ -639,9 +637,8 @@ export default function ArchitectureDiagram({
                   )}
                   {inspectedNode.tier && (
                     <span
-                      className={`px-2 py-0.5 text-[9px] border uppercase ${
-                        TIER_ACCENTS[inspectedNode.tier].badge
-                      }`}
+                      className={`px-2 py-0.5 text-[9px] border uppercase ${TIER_ACCENTS[inspectedNode.tier].badge
+                        }`}
                     >
                       {inspectedNode.category || inspectedNode.tier}
                     </span>
@@ -788,11 +785,10 @@ export default function ArchitectureDiagram({
                 <span className="text-[#8A8A8A] mr-2">PROTOCOL FILTER:</span>
                 <button
                   onClick={() => setActiveProtocol("ALL")}
-                  className={`px-3 py-1 border transition-colors cursor-pointer ${
-                    activeProtocol === "ALL"
+                  className={`px-3 py-1 border transition-colors cursor-pointer ${activeProtocol === "ALL"
                       ? "bg-[#D7FF00] text-[#050505] border-[#D7FF00] font-bold"
                       : "border-[#F5F5F0]/10 text-[#8A8A8A] hover:text-[#F5F5F0]"
-                  }`}
+                    }`}
                 >
                   ALL ({connections.length})
                 </button>
@@ -803,11 +799,10 @@ export default function ArchitectureDiagram({
                     <button
                       key={proto}
                       onClick={() => setActiveProtocol(proto)}
-                      className={`px-3 py-1 border transition-colors cursor-pointer flex items-center gap-1.5 ${
-                        activeProtocol === proto
+                      className={`px-3 py-1 border transition-colors cursor-pointer flex items-center gap-1.5 ${activeProtocol === proto
                           ? "bg-[#D7FF00] text-[#050505] border-[#D7FF00] font-bold"
                           : "border-[#F5F5F0]/10 text-[#8A8A8A] hover:text-[#F5F5F0]"
-                      }`}
+                        }`}
                     >
                       <span
                         className="w-2 h-2 rounded-full"

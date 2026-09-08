@@ -133,8 +133,8 @@ export default function EngineeringNotes() {
       const opacity = isCenter
         ? 1
         : absOffset === 1
-        ? params.sideOpacity
-        : params.farOpacity;
+          ? params.sideOpacity
+          : params.farOpacity;
 
       // Stacking order: center is highest (30), side cards are underneath (20, 10)
       const zIndex = 30 - absOffset * 10;
@@ -396,9 +396,9 @@ export default function EngineeringNotes() {
                     onClick={
                       !isActive && Math.abs(offset) <= 1
                         ? (e) => {
-                            e.stopPropagation();
-                            goToIndex(index);
-                          }
+                          e.stopPropagation();
+                          goToIndex(index);
+                        }
                         : undefined
                     }
                     aria-hidden={!isActive}
@@ -420,11 +420,10 @@ export default function EngineeringNotes() {
               <button
                 key={i}
                 onClick={() => goToIndex(i)}
-                className={`h-1.5 rounded-full transition-all duration-500 ease-out cursor-pointer ${
-                  i === activeIndex
+                className={`h-1.5 rounded-full transition-all duration-500 ease-out cursor-pointer ${i === activeIndex
                     ? "w-8 bg-[#D7FF00] shadow-[0_0_10px_rgba(215,255,0,0.5)]"
                     : "w-1.5 bg-[#F5F5F0]/20 hover:bg-[#F5F5F0]/40"
-                }`}
+                  }`}
                 aria-label={`Go to note ${i + 1}: ${engineeringNotes[i].title}`}
               />
             ))}

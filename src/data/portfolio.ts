@@ -1090,15 +1090,15 @@ export const certifications: Certification[] = [
 export interface EngineeringPost {
   id: string;
   category:
-    | "SYSTEM DESIGN"
-    | "AI"
-    | "BACKEND"
-    | "DEVOPS"
-    | "WEB PERFORMANCE"
-    | "ARCHITECTURE"
-    | "OPEN SOURCE"
-    | "LEARNING"
-    | "SECURITY";
+  | "SYSTEM DESIGN"
+  | "AI"
+  | "BACKEND"
+  | "DEVOPS"
+  | "WEB PERFORMANCE"
+  | "ARCHITECTURE"
+  | "OPEN SOURCE"
+  | "LEARNING"
+  | "SECURITY";
   title: string;
   description: string;
   date: string;
