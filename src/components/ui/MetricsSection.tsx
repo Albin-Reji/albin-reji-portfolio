@@ -149,10 +149,10 @@ export default function MetricsSection() {
         {/* Header */}
         <div className="metrics-header flex flex-wrap items-center justify-between border-b border-[#F5F5F0]/15 pb-4 font-mono text-xs uppercase tracking-[0.25em] text-[#8A8A8A]">
           <div className="flex items-center gap-3">
-            <span className="text-[#D7FF00] font-bold">[METRICS // 06]</span>
+            <span className="text-[#DDFE67] font-bold">[METRICS // 06]</span>
             <span>PRODUCTION BENCHMARKS &amp; TELEMETRY</span>
           </div>
-          <span className="text-[#D7FF00]">HIGH-AVAILABILITY VERIFIED</span>
+          <span className="text-[#DDFE67]">HIGH-AVAILABILITY VERIFIED</span>
         </div>
 
         {/* 4-Column Metric Grid */}
@@ -160,15 +160,21 @@ export default function MetricsSection() {
           {PRODUCTION_METRICS.map((metric, idx) => (
             <div
               key={metric.label}
-              className="metric-card border border-[#F5F5F0]/15 p-6 md:p-8 bg-[#000000] flex flex-col justify-between space-y-6 hover:border-[#D7FF00] transition-all duration-300 group"
+              className="metric-card spotlight-card relative border border-[#F5F5F0]/15 p-6 md:p-8 bg-[#000000] flex flex-col justify-between space-y-6 hover:border-[#DDFE67] transition-all duration-300 group"
             >
+              {/* Corner crosshairs */}
+              <span className="absolute top-1 left-1 text-[8px] font-mono text-[#F5F5F0]/20 group-hover:text-[#DDFE67]/50 select-none pointer-events-none transition-colors">+</span>
+              <span className="absolute top-1 right-1 text-[8px] font-mono text-[#F5F5F0]/20 group-hover:text-[#DDFE67]/50 select-none pointer-events-none transition-colors">+</span>
+              <span className="absolute bottom-1 left-1 text-[8px] font-mono text-[#F5F5F0]/20 group-hover:text-[#DDFE67]/50 select-none pointer-events-none transition-colors">+</span>
+              <span className="absolute bottom-1 right-1 text-[8px] font-mono text-[#F5F5F0]/20 group-hover:text-[#DDFE67]/50 select-none pointer-events-none transition-colors">+</span>
+
               <div className="space-y-3">
                 <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.2em] text-[#8A8A8A] border-b border-[#F5F5F0]/10 pb-3">
                   <span>TELEMETRY // 0{idx + 1}</span>
-                  <span className="text-[#D7FF00]">{metric.specCode.split("//")[0]?.trim()}</span>
+                  <span className="text-[#DDFE67]">{metric.specCode.split("//")[0]?.trim()}</span>
                 </div>
 
-                <div className="flex items-baseline font-mono text-4xl sm:text-5xl lg:text-6xl font-black text-[#F5F5F0] group-hover:text-[#D7FF00] transition-colors tracking-tight pt-2">
+                <div className="flex items-baseline font-mono text-4xl sm:text-5xl lg:text-6xl font-black text-[#F5F5F0] group-hover:text-[#DDFE67] transition-colors tracking-tight pt-2">
                   {metric.prefix && (
                     <span className="text-2xl sm:text-3xl text-[#8A8A8A] mr-1">
                       {metric.prefix}
@@ -182,7 +188,7 @@ export default function MetricsSection() {
                     0
                   </span>
                   {metric.suffix && (
-                    <span className="text-2xl sm:text-3xl md:text-4xl text-[#D7FF00]">
+                    <span className="text-2xl sm:text-3xl md:text-4xl text-[#DDFE67]">
                       {metric.suffix}
                     </span>
                   )}
@@ -202,17 +208,17 @@ export default function MetricsSection() {
         </div>
 
         {/* Real-time System Telemetry & Cluster Health Monitor UI */}
-        <div className="telemetry-dashboard border border-[#F5F5F0]/15 bg-[#000000] p-6 md:p-8 font-mono">
+        <div className="telemetry-dashboard spotlight-card relative border border-[#F5F5F0]/15 bg-[#000000] p-6 md:p-8 font-mono">
           <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#F5F5F0]/15 pb-4 mb-6 text-xs uppercase">
             <div className="flex items-center gap-3">
-              <Activity size={16} className="text-[#D7FF00]" />
+              <Activity size={16} className="text-[#DDFE67]" />
               <span className="font-bold text-[#F5F5F0] tracking-wider">
                 LIVE PRODUCTION TELEMETRY // REAL-TIME DISPATCH MONITOR
               </span>
             </div>
 
-            <div className="flex items-center gap-2 px-3 py-1 bg-[#D7FF00]/10 border border-[#D7FF00]/30 text-[#D7FF00] text-[10px]">
-              <span className="w-2 h-2 rounded-full bg-[#D7FF00] animate-pulse" />
+            <div className="flex items-center gap-2 px-3 py-1 bg-[#DDFE67]/10 border border-[#DDFE67]/30 text-[#DDFE67] text-[10px]">
+              <span className="w-2 h-2 rounded-full bg-[#DDFE67] animate-pulse" />
               <span>CLUSTER STATUS: OPTIMAL // 0 INCIDENTS</span>
             </div>
           </div>
@@ -222,10 +228,10 @@ export default function MetricsSection() {
             <div className="border border-[#F5F5F0]/10 p-4 bg-[#080808] space-y-3">
               <div className="flex items-center justify-between text-[10px] text-[#8A8A8A] uppercase">
                 <span className="flex items-center gap-1.5 text-[#F5F5F0]">
-                  <Server size={12} className="text-[#D7FF00]" />
+                  <Server size={12} className="text-[#DDFE67]" />
                   <span>CONNECTION POOLS</span>
                 </span>
-                <span className="text-[#D7FF00]">ACTIVE</span>
+                <span className="text-[#DDFE67]">ACTIVE</span>
               </div>
               <div className="space-y-1.5 text-[11px]">
                 <div className="flex justify-between">
@@ -238,7 +244,7 @@ export default function MetricsSection() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-[#8A8A8A]">Netty Event Loops</span>
-                  <span className="text-[#D7FF00] font-bold">16 worker threads</span>
+                  <span className="text-[#DDFE67] font-bold">16 worker threads</span>
                 </div>
               </div>
             </div>
@@ -247,7 +253,7 @@ export default function MetricsSection() {
             <div className="border border-[#F5F5F0]/10 p-4 bg-[#080808] space-y-3">
               <div className="flex items-center justify-between text-[10px] text-[#8A8A8A] uppercase">
                 <span className="flex items-center gap-1.5 text-[#F5F5F0]">
-                  <Zap size={12} className="text-[#D7FF00]" />
+                  <Zap size={12} className="text-[#DDFE67]" />
                   <span>EVENT BUS &amp; CACHE</span>
                 </span>
                 <span className="text-[#34D399]">SYNCHRONIZED</span>
@@ -255,7 +261,7 @@ export default function MetricsSection() {
               <div className="space-y-1.5 text-[11px]">
                 <div className="flex justify-between">
                   <span className="text-[#8A8A8A]">RabbitMQ Ack Latency</span>
-                  <span className="text-[#D7FF00] font-bold">&lt; 1.4ms</span>
+                  <span className="text-[#DDFE67] font-bold">&lt; 1.4ms</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-[#8A8A8A]">Redis L2 Hit Ratio</span>
@@ -272,7 +278,7 @@ export default function MetricsSection() {
             <div className="border border-[#F5F5F0]/10 p-4 bg-[#080808] space-y-3">
               <div className="flex items-center justify-between text-[10px] text-[#8A8A8A] uppercase">
                 <span className="flex items-center gap-1.5 text-[#F5F5F0]">
-                  <Shield size={12} className="text-[#D7FF00]" />
+                  <Shield size={12} className="text-[#DDFE67]" />
                   <span>ZERO-TRUST BOUNDARY</span>
                 </span>
                 <span className="text-[#A78BFA]">ENFORCED</span>
@@ -284,7 +290,7 @@ export default function MetricsSection() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-[#8A8A8A]">JWT Token Auth</span>
-                  <span className="text-[#D7FF00] font-bold">RSA-256 Validated</span>
+                  <span className="text-[#DDFE67] font-bold">RSA-256 Validated</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-[#8A8A8A]">CORS &amp; CSRF Filters</span>

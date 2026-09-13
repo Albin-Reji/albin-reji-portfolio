@@ -25,7 +25,7 @@ export const architecturalPillars: ArchitecturalPillar[] = [
     tag: "RESILIENCE // FAULT ISOLATION",
     title: "Zero-Downtime Resilience",
     description:
-      "Fault-tolerant microservices built with automated circuit breaking, retry policies, and decoupled async event brokers.",
+      "Fault-tolerant microservices built with automated circuit breaking, retry policies, and decoupled async event brokers to **isolate** failures and **guarantee** uptime.",
     techBadge: "CIRCUIT BREAKERS / RETRY",
   },
   {
@@ -33,7 +33,7 @@ export const architecturalPillars: ArchitecturalPillar[] = [
     tag: "LATENCY // SUB-MS RECONCILIATION",
     title: "Deterministic State Management",
     description:
-      "Real-time data streams optimized for sub-millisecond local latency with reliable event reconciliation.",
+      "Real-time data streams optimized for sub-millisecond local latency to **reconcile** state flawlessly across distributed nodes.",
     techBadge: "EVENT STREAMING / CQRS",
   },
   {
@@ -41,7 +41,7 @@ export const architecturalPillars: ArchitecturalPillar[] = [
     tag: "DEFENSE // ZERO-TRUST RBAC",
     title: "Security-First Architecture",
     description:
-      "Multi-layered defense with zero-trust networking, strict RBAC, and end-to-end tokenized payload encryption.",
+      "Multi-layered defense with zero-trust networking, strict RBAC, and end-to-end tokenized payload encryption to **lock down** the mesh.",
     techBadge: "JWT / ZERO-TRUST / OIDC",
   },
   {
@@ -49,7 +49,7 @@ export const architecturalPillars: ArchitecturalPillar[] = [
     tag: "OPTIMIZATION // MULTI-TIER CACHE",
     title: "Algorithmic Efficiency",
     description:
-      "Database query profiling, connection pooling, and optimized multi-tier caching architectures.",
+      "Database query profiling, connection pooling, and optimized multi-tier caching architectures to **accelerate** response times at scale.",
     techBadge: "INDEX TUNING / POOLING",
   },
 ];
@@ -146,7 +146,7 @@ export const personalInfo = {
   name: "Albin Reji",
   title: "Full Stack Developer",
   tagline:
-    "I build secure, scalable web applications and distributed systems using Java, Spring Boot, React, and modern cloud-native technologies.",
+    "I **architect** secure, scalable web applications and distributed systems using Java, Spring Boot, React, and modern cloud-native technologies.",
   location: "Udupi, Karnataka, India",
   email: "albinrejim30@gmail.com",
   phone: "+91-8123160330",
@@ -196,7 +196,7 @@ export const socialLinks: SocialLink[] = [
 // ─── About ───────────────────────────────────────────────────────────────────
 
 export const aboutText =
-  "Full Stack Developer with expertise in Java, Spring Boot, and React. Proven track record in building secure REST APIs and microservices using Spring Security and JWT. Skilled in PostgreSQL optimization and integrating AI services for scalable web applications. Focused on delivering high-performance, modular solutions with clean, maintainable code.";
+  "Full Stack Developer with expertise in Java, Spring Boot, and React. A proven track record **shipping** secure REST APIs and microservices — built to **survive** production, not just pass a demo. Skilled in PostgreSQL optimization and integrating AI services to **scale** web applications. Focused on **delivering** high-performance, modular solutions with clean, maintainable code.";
 
 export const coreTechnologies = [
   "Java",
@@ -320,7 +320,7 @@ export const projects: Project[] = [
   {
     name: "CA Connecting Platform",
     description:
-      "A secure, containerized microservices platform built with Spring Boot and React, designed for scalable service communication and centralized authentication.",
+      "A secure, containerized microservices platform built with Spring Boot and React, designed to **scale** service communication and **centralize** authentication.",
     highlights: [
       "Built a microservices platform with Spring Boot and API Gateway, reducing inter-service coupling and improving scalability and maintainability.",
       "Integrated Keycloak using OAuth2/OIDC to provide centralized authentication and authorization across services.",
@@ -671,7 +671,7 @@ export const projects: Project[] = [
   {
     name: "AI-Powered Fitness App",
     description:
-      "An AI-powered fitness platform that generates personalized workout plans using Gemini AI and uses event-driven microservices for scalable backend communication.",
+      "An AI-powered fitness platform that **generates** personalized workout plans using Gemini AI and **orchestrates** event-driven microservices for high-volume activity logging.",
     highlights: [
       "Replaced generic workout content with AI-generated personalized plans using Gemini API.",
       "Unified backend services through Spring Cloud Gateway with reactive Keycloak user synchronization.",

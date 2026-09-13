@@ -134,7 +134,7 @@ function StrikethroughSVG() {
       <path
         ref={pathRef}
         d="M 4 20 C 60 14, 120 25, 185 16 C 240 9, 300 23, 365 15 C 390 12, 415 18, 436 15"
-        stroke="#DFFF35"
+        stroke="#DDFE67"
         strokeWidth="7"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -538,9 +538,9 @@ export default function Contact() {
                   <div className="pb-2">
                     <span className="contact-info-label block">BASE HEADQUARTERS</span>
                     <div className="text-base sm:text-lg text-[#171717] font-semibold flex items-center gap-2 flex-wrap">
-                      <span>{personalInfo.location}</span>
+                      <span className="text-[10px] text-[#777771] lowercase">{personalInfo.location}</span>
                       <span className="text-[rgba(23,23,23,0.4)] font-normal">/</span>
-                      <span className="text-[rgba(23,23,23,0.8)] font-medium">Remote Available</span>
+                      <span className="text-[10px] text-[#777771] lowercase">remote available</span>
                     </div>
                   </div>
                 </div>

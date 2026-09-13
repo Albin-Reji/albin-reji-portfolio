@@ -64,7 +64,7 @@ export async function POST(request: Request) {
 
           <!-- Header bar -->
           <tr>
-            <td style="background:#DFFF35;padding:10px 20px;">
+            <td style="background:#DDFE67;padding:10px 20px;">
               <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td>
@@ -95,7 +95,7 @@ export async function POST(request: Request) {
                   <!-- Return email -->
                   <td width="52%" style="vertical-align:top;padding-left:12px;border-left:1px solid #222;">
                     <p style="margin:0 0 4px;font-size:7.5px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:#4a4a4a;font-family:ui-monospace,monospace;line-height:1;">RETURN EMAIL</p>
-                    <a href="mailto:${email.trim()}" style="color:#DFFF35;font-size:12px;font-weight:600;text-decoration:none;word-break:break-all;line-height:1.4;display:block;">${email.trim()}</a>
+                    <a href="mailto:${email.trim()}" style="color:#DDFE67;font-size:12px;font-weight:600;text-decoration:none;word-break:break-all;line-height:1.4;display:block;">${email.trim()}</a>
                   </td>
                 </tr>
               </table>
@@ -113,14 +113,14 @@ export async function POST(request: Request) {
           <tr>
             <td style="padding:14px 20px;">
               <p style="margin:0 0 8px;font-size:7.5px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:#4a4a4a;font-family:ui-monospace,monospace;line-height:1;">MESSAGE</p>
-              <p style="margin:0;font-size:14px;color:#C0C0C0;line-height:1.7;white-space:pre-wrap;border-left:2px solid #DFFF35;padding-left:12px;">${message.trim().replace(/</g, "&lt;").replace(/>/g, "&gt;")}</p>
+              <p style="margin:0;font-size:14px;color:#C0C0C0;line-height:1.7;white-space:pre-wrap;border-left:2px solid #DDFE67;padding-left:12px;">${message.trim().replace(/</g, "&lt;").replace(/>/g, "&gt;")}</p>
             </td>
           </tr>
 
           <!-- Reply CTA -->
           <tr>
             <td style="padding:0 20px 18px;">
-              <a href="mailto:${email.trim()}?subject=Re%3A%20Your%20message%20to%20Albin%20Reji" style="display:inline-block;background:#DFFF35;color:#111;font-size:8px;font-weight:800;letter-spacing:0.28em;text-transform:uppercase;text-decoration:none;padding:10px 18px;font-family:ui-monospace,monospace;line-height:1;">
+              <a href="mailto:${email.trim()}?subject=Re%3A%20Your%20message%20to%20Albin%20Reji" style="display:inline-block;background:#DDFE67;color:#111;font-size:8px;font-weight:800;letter-spacing:0.28em;text-transform:uppercase;text-decoration:none;padding:10px 18px;font-family:ui-monospace,monospace;line-height:1;">
                 ↗ REPLY TO ${name.trim().toUpperCase()}
               </a>
             </td>

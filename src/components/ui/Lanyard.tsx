@@ -74,11 +74,11 @@ const BACK_UV_RECT = {
 
 const DEFAULT_CARD_SCALE = 4.55;
 
-const DEFAULT_CARD_BG = '#D4FF45';
+const DEFAULT_CARD_BG = '#DDFE67';
 
 const STRAP_BLACK = '#080808';
 
-const STRAP_LIME = '#D7FF00';
+const STRAP_LIME = '#DDFE67';
 
 /* =========================================================
    CARD BORDER SHADOW

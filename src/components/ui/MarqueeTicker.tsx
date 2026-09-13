@@ -68,7 +68,7 @@ export default function MarqueeTicker({
   const content = items.map((item, i) => (
     <span key={i} className="inline-flex items-center gap-6 whitespace-nowrap">
       <span>{item}</span>
-      <span className="text-[#D7FF00] opacity-60">{separator}</span>
+      <span className="text-[#DDFE67] opacity-60">{separator}</span>
     </span>
   ));
 

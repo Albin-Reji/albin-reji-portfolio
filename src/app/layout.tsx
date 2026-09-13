@@ -64,6 +64,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <body className="bg-bg text-text font-sans antialiased relative">
+        <div className="film-grain" aria-hidden="true" />
         <ContourBackground />
         <SmoothScroll />
         <CustomCursor />

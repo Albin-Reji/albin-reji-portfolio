@@ -290,14 +290,14 @@ export default function EngineeringNotes() {
           {/* Eyebrow & Status Row */}
           <div className="flex flex-wrap items-center justify-between gap-4 font-mono text-xs uppercase tracking-[0.25em] text-[#8A8A8A] border-b border-[#F5F5F0]/15 pb-4">
             <div className="flex items-center gap-3">
-              <span className="text-[#D7FF00] font-bold">[ENGINEERING NOTES // 06]</span>
+              <span className="text-[#DDFE67] font-bold">[ENGINEERING NOTES // 06]</span>
               <span className="hidden sm:inline">TECH DISPATCHES &amp; BUILD LOGS</span>
             </div>
 
             <div className="flex items-center gap-4">
               {/* Live from the lab status badge */}
-              <div className="flex items-center gap-2 px-2.5 py-1 bg-[#D7FF00]/10 border border-[#D7FF00]/30 text-[#D7FF00] text-[10px] font-mono">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#D7FF00] animate-pulse" />
+              <div className="flex items-center gap-2 px-2.5 py-1 bg-[#DDFE67]/10 border border-[#DDFE67]/30 text-[#DDFE67] text-[10px] font-mono">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#DDFE67] animate-pulse shadow-[0_0_8px_rgba(221,254,103,0.8)]" />
                 <span>LIVE FROM THE LAB</span>
               </div>
 
@@ -312,7 +312,7 @@ export default function EngineeringNotes() {
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pt-2">
             <div className="space-y-2 max-w-3xl">
               <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight text-[#F5F5F0] leading-[0.95]">
-                THINGS I&apos;M BUILDING, LEARNING &amp; SHARING<span className="text-[#D7FF00]">.</span>
+                THINGS I&apos;M BUILDING, LEARNING &amp; SHARING<span className="text-[#DDFE67]">.</span>
               </h2>
               <p className="text-sm md:text-base text-[#B5B5B5] font-light leading-relaxed">
                 Selected technical posts, experiments, architecture ideas, and lessons from building software.
@@ -326,25 +326,25 @@ export default function EngineeringNotes() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="View all technical posts on X profile @_AlbinReji_"
-                className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-[#F5F5F0] hover:text-[#D7FF00] transition-colors group"
+                className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-[#F5F5F0] hover:text-[#DDFE67] transition-colors group"
               >
                 <XIcon width={12} height={12} />
                 <span>VIEW ALL POSTS</span>
-                <ArrowUpRight size={14} className="text-[#8A8A8A] group-hover:text-[#D7FF00] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                <ArrowUpRight size={14} className="text-[#8A8A8A] group-hover:text-[#DDFE67] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </a>
 
               {/* Desktop Nav Arrows */}
               <div className="hidden sm:flex items-center gap-2 font-mono">
                 <button
                   onClick={() => goTo("left")}
-                  className="p-2.5 border border-[#F5F5F0]/20 text-[#F5F5F0] hover:border-[#D7FF00] hover:text-[#D7FF00] transition-colors cursor-pointer bg-[#000000] rounded-sm active:scale-95"
+                  className="p-2.5 border border-[#F5F5F0]/20 text-[#F5F5F0] hover:border-[#DDFE67] hover:text-[#DDFE67] transition-colors cursor-pointer bg-[#000000] rounded-sm active:scale-95"
                   aria-label="Previous engineering note"
                 >
                   <ChevronLeft size={16} />
                 </button>
                 <button
                   onClick={() => goTo("right")}
-                  className="p-2.5 border border-[#F5F5F0]/20 text-[#F5F5F0] hover:border-[#D7FF00] hover:text-[#D7FF00] transition-colors cursor-pointer bg-[#000000] rounded-sm active:scale-95"
+                  className="p-2.5 border border-[#F5F5F0]/20 text-[#F5F5F0] hover:border-[#DDFE67] hover:text-[#DDFE67] transition-colors cursor-pointer bg-[#000000] rounded-sm active:scale-95"
                   aria-label="Next engineering note"
                 >
                   <ChevronRight size={16} />
@@ -421,7 +421,7 @@ export default function EngineeringNotes() {
                 key={i}
                 onClick={() => goToIndex(i)}
                 className={`h-1.5 rounded-full transition-all duration-500 ease-out cursor-pointer ${i === activeIndex
-                    ? "w-8 bg-[#D7FF00] shadow-[0_0_10px_rgba(215,255,0,0.5)]"
+                    ? "w-8 bg-[#DDFE67] shadow-[0_0_10px_rgba(221,254,103,0.6)]"
                     : "w-1.5 bg-[#F5F5F0]/20 hover:bg-[#F5F5F0]/40"
                   }`}
                 aria-label={`Go to note ${i + 1}: ${engineeringNotes[i].title}`}

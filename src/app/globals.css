@@ -6,7 +6,7 @@
   /* Primary palette */
   --color-black: #050505;
   --color-white: #F5F5F0;
-  --color-lime: #D7FF00;
+  --color-lime: #DDFE67;
   --color-gray: #8A8A8A;
   --color-gray-dark: #3A3A3A;
   --color-gray-light: #B5B5B5;
@@ -16,7 +16,9 @@
   --color-text: #F5F5F0;
   --color-text-secondary: #B5B5B5;
   --color-text-muted: #6A6A6A;
-  --color-accent: #D7FF00;
+  --color-accent: #DDFE67;
+  --color-accent-glow: rgba(221, 254, 103, 0.25);
+  --color-accent-subtle: rgba(221, 254, 103, 0.05);
   --color-border: rgba(245, 245, 240, 0.12);
   --color-border-strong: rgba(245, 245, 240, 0.25);
   --color-surface: rgba(245, 245, 240, 0.04);
@@ -274,23 +276,57 @@
   pointer-events: none;
   z-index: 9999;
   mix-blend-mode: difference;
-  transition: width 0.3s ease, height 0.3s ease, margin 0.3s ease, opacity 0.18s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #050505;
+  transition: width 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              height 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              margin 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.2s ease,
+              background-color 0.25s ease,
+              border-color 0.25s ease;
 }
 
 .cursor-dot.is-active {
-  width: 48px;
-  height: 48px;
-  margin-left: -20px;
-  margin-top: -20px;
+  width: 44px;
+  height: 44px;
+  margin-left: -18px;
+  margin-top: -18px;
   background-color: var(--color-accent);
-  opacity: 0.3;
+  opacity: 0.25;
+}
+
+.cursor-dot.is-labeled {
+  width: 64px;
+  height: 64px;
+  margin-left: -28px;
+  margin-top: -28px;
+  background-color: var(--color-accent);
+  mix-blend-mode: normal;
+  opacity: 0.95;
+  box-shadow: 0 0 30px rgba(221, 254, 103, 0.45);
+}
+
+.cursor-label {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  user-select: none;
+  pointer-events: none;
+}
+
+.cursor-dot.is-labeled .cursor-label {
+  opacity: 1;
 }
 
 /* ── Hide custom cursor blob inside the Transmission Console ─────────────── */
-/* Targets any input or textarea inside the contact form card */
 .contact-form-card:has(input:focus)~.cursor-dot,
 .contact-form-card:has(textarea:focus)~.cursor-dot {
-  opacity: 0;
+  opacity: 0 !important;
 }
 
 @media (pointer: coarse) {
@@ -303,6 +339,57 @@
   .cursor-dot {
     display: none !important;
   }
+}
+
+/* ─── Film Grain Texture ─────────────────────────────────────────────────── */
+.film-grain {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 40;
+  opacity: 0.022;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* ─── Spotlight Card (Dynamic Light Bleed) ────────────────────────────────── */
+.spotlight-card {
+  position: relative;
+}
+
+.spotlight-card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: radial-gradient(
+    420px circle at var(--mouse-x, -999px) var(--mouse-y, -999px),
+    rgba(221, 254, 103, 0.12),
+    transparent 65%
+  );
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.spotlight-card:hover::before {
+  opacity: 1;
+}
+
+/* ─── Scroll Progress Bar ─────────────────────────────────────────────────── */
+.scroll-progress-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 1.5px;
+  background: linear-gradient(90deg, #DDFE67 0%, rgba(221, 254, 103, 0.4) 100%);
+  box-shadow: 0 0 8px rgba(221, 254, 103, 0.6);
+  pointer-events: none;
+  z-index: 60;
+  transition: width 0.1s linear;
 }
 
 /* ─── Button Editorial ────────────────────────────────────────────────────── */
@@ -426,8 +513,8 @@
 }
 
 .cta-text-outline:hover {
-  -webkit-text-stroke: 2px #D7FF00;
-  text-shadow: 0 0 40px rgba(215, 255, 0, 0.15);
+  -webkit-text-stroke: 2px #DDFE67;
+  text-shadow: 0 0 40px rgba(221, 254, 103, 0.15);
 }
 
 @media (max-width: 768px) {
@@ -436,16 +523,16 @@
   }
 
   .cta-text-outline:hover {
-    -webkit-text-stroke: 1.5px #D7FF00;
+    -webkit-text-stroke: 1.5px #DDFE67;
   }
 }
 
 /* Glowing lime accent text with animated pulse */
 .cta-text-glow {
-  color: #D7FF00;
+  color: #DDFE67;
   text-shadow:
-    0 0 20px rgba(215, 255, 0, 0.3),
-    0 0 60px rgba(215, 255, 0, 0.1);
+    0 0 20px rgba(221, 254, 103, 0.3),
+    0 0 60px rgba(221, 254, 103, 0.1);
   animation: cta-glow-pulse 3s ease-in-out infinite;
 }
 
@@ -505,9 +592,9 @@
    Primary Ink:     #171717 (Deep Near-Black Charcoal)
    Secondary Ink:   rgba(23, 23, 23, 0.65) (65% Dark Charcoal)
    Muted/Place:     rgba(23, 23, 23, 0.48) (48% Dark Charcoal)
-   Lime Accent:     #DFFF35 / #D8FF3F (Fluorescent Lemon-Lime)
+   Lime Accent:     #DDFE67 (Primary Acid Lime)
    Background Main: #F7F6EE (Warm Cream)
-   Background Bot:  #DFFF35 (Lemon-Lime Emerging Glow)
+   Background Bot:  #DDFE67 (Acid Lime Emerging Glow)
    Contour Stroke:  #6F733F (Subtle Topographic lines at 0.08 opacity)
    ═══════════════════════════════════════════════════════════════════════════ */
 
@@ -520,9 +607,9 @@
   overflow: hidden;
   background:
     /* Bottom fluorescent lime emergence */
-    radial-gradient(ellipse 130% 45% at 50% 115%, rgba(223, 255, 53, 0.40) 0%, transparent 65%),
-    radial-gradient(ellipse 90% 35% at 25% 100%, rgba(223, 255, 53, 0.20) 0%, transparent 55%),
-    radial-gradient(ellipse 80% 30% at 75% 100%, rgba(223, 255, 53, 0.16) 0%, transparent 50%),
+    radial-gradient(ellipse 130% 45% at 50% 115%, rgba(221, 254, 103, 0.40) 0%, transparent 65%),
+    radial-gradient(ellipse 90% 35% at 25% 100%, rgba(221, 254, 103, 0.20) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 30% at 75% 100%, rgba(221, 254, 103, 0.16) 0%, transparent 50%),
     /* Subtle seam transition at very top (0px-95px) — eliminates hard lines without casting dark shadows over text */
     linear-gradient(180deg,
       #050505 0px,
@@ -534,7 +621,7 @@
       #F7F6EE 105px,
       #F7F6EE 82%,
       #F2F0D8 91%,
-      #DFFF35 100%);
+      #DDFE67 100%);
 }
 
 /* ── Topographic Contour Pattern Overlay ─────────────────────────────────── */
@@ -638,7 +725,7 @@
   display: block;
   width: 3px;
   height: 0.875rem;
-  background: #DFFF35;
+  background: #DDFE67;
   border: 1px solid rgba(23, 23, 23, 0.15);
   flex-shrink: 0;
 }
@@ -939,7 +1026,7 @@
   align-items: center;
   gap: 0.25rem;
   background: #171717;
-  color: #DFFF35;
+  color: #DDFE67;
   border: none;
   font-size: 0.58rem;
   font-weight: 800;
@@ -983,7 +1070,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.875rem;
-  background: #DFFF35;
+  background: #DDFE67;
   color: #111111;
   font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
   font-size: 0.8125rem;
@@ -999,7 +1086,7 @@
   /* Elevated lime glow */
   box-shadow:
     0 6px 30px rgba(0, 0, 0, 0.1),
-    0 2px 8px rgba(223, 255, 53, 0.25),
+    0 2px 8px rgba(221, 254, 103, 0.25),
     inset 0 1px 0 rgba(255, 255, 255, 0.45);
   transition: color 0.38s ease, box-shadow 0.3s ease;
 }
@@ -1044,11 +1131,11 @@
 }
 
 .contact-submit-btn:hover:not(:disabled) {
-  color: #DFFF35;
+  color: #DDFE67;
   box-shadow:
     0 10px 40px rgba(0, 0, 0, 0.15),
-    0 0 0 1px rgba(223, 255, 53, 0.2),
-    0 0 28px rgba(223, 255, 53, 0.15);
+    0 0 0 1px rgba(221, 254, 103, 0.2),
+    0 0 28px rgba(221, 254, 103, 0.15);
 }
 
 .contact-submit-btn>* {
@@ -1123,7 +1210,7 @@
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(23, 23, 23, 0.18);
-  border-left: 3px solid #DFFF35;
+  border-left: 3px solid #DDFE67;
   animation: contact-success-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
@@ -1145,7 +1232,7 @@
   justify-content: center;
   width: 52px;
   height: 52px;
-  background: #DFFF35;
+  background: #DDFE67;
   color: #171717;
   flex-shrink: 0;
 }

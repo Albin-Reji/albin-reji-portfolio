@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowUpRight } from "lucide-react";
 import { aboutText, coreTechnologies, education } from "@/data/portfolio";
 import MarqueeTicker from "@/components/ui/MarqueeTicker";
+import { TextParser } from "@/components/ui/TextParser";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -118,62 +119,49 @@ export default function About() {
         </div>
         <div className="overflow-hidden mt-1">
           <h2 className="about-title-line text-[clamp(2.5rem,7vw,7.2rem)] font-black uppercase leading-[0.88] tracking-[-0.05em] text-[#F5F5F0]">
-            I DESIGN <span className="text-[#D7FF00]">SYSTEMS.</span>
+            I DESIGN <span className="text-[#DDFE67]">SYSTEMS.</span>
           </h2>
         </div>
 
         {/* Page Indicator Tag */}
         <div className="mt-8 flex items-center gap-2.5 font-mono text-xs uppercase tracking-[0.25em] text-[#8A8A8A]">
           <span className="text-[#8A8A8A]">ABOUT</span>
-          <span className="text-[#D7FF00] font-bold">{"//"}</span>
+          <span className="text-[#DDFE67] font-bold">{"//"}</span>
           <span className="text-[#F5F5F0] font-semibold">ENGINEERING PHILOSOPHY</span>
         </div>
       </div>
 
       {/* ═══ Engineering Philosophy Manifesto ═══ */}
       <div className="about-pipeline-container px-6 md:px-12 max-w-[1728px] mx-auto mb-10 md:mb-14">
-        <div className="relative overflow-hidden rounded-xl border border-[#F5F5F0]/15 bg-[#000000] p-6 sm:p-10 md:p-14 lg:p-16 shadow-2xl transition-all duration-500 hover:border-[#D7FF00]/30 group">
+        <div className="spotlight-card relative overflow-hidden rounded-xl border border-[#F5F5F0]/15 bg-[#000000] p-6 sm:p-10 md:p-14 lg:p-16 shadow-2xl transition-all duration-500 hover:border-[#DDFE67]/50 hover:shadow-[0_0_50px_rgba(221,254,103,0.08)] group">
           {/* Subtle Ambient Radial Glows */}
-          <div className="absolute -top-24 -left-24 w-80 h-80 bg-[#D7FF00]/[0.03] rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-24 -right-24 w-80 h-80 bg-[#D7FF00]/[0.02] rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -top-24 -left-24 w-80 h-80 bg-[#DDFE67]/[0.04] rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-24 -right-24 w-80 h-80 bg-[#DDFE67]/[0.03] rounded-full blur-3xl pointer-events-none" />
 
           {/* Precision Corner Crosshair Accents */}
-          <div className="absolute top-3 left-3 font-mono text-[10px] text-[#8A8A8A]/30 select-none pointer-events-none">
+          <div className="absolute top-3 left-3 font-mono text-[10px] text-[#F5F5F0]/30 select-none pointer-events-none group-hover:text-[#DDFE67]/60 transition-colors">
             +
           </div>
-          <div className="absolute top-3 right-3 font-mono text-[10px] text-[#8A8A8A]/30 select-none pointer-events-none">
+          <div className="absolute top-3 right-3 font-mono text-[10px] text-[#F5F5F0]/30 select-none pointer-events-none group-hover:text-[#DDFE67]/60 transition-colors">
             +
           </div>
-          <div className="absolute bottom-3 left-3 font-mono text-[10px] text-[#8A8A8A]/30 select-none pointer-events-none">
+          <div className="absolute bottom-3 left-3 font-mono text-[10px] text-[#F5F5F0]/30 select-none pointer-events-none group-hover:text-[#DDFE67]/60 transition-colors">
             +
           </div>
-          <div className="absolute bottom-3 right-3 font-mono text-[10px] text-[#8A8A8A]/30 select-none pointer-events-none">
+          <div className="absolute bottom-3 right-3 font-mono text-[10px] text-[#F5F5F0]/30 select-none pointer-events-none group-hover:text-[#DDFE67]/60 transition-colors">
             +
           </div>
 
           {/* Main Philosophical Quote Block with Indented Attribution */}
-          <div className="relative">
-            {/* Watermark Quote Symbol */}
-            <span
-              className="text-[#D7FF00]/10 font-serif text-7xl sm:text-8xl md:text-9xl leading-none absolute -top-8 sm:-top-10 -left-3 sm:-left-6 select-none pointer-events-none font-black"
-              aria-hidden="true"
-            >
-              “
-            </span>
-
-            <blockquote className="relative z-10 pl-2 sm:pl-4 md:pl-6 space-y-4 sm:space-y-6">
-              <p className="text-lg sm:text-xl md:text-2xl lg:text-[1.85rem] xl:text-[2.1rem] text-[#F5F5F0] font-light leading-relaxed sm:leading-relaxed md:leading-[1.4] tracking-tight">
-                &ldquo;Great engineering isn&apos;t just about syntax or shipping features on a deadline—it&apos;s about{" "}
-                <span className="text-[#F5F5F0] font-normal">anticipating failure</span>,{" "}
-                <span className="text-[#D7FF00] font-semibold">engineering for scale</span>, and building{" "}
-                <span className="text-[#F5F5F0] font-normal">resilient architectures</span> that outlast tech stacks. Every line of code is a commitment to{" "}
-                <span className="text-[#D7FF00] font-semibold">performance</span>,{" "}
-                <span className="text-[#F5F5F0] font-normal">clarity</span>, and{" "}
-                <span className="text-[#F5F5F0] font-normal">maintainability</span>, transforming complex business logic into seamless, high-velocity digital ecosystems.&rdquo;
+          <div className="relative py-8 sm:py-12 flex flex-col items-start sm:items-center text-left sm:text-center z-10">
+            <div className="w-12 h-1 bg-[#DDFE67] mb-8 shadow-[0_0_12px_rgba(221,254,103,0.8)]" />
+            <blockquote className="relative z-10 space-y-6 max-w-4xl">
+              <p className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.2rem] xl:text-[3.6rem] text-[#F5F5F0] font-bold leading-tight tracking-tight">
+                Great engineering isn&apos;t just about syntax... it&apos;s about <span className="text-[#DDFE67]">anticipating failure</span>.
               </p>
-              <div className="pl-6 sm:pl-12 md:pl-20 lg:pl-88">
-                <span className="font-mono text-sm sm:text-base md:text-lg lg:text-xl font-normal text-[#D7FF00] block">
-                  — A developer who just successfully explained their bug to a rubber duck
+              <div>
+                <span className="font-mono text-[10px] text-[#777771] block tracking-widest lowercase">
+                  — a developer who just successfully explained their bug to a rubber duck
                 </span>
               </div>
             </blockquote>
@@ -187,11 +175,11 @@ export default function About() {
           {/* Left Narrative (7 cols) */}
           <div className="lg:col-span-7 space-y-10">
             <div className="about-content-fade space-y-4">
-              <span className="font-mono text-xs font-bold uppercase tracking-[0.25em] text-[#D7FF00] block">
+              <span className="font-mono text-xs font-bold uppercase tracking-[0.25em] text-[#DDFE67] block">
                 {"// ENGINEERING NARRATIVE"}
               </span>
               <p className="text-xl sm:text-2xl md:text-3xl text-[#F5F5F0] font-light leading-snug tracking-tight">
-                {aboutText}
+                <TextParser text={aboutText} />
               </p>
             </div>
 
@@ -206,12 +194,12 @@ export default function About() {
                 {coreTechnologies.map((tech, idx) => (
                   <div
                     key={tech}
-                    className="group border border-[#F5F5F0]/15 p-4 bg-[#F5F5F0]/[0.02] hover:border-[#D7FF00] hover:bg-[#D7FF00]/5 transition-all cursor-default"
+                    className="spotlight-card group border border-[#F5F5F0]/15 p-4 bg-[#F5F5F0]/[0.02] hover:border-[#DDFE67]/70 hover:bg-[#DDFE67]/5 transition-all cursor-default relative overflow-hidden"
                   >
-                    <span className="block font-mono text-[9px] text-[#8A8A8A] group-hover:text-[#D7FF00] mb-1 transition-colors">
+                    <span className="relative z-10 block font-mono text-[9px] text-[#8A8A8A] group-hover:text-[#DDFE67] mb-1 transition-colors">
                       0{idx + 1}
                     </span>
-                    <span className="font-mono text-xs font-bold uppercase tracking-[0.12em] text-[#F5F5F0] group-hover:text-[#D7FF00] transition-colors">
+                    <span className="relative z-10 font-mono text-xs font-bold uppercase tracking-[0.12em] text-[#F5F5F0] group-hover:text-[#DDFE67] transition-colors block">
                       {tech}
                     </span>
                   </div>
@@ -222,19 +210,19 @@ export default function About() {
 
           {/* Right Architecture & Credential Card (5 cols) */}
           <div className="lg:col-span-5 space-y-6">
-            <div className="about-content-fade border border-[#F5F5F0]/15 p-6 md:p-8 bg-[#050505] space-y-6">
+            <div className="about-content-fade border border-[#F5F5F0]/15 p-6 md:p-8 bg-[#050505] space-y-6 hover:border-[#DDFE67]/40 transition-colors">
               <div className="flex items-center justify-between border-b border-[#F5F5F0]/15 pb-3">
-                <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#D7FF00] font-bold">
+                <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#DDFE67] font-bold">
                   {"EDUCATION // CREDENTIAL"}
                 </span>
-                <span className="font-mono text-[10px] text-[#8A8A8A]">MITE</span>
+                <span className="font-mono text-[10px] text-[#777771] lowercase">mite</span>
               </div>
 
               <div>
                 <p className="text-xl md:text-2xl font-bold uppercase tracking-tight text-[#F5F5F0] leading-snug">
                   {education.degree}
                 </p>
-                <p className="mt-2 font-mono text-xs uppercase text-[#8A8A8A]">
+                <p className="mt-2 font-mono text-[10px] lowercase text-[#777771]">
                   {education.institution}
                 </p>
               </div>
@@ -242,11 +230,11 @@ export default function About() {
               <div className="grid grid-cols-2 gap-4 border-t border-b border-[#F5F5F0]/15 py-4 font-mono text-xs">
                 <div>
                   <span className="text-[10px] uppercase tracking-wider text-[#8A8A8A] block">PERIOD</span>
-                  <span className="text-[#F5F5F0] font-medium uppercase">{education.duration}</span>
+                  <span className="text-[#777771] lowercase font-medium">{education.duration}</span>
                 </div>
                 <div>
                   <span className="text-[10px] uppercase tracking-wider text-[#8A8A8A] block">LOCATION</span>
-                  <span className="text-[#F5F5F0] font-medium uppercase">{education.location}</span>
+                  <span className="text-[#777771] lowercase font-medium">{education.location}</span>
                 </div>
               </div>
 
@@ -254,14 +242,14 @@ export default function About() {
                 <span className="font-mono text-[10px] uppercase tracking-widest text-[#8A8A8A] block">
                   TECHNICAL FOCUS
                 </span>
-                <p className="font-mono text-sm font-bold uppercase text-[#D7FF00]">
+                <p className="font-mono text-sm font-bold uppercase text-[#DDFE67]">
                   Full-Stack Architecture &amp; High-Throughput Microservices
                 </p>
               </div>
             </div>
 
             {/* Quick Link Card */}
-            <div className="about-content-fade border border-[#F5F5F0]/15 p-5 bg-[#F5F5F0]/[0.02] flex items-center justify-between hover:border-[#D7FF00] transition-colors group">
+            <div className="about-content-fade border border-[#F5F5F0]/15 p-5 bg-[#F5F5F0]/[0.02] flex items-center justify-between hover:border-[#DDFE67] hover:bg-[#DDFE67]/[0.02] transition-colors group">
               <div>
                 <p className="font-mono text-xs uppercase tracking-wider text-[#F5F5F0] font-bold">
                   LOOKING FOR A BACKEND / FULL STACK DEV?
@@ -272,7 +260,7 @@ export default function About() {
               </div>
               <a
                 href="#contact"
-                className="p-3 border border-[#F5F5F0]/15 text-[#F5F5F0] group-hover:border-[#D7FF00] group-hover:text-[#D7FF00] transition-colors"
+                className="p-3 border border-[#F5F5F0]/15 text-[#F5F5F0] group-hover:border-[#DDFE67] group-hover:text-[#DDFE67] group-hover:bg-[#DDFE67]/10 transition-all"
                 aria-label="Contact"
               >
                 <ArrowUpRight size={18} />

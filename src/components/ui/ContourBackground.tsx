@@ -23,7 +23,7 @@ export default function ContourBackground() {
     // Tuned for ultra-fine aesthetic lines and low subtle opacity:
     const CONFIG = {
       bg: "#050505",
-      lineRGB: "215, 255, 0", // Neon lime #D7FF00
+      lineRGB: "221, 254, 103", // Acid lime #DDFE67
       lineAlpha: 0.17,        // Low, subtle opacity
       lineWidth: 0.75,        // Fine, razor-thin linework
       noiseScale: 11 / SCALE_DIV, // 11

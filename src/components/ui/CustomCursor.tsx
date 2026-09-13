@@ -4,9 +4,11 @@ import { useEffect, useRef } from "react";
 
 export default function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
+  const labelRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     const cursor = cursorRef.current;
+    const label = labelRef.current;
     if (!cursor) return;
 
     // Only on non-touch devices
@@ -30,6 +32,26 @@ export default function CustomCursor() {
       mouseX = e.clientX;
       mouseY = e.clientY;
 
+      // Update spotlight position on any hovered spotlight card
+      const spotlightCard = (e.target as Element)?.closest?.(".spotlight-card") as HTMLElement | null;
+      if (spotlightCard) {
+        const rect = spotlightCard.getBoundingClientRect();
+        spotlightCard.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
+        spotlightCard.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
+      }
+
+      // Check for contextual cursor labels (e.g., data-cursor="DRAG" or data-cursor="VIEW")
+      const labeledElement = (e.target as Element)?.closest?.("[data-cursor]") as HTMLElement | null;
+      if (labeledElement) {
+        const text = labeledElement.getAttribute("data-cursor") || "";
+        cursor.classList.add("is-labeled");
+        cursor.classList.remove("is-active");
+        if (label) label.textContent = text;
+      } else {
+        cursor.classList.remove("is-labeled");
+        if (label) label.textContent = "";
+      }
+
       // Hide the dot entirely when hovering inside the contact form card
       const formCard = (e.target as Element)?.closest?.(".contact-form-card, .cf-fields, .cf-field, .cf-field-body");
       if (formCard) {
@@ -41,8 +63,8 @@ export default function CustomCursor() {
 
     const animate = () => {
       // Smooth follow with lerp
-      cursorX += (mouseX - cursorX) * 0.15;
-      cursorY += (mouseY - cursorY) * 0.15;
+      cursorX += (mouseX - cursorX) * 0.18;
+      cursorY += (mouseY - cursorY) * 0.18;
 
       cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0)`;
 
@@ -50,8 +72,9 @@ export default function CustomCursor() {
     };
 
     const onMouseEnterInteractive = (e: Event) => {
-      // Don't expand when over inputs/textareas inside the contact form
+      // Don't expand when over inputs/textareas inside the contact form or when labeled
       const target = e.target as Element;
+      if (cursor.classList.contains("is-labeled")) return;
       const isInsideForm = target.closest(".contact-form-card, .cf-fields");
       if (isInsideForm) return;
       cursor.classList.add("is-active");
@@ -71,7 +94,7 @@ export default function CustomCursor() {
       el.addEventListener("mouseleave", onMouseLeaveInteractive);
     });
 
-    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mousemove", onMouseMove, { passive: true });
     rafId = requestAnimationFrame(animate);
 
     // Re-bind on DOM changes (for dynamic content)
@@ -98,5 +121,9 @@ export default function CustomCursor() {
     };
   }, []);
 
-  return <div ref={cursorRef} className="cursor-dot" />;
+  return (
+    <div ref={cursorRef} className="cursor-dot" aria-hidden="true">
+      <span ref={labelRef} className="cursor-label" />
+    </div>
+  );
 }

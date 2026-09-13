@@ -15,7 +15,7 @@ interface SVGSignatureProps {
 
 export default function SVGSignature({
   className = "",
-  color = "#D7FF00",
+  color = "#DDFE67",
   strokeWidth = 3.5,
   delay = 0.4,
 }: SVGSignatureProps) {

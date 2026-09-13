@@ -26,7 +26,7 @@ const CONFIG = {
   mouseInfluenceStrength: 2.5,
 
   // Colors
-  accentColor: "#D7FF00",
+  accentColor: "#DDFE67",
   whiteColor: "#F5F5F0",
 };
 
@@ -385,7 +385,7 @@ export default function HeroPortrait3D() {
 
       {/* Editorial label */}
       <div
-        className="absolute top-4 left-4 font-mono text-[9px] uppercase tracking-[0.25em] text-[#D7FF00] px-2 py-1 bg-[#050505]/80 border border-[#F5F5F0]/15"
+        className="absolute top-4 left-4 font-mono text-[9px] uppercase tracking-[0.25em] text-[#DDFE67] px-2 py-1 bg-[#050505]/80 border border-[#F5F5F0]/15"
         style={{ zIndex: 20 }}
       >
         PORTRAIT // 01
@@ -397,7 +397,7 @@ export default function HeroPortrait3D() {
         style={{ zIndex: 20 }}
       >
         <span>JAVA &bull; SPRING &bull; REACT</span>
-        <span className="text-[#D7FF00] font-bold">2025/2026</span>
+        <span className="text-[#DDFE67] font-bold">2025/2026</span>
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SVGSignature from "@/components/ui/SVGSignature";
 import { architecturalPillars } from "@/data/portfolio";
+import { TextParser } from "@/components/ui/TextParser";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -90,7 +91,7 @@ export default function StatementSection() {
         {/* Chapter marker metadata header */}
         <div className="statement-meta flex items-center justify-between gap-4 font-mono text-xs uppercase tracking-[0.25em] text-[#8A8A8A] mb-6 border-b border-[#F5F5F0]/15 pb-4">
           <div className="flex items-center gap-4">
-            <span className="text-[#D7FF00] font-bold">[STATEMENT // 01]</span>
+            <span className="text-[#DDFE67] font-bold">[STATEMENT // 01]</span>
             <span className="hidden sm:inline">DISCIPLINE &amp; EXECUTION</span>
           </div>
           <span className="text-right text-[#B5B5B5]">PRECISION BACKEND SYSTEMS</span>
@@ -124,7 +125,7 @@ export default function StatementSection() {
 
           {/* Line 3: THROUGH CODE. */}
           <div className="overflow-hidden pt-3 md:pt-5">
-            <h2 className="statement-line text-[clamp(2.5rem,7.5vw,8.5rem)] font-black uppercase tracking-[-0.05em] leading-[0.88] text-[#D7FF00]">
+            <h2 className="statement-line text-[clamp(2.5rem,7.5vw,8.5rem)] font-black uppercase tracking-[-0.05em] leading-[0.88] text-[#DDFE67]">
               THROUGH CODE<span className="text-[#F5F5F0]">.</span>
             </h2>
           </div>
@@ -134,7 +135,7 @@ export default function StatementSection() {
         {/* Core Philosophy Architectural Pillars Grid */}
         <div className="mt-10 md:mt-14 space-y-6">
           <div className="statement-meta flex items-center justify-between border-b border-[#F5F5F0]/15 pb-3 font-mono text-[10px] uppercase tracking-[0.25em] text-[#8A8A8A]">
-            <span className="text-[#D7FF00] font-bold">// ARCHITECTURAL PILLARS</span>
+            <span className="text-[#DDFE67] font-bold">// ARCHITECTURAL PILLARS</span>
             <span>CORE ENGINEERING POLICIES</span>
           </div>
 
@@ -142,11 +143,26 @@ export default function StatementSection() {
             {architecturalPillars.map((pillar) => (
               <div
                 key={pillar.id}
-                className="pillar-card border border-[#F5F5F0]/15 p-6 bg-[#050505]/90 hover:border-[#D7FF00] hover:bg-[#D7FF00]/[0.02] transition-all duration-300 flex flex-col justify-between space-y-6 group"
+                data-cursor="SYSTEM"
+                className="pillar-card spotlight-card relative border border-[#F5F5F0]/15 p-6 bg-[#050505]/90 hover:border-[#DDFE67]/60 hover:bg-[#DDFE67]/[0.03] transition-all duration-300 flex flex-col justify-between space-y-6 group hover:shadow-[0_0_30px_rgba(221,254,103,0.07)]"
               >
-                <div className="space-y-4">
+                {/* Precision Corner Crosshairs */}
+                <div className="absolute top-2 left-2 font-mono text-[9px] text-[#F5F5F0]/20 group-hover:text-[#DDFE67]/50 select-none pointer-events-none transition-colors">
+                  +
+                </div>
+                <div className="absolute top-2 right-2 font-mono text-[9px] text-[#F5F5F0]/20 group-hover:text-[#DDFE67]/50 select-none pointer-events-none transition-colors">
+                  +
+                </div>
+                <div className="absolute bottom-2 left-2 font-mono text-[9px] text-[#F5F5F0]/20 group-hover:text-[#DDFE67]/50 select-none pointer-events-none transition-colors">
+                  +
+                </div>
+                <div className="absolute bottom-2 right-2 font-mono text-[9px] text-[#F5F5F0]/20 group-hover:text-[#DDFE67]/50 select-none pointer-events-none transition-colors">
+                  +
+                </div>
+
+                <div className="space-y-4 relative z-10">
                   <div className="flex items-center justify-between border-b border-[#F5F5F0]/10 pb-3 font-mono text-[10px] uppercase tracking-widest">
-                    <span className="text-[#D7FF00] font-bold">
+                    <span className="text-[#DDFE67] font-bold">
                       [PILLAR // {pillar.id}]
                     </span>
                     <span className="text-[#8A8A8A] group-hover:text-[#F5F5F0] transition-colors">
@@ -154,18 +170,18 @@ export default function StatementSection() {
                     </span>
                   </div>
 
-                  <h3 className="text-lg md:text-xl font-bold uppercase tracking-tight text-[#F5F5F0] group-hover:text-[#D7FF00] transition-colors">
+                  <h3 className="text-lg md:text-xl font-bold uppercase tracking-tight text-[#F5F5F0] group-hover:text-[#DDFE67] transition-colors">
                     {pillar.title}
                   </h3>
 
                   <p className="text-xs md:text-sm text-[#B5B5B5] font-sans font-light leading-relaxed">
-                    {pillar.description}
+                    <TextParser text={pillar.description} />
                   </p>
                 </div>
 
-                <div className="border-t border-[#F5F5F0]/10 pt-3 flex items-center justify-between font-mono text-[9px] uppercase tracking-wider text-[#8A8A8A]">
+                <div className="relative z-10 border-t border-[#F5F5F0]/10 pt-3 flex items-center justify-between font-mono text-[9px] uppercase tracking-wider text-[#8A8A8A]">
                   <span>SPEC // MODULE</span>
-                  <span className="text-[#D7FF00]">{pillar.techBadge}</span>
+                  <span className="text-[#DDFE67] font-semibold">{pillar.techBadge}</span>
                 </div>
               </div>
             ))}
@@ -175,7 +191,7 @@ export default function StatementSection() {
         {/* Bottom Annotation Strip */}
         <div className="statement-meta mt-8 md:mt-10 grid grid-cols-1 md:grid-cols-12 gap-6 pt-6 border-t border-[#F5F5F0]/15 font-mono text-xs text-[#8A8A8A]">
           <div className="md:col-span-6 space-y-1">
-            <span className="text-[#D7FF00] block text-[10px] uppercase tracking-widest">
+            <span className="text-[#DDFE67] block text-[10px] uppercase tracking-widest">
               SYSTEM MANDATE
             </span>
             <p className="text-sm md:text-base text-[#B5B5B5] font-sans font-light">
@@ -190,7 +206,7 @@ export default function StatementSection() {
             </div>
             <div>
               <span className="text-[#8A8A8A] block text-[10px]">LATENCY</span>
-              <span className="text-[#D7FF00] font-bold">&lt; 25MS TARGET</span>
+              <span className="text-[#DDFE67] font-bold">&lt; 25MS TARGET</span>
             </div>
           </div>
         </div>

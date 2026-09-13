@@ -8,11 +8,20 @@ import { navItems, personalInfo } from "@/data/portfolio";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("about");
 
   useEffect(() => {
-    const onScroll = () => setIsScrolled(window.scrollY > 40);
+    const onScroll = () => {
+      const scrollY = window.scrollY;
+      setIsScrolled(scrollY > 40);
+
+      const winHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (winHeight > 0) {
+        setScrollProgress(Math.min(100, Math.max(0, (scrollY / winHeight) * 100)));
+      }
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -55,12 +64,17 @@ export default function Navbar() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled
-            ? "bg-[#050505]/90 backdrop-blur-md border-b border-[#F5F5F0]/10 py-3.5"
-            : "bg-[#050505]/90 backdrop-blur-sm border-b border-[#F5F5F0]/10 py-3.5"
-        }`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
+            ? "bg-[#050505]/92 backdrop-blur-md border-b border-[#F5F5F0]/10 py-3.5"
+            : "bg-[#050505]/80 backdrop-blur-sm border-b border-[#F5F5F0]/10 py-3.5"
+          }`}
       >
+        <div
+          className="scroll-progress-line"
+          style={{ width: `${scrollProgress}%` }}
+          aria-hidden="true"
+        />
+
         <nav
           className="mx-auto flex w-full max-w-[1728px] items-center justify-between px-6 md:px-12"
           aria-label="Main navigation"
@@ -73,7 +87,7 @@ export default function Navbar() {
             className="group text-left cursor-pointer flex items-center focus:outline-none flex-shrink-0 z-10"
             aria-label="Albin Reji - Back to top"
           >
-            <div className="relative h-10 w-10 sm:h-11 sm:w-11 overflow-hidden rounded-lg border border-[#F5F5F0]/20 bg-[#D7FF00]/10 transition-all duration-300 group-hover:border-[#D7FF00] group-hover:scale-105 group-hover:shadow-[0_0_15px_rgba(215,255,0,0.35)]">
+            <div className="relative h-10 w-10 sm:h-11 sm:w-11 overflow-hidden rounded-lg border border-[#F5F5F0]/20 bg-[#DDFE67]/10 transition-all duration-300 group-hover:border-[#DDFE67] group-hover:scale-105 group-hover:shadow-[0_0_15px_rgba(221,254,103,0.35)]">
               <Image
                 src="/logo.png"
                 alt="Albin Reji Logo"
@@ -85,9 +99,12 @@ export default function Navbar() {
             </div>
           </button>
 
-          {/* Center Coordinates / Editorial Label */}
-          <div className="hidden xl:flex items-center gap-4 font-mono text-[10px] tracking-[0.25em] text-[#8A8A8A] uppercase">
-            <span>FULL STACK ENGINEER</span>
+          {/* Center Systems Engineer Status Chip */}
+          <div className="hidden lg:flex items-center gap-3 px-3 py-1 border border-[#F5F5F0]/15 bg-[#000000]/60 font-mono text-[9px] uppercase tracking-[0.2em]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#DDFE67] animate-pulse shadow-[0_0_8px_rgba(221,254,103,0.8)]" />
+            <span className="text-[#8A8A8A]">SYS // OPERATIONAL</span>
+            <span className="text-[#F5F5F0]/25">•</span>
+            <span className="text-[#DDFE67] font-semibold">IST (UTC+5:30)</span>
           </div>
 
           {/* Desktop Nav Links */}
@@ -101,19 +118,19 @@ export default function Navbar() {
                     onClick={() => handleNavClick(item.href)}
                     className="group relative flex items-center gap-1.5 py-1 font-mono text-xs uppercase tracking-[0.18em] transition-colors cursor-pointer"
                   >
-                    <span className="text-[9px] text-[#8A8A8A] group-hover:text-[#D7FF00] transition-colors">
+                    <span className="text-[9px] text-[#8A8A8A] group-hover:text-[#DDFE67] transition-colors">
                       0{idx + 1}
                     </span>
                     <span
                       className={`font-semibold ${isActive
-                        ? "text-[#D7FF00]"
-                        : "text-[#F5F5F0] group-hover:text-[#D7FF00]"
+                        ? "text-[#DDFE67]"
+                        : "text-[#F5F5F0] group-hover:text-[#DDFE67]"
                         } transition-colors`}
                     >
                       {item.label}
                     </span>
                     {isActive && (
-                      <span className="inline-block h-1 w-1 rounded-full bg-[#D7FF00] ml-0.5" />
+                      <span className="inline-block h-1 w-1 rounded-full bg-[#DDFE67] ml-0.5 shadow-[0_0_6px_rgba(221,254,103,0.8)]" />
                     )}
                   </button>
                 </li>
@@ -124,7 +141,7 @@ export default function Navbar() {
           {/* Mobile hamburger button */}
           <button
             onClick={() => setIsMobileOpen(!isMobileOpen)}
-            className="md:hidden p-2 text-[#F5F5F0] hover:text-[#D7FF00] transition-colors cursor-pointer border border-[#F5F5F0]/15 rounded-none"
+            className="md:hidden p-2 text-[#F5F5F0] hover:text-[#DDFE67] transition-colors cursor-pointer border border-[#F5F5F0]/15 rounded-none"
             aria-label={isMobileOpen ? "Close menu" : "Open menu"}
             aria-expanded={isMobileOpen}
           >
@@ -163,13 +180,13 @@ export default function Navbar() {
                         <span className="font-mono text-xs text-[#8A8A8A]">
                           0{idx + 1}
                         </span>
-                        <span className="text-3xl font-extrabold uppercase tracking-tight text-[#F5F5F0] group-hover:text-[#D7FF00] transition-colors">
+                        <span className="text-3xl font-extrabold uppercase tracking-tight text-[#F5F5F0] group-hover:text-[#DDFE67] transition-colors">
                           {item.label}
                         </span>
                       </div>
                       <ArrowUpRight
                         size={20}
-                        className="text-[#8A8A8A] group-hover:text-[#D7FF00] group-hover:translate-x-1 group-hover:-translate-y-1 transition-all"
+                        className="text-[#8A8A8A] group-hover:text-[#DDFE67] group-hover:translate-x-1 group-hover:-translate-y-1 transition-all"
                       />
                     </button>
                   </motion.li>
@@ -180,7 +197,7 @@ export default function Navbar() {
             <div className="border-t border-[#F5F5F0]/15 pt-6 space-y-2 font-mono text-[11px] uppercase tracking-wider text-[#8A8A8A]">
               <p className="text-[#F5F5F0] font-semibold">{personalInfo.name}</p>
               <p>{personalInfo.location}</p>
-              <p className="text-[#D7FF00] pt-2">{personalInfo.email}</p>
+              <p className="text-[#DDFE67] pt-2">{personalInfo.email}</p>
             </div>
           </motion.div>
         )}

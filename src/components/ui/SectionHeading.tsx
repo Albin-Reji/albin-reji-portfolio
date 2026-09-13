@@ -21,7 +21,7 @@ export default function SectionHeading({
       {/* Top micro metadata strip */}
       <div className="flex items-center justify-between border-b border-[#F5F5F0]/15 pb-3 mb-6">
         <div className="flex items-center gap-3">
-          <span className="font-mono text-xs font-bold text-[#D7FF00] tracking-[0.2em]">
+          <span className="font-mono text-xs font-bold text-[#DDFE67] tracking-[0.2em]">
             [{index}]
           </span>
           {category && (

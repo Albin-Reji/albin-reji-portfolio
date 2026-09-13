@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowDown, ArrowUpRight } from "lucide-react";
+import { ArrowDown, ArrowUpRight, Terminal, Check } from "lucide-react";
 import { personalInfo } from "@/data/portfolio";
 import MarqueeTicker from "@/components/ui/MarqueeTicker";
+import { TextParser } from "@/components/ui/TextParser";
 
 const Lanyard = dynamic(() => import("@/components/ui/Lanyard"), { ssr: false });
 
@@ -29,6 +30,13 @@ export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const headlineRef = useRef<HTMLDivElement>(null);
   const imageContainerRef = useRef<HTMLDivElement>(null);
+  const [copiedCmd, setCopiedCmd] = useState(false);
+
+  const handleCopyCmd = () => {
+    navigator.clipboard.writeText("npx albin-reji");
+    setCopiedCmd(true);
+    setTimeout(() => setCopiedCmd(false), 2000);
+  };
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
@@ -103,11 +111,24 @@ export default function Hero() {
             className="lg:col-span-7 space-y-6 max-w-2xl lg:max-w-none"
           >
             <div>
-              {/* Eyebrow */}
-              <div className="overflow-hidden mb-3">
-                <p className="hero-text-line font-mono text-xs md:text-sm font-semibold uppercase tracking-[0.35em] text-[#D7FF00]">
-                  {"// "}{personalInfo.title}
-                </p>
+              {/* Eyebrow & Terminal Pill */}
+              <div className="flex flex-wrap items-center gap-3 mb-3">
+                <div className="overflow-hidden">
+                  <p className="hero-text-line font-mono text-xs md:text-sm font-semibold uppercase tracking-[0.35em] text-[#DDFE67]">
+                    {"// "}{personalInfo.title}
+                  </p>
+                </div>
+                <button
+                  onClick={handleCopyCmd}
+                  className="hero-fade inline-flex items-center gap-1.5 px-2.5 py-1 border border-[#F5F5F0]/15 bg-[#000000]/60 hover:border-[#DDFE67]/50 transition-colors font-mono text-[10px] text-[#8A8A8A] hover:text-[#F5F5F0] cursor-pointer"
+                  aria-label="Copy terminal run command"
+                >
+                  <Terminal size={11} className="text-[#DDFE67]" />
+                  <span>npx albin-reji</span>
+                  {copiedCmd ? (
+                    <Check size={11} className="text-[#DDFE67]" />
+                  ) : null}
+                </button>
               </div>
 
               {/* Dominant Headline Anchor */}
@@ -119,29 +140,29 @@ export default function Hero() {
 
               <div className="overflow-hidden">
                 <h1 className="hero-text-line text-[clamp(3.75rem,13vw,13.5rem)] font-black uppercase leading-[0.82] tracking-[-0.06em] text-[#F5F5F0]">
-                  REJI<span className="text-[#D7FF00]">.</span>
+                  REJI<span className="text-[#DDFE67]">.</span>
                 </h1>
               </div>
             </div>
 
             {/* Tagline narrative */}
-            <div className="max-w-xl hero-fade">
+            <div className="max-w-xl hero-fade mt-10">
               <p className="text-base md:text-xl text-[#B5B5B5] leading-relaxed font-light">
-                {personalInfo.tagline}
+                <TextParser text={personalInfo.tagline} />
               </p>
             </div>
 
             {/* Action Buttons */}
-            <div className="pt-2 flex flex-wrap items-center gap-4 hero-fade">
+            <div className="pt-6 flex flex-wrap items-center gap-4 hero-fade">
               <a
                 href="#projects"
-                className="btn-editorial bg-[#D7FF00] text-[#050505] font-bold border-[#D7FF00] hover:bg-[#F5F5F0] hover:text-[#050505] transition-colors"
+                className="btn-editorial bg-[#DDFE67] text-[#050505] font-bold border-[#DDFE67] hover:bg-[#F5F5F0] hover:text-[#050505] shadow-[0_0_20px_rgba(221,254,103,0.18)] hover:shadow-[0_0_30px_rgba(221,254,103,0.35)] transition-all"
               >
-                <span>EXPLORE WORK</span>
+                <span>Explore work</span>
                 <ArrowDown size={14} className="arrow" />
               </a>
-              <a href="#contact" className="btn-editorial">
-                <span>GET IN TOUCH</span>
+              <a href="#contact" className="btn-editorial hover:border-[#DDFE67] hover:text-[#DDFE67] transition-all">
+                <span>Get in touch</span>
                 <ArrowUpRight size={14} className="arrow" />
               </a>
             </div>
@@ -164,13 +185,13 @@ export default function Hero() {
                 frontImage="/albin-reji_photo_fianal.png"
                 cardScale={4.25}
                 lanyardWidth={1.3}
-                cardBgColor="#D4ff45"
+                cardBgColor="#DDFE67"
               />
             </div>
 
             {/* Accent Editorial Grid Brackets (Desktop) */}
-            <div className="hidden lg:block absolute -top-3 -right-3 w-8 h-8 border-t-2 border-r-2 border-[#D7FF00]/50 pointer-events-none" />
-            <div className="hidden lg:block absolute -bottom-3 -left-3 w-8 h-8 border-b-2 border-l-2 border-[#D7FF00]/50 pointer-events-none" />
+            <div className="hidden lg:block absolute -top-3 -right-3 w-8 h-8 border-t-2 border-r-2 border-[#DDFE67]/50 pointer-events-none" />
+            <div className="hidden lg:block absolute -bottom-3 -left-3 w-8 h-8 border-b-2 border-l-2 border-[#DDFE67]/50 pointer-events-none" />
           </div>
 
         </div>

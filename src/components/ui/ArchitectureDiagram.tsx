@@ -68,10 +68,10 @@ const PROTOCOL_CONFIG: Record<
   },
   discovery: {
     label: "DISCOVERY / CONFIG",
-    stroke: "#D7FF00",
-    glow: "rgba(215, 255, 0, 0.4)",
-    bg: "rgba(215, 255, 0, 0.1)",
-    text: "#D7FF00",
+    stroke: "#DDFE67",
+    glow: "rgba(221, 254, 103, 0.4)",
+    bg: "rgba(221, 254, 103, 0.1)",
+    text: "#DDFE67",
   },
 };
 
@@ -82,7 +82,7 @@ const TIER_ACCENTS: Record<ArchNodeType, { border: string; badge: string }> = {
   broker: { border: "#F59E0B", badge: "text-[#F59E0B] bg-[#F59E0B]/10 border-[#F59E0B]/30" },
   data: { border: "#10B981", badge: "text-[#10B981] bg-[#10B981]/10 border-[#10B981]/30" },
   external: { border: "#F43F5E", badge: "text-[#F43F5E] bg-[#F43F5E]/10 border-[#F43F5E]/30" },
-  governance: { border: "#D7FF00", badge: "text-[#D7FF00] bg-[#D7FF00]/10 border-[#D7FF00]/30" },
+  governance: { border: "#DDFE67", badge: "text-[#DDFE67] bg-[#DDFE67]/10 border-[#DDFE67]/30" },
 };
 
 // ─── Edge Calculation Helper ────────────────────────────────────────────────
@@ -329,7 +329,7 @@ export default function ArchitectureDiagram({
           markerHeight="6"
           orient="auto-start-reverse"
         >
-          <path d="M 0 1 L 9 5 L 0 9 z" fill="#D7FF00" />
+          <path d="M 0 1 L 9 5 L 0 9 z" fill="#DDFE67" />
         </marker>
 
         {/* Grid pattern */}
@@ -383,7 +383,7 @@ export default function ArchitectureDiagram({
         const isDimmed = activeFocusId !== null && !isHighlighted;
         const protoCfg = conn.type ? PROTOCOL_CONFIG[conn.type] : null;
         const strokeColor = isHighlighted
-          ? "#D7FF00"
+          ? "#DDFE67"
           : protoCfg
             ? protoCfg.stroke
             : "rgba(245, 245, 240, 0.25)";
@@ -439,7 +439,7 @@ export default function ArchitectureDiagram({
         const isFocused = activeFocusId === node.id;
         const isConnected = connectedIds.has(node.id);
         const isDimmed = activeFocusId !== null && !isConnected;
-        const tierAccent = node.tier ? TIER_ACCENTS[node.tier] : { border: "#D7FF00", badge: "" };
+        const tierAccent = node.tier ? TIER_ACCENTS[node.tier] : { border: "#DDFE67", badge: "" };
 
         return (
           <g
@@ -460,7 +460,7 @@ export default function ArchitectureDiagram({
                 width={w + 4}
                 height={h + 4}
                 fill="none"
-                stroke="#D7FF00"
+                stroke="#DDFE67"
                 strokeWidth={1.5}
                 opacity={0.8}
                 filter="url(#glow)"
@@ -477,9 +477,9 @@ export default function ArchitectureDiagram({
               fill={isFocused ? "#121800" : isConnected ? "#0A0D04" : "#0D0D0D"}
               stroke={
                 isFocused
-                  ? "#D7FF00"
+                  ? "#DDFE67"
                   : isConnected
-                    ? "rgba(215, 255, 0, 0.5)"
+                    ? "rgba(221, 254, 103, 0.5)"
                     : "rgba(245, 245, 240, 0.2)"
               }
               strokeWidth={1}
@@ -492,7 +492,7 @@ export default function ArchitectureDiagram({
               y={node.y}
               width={3}
               height={h}
-              fill={isFocused ? "#D7FF00" : tierAccent.border}
+              fill={isFocused ? "#DDFE67" : tierAccent.border}
             />
 
             {/* Status Pip */}
@@ -500,7 +500,7 @@ export default function ArchitectureDiagram({
               cx={node.x + 12}
               cy={node.y + 14}
               r={2.5}
-              fill={isFocused ? "#D7FF00" : tierAccent.border}
+              fill={isFocused ? "#DDFE67" : tierAccent.border}
             />
 
             {/* Node Title */}
@@ -509,7 +509,7 @@ export default function ArchitectureDiagram({
               y={node.y + 14}
               dominantBaseline="middle"
               className="font-mono text-[10.5px] font-bold tracking-[0.05em] select-none uppercase"
-              fill={isFocused ? "#D7FF00" : "#F5F5F0"}
+              fill={isFocused ? "#DDFE67" : "#F5F5F0"}
             >
               {node.label}
             </text>
@@ -558,10 +558,10 @@ export default function ArchitectureDiagram({
       <div className="p-3 md:p-4 border-b border-[#F5F5F0]/15 flex flex-wrap items-center justify-between gap-3 bg-[#0A0A0A]">
         <div className="flex items-center gap-3">
           <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#8A8A8A] flex items-center gap-1.5">
-            <Layers size={13} className="text-[#D7FF00]" />
+            <Layers size={13} className="text-[#DDFE67]" />
             <span>{title || "DISTRIBUTED SYSTEM TOPOLOGY"}</span>
           </span>
-          <span className="font-mono text-[9px] px-2 py-0.5 border border-[#F5F5F0]/15 text-[#D7FF00] bg-[#000000]">
+          <span className="font-mono text-[9px] px-2 py-0.5 border border-[#F5F5F0]/15 text-[#DDFE67] bg-[#000000]">
             {nodes.length} NODES // {connections.length} FLOWS
           </span>
         </div>
@@ -571,7 +571,7 @@ export default function ArchitectureDiagram({
           <button
             onClick={() => setActiveProtocol("ALL")}
             className={`px-2 py-1 border transition-colors cursor-pointer ${activeProtocol === "ALL"
-                ? "bg-[#D7FF00] text-[#050505] border-[#D7FF00] font-bold"
+                ? "bg-[#DDFE67] text-[#050505] border-[#DDFE67] font-bold"
                 : "border-[#F5F5F0]/10 text-[#8A8A8A] hover:text-[#F5F5F0]"
               }`}
           >
@@ -585,7 +585,7 @@ export default function ArchitectureDiagram({
                 key={proto}
                 onClick={() => setActiveProtocol(isActive ? "ALL" : proto)}
                 className={`px-2 py-1 border transition-colors cursor-pointer flex items-center gap-1 ${isActive
-                    ? "bg-[#D7FF00] text-[#050505] border-[#D7FF00] font-bold"
+                    ? "bg-[#DDFE67] text-[#050505] border-[#DDFE67] font-bold"
                     : "border-[#F5F5F0]/10 text-[#8A8A8A] hover:text-[#F5F5F0]"
                   }`}
               >
@@ -601,7 +601,7 @@ export default function ArchitectureDiagram({
           {/* Fullscreen Modal Toggle Button */}
           <button
             onClick={() => setIsFullscreen(true)}
-            className="ml-2 p-1.5 border border-[#F5F5F0]/15 text-[#8A8A8A] hover:text-[#D7FF00] hover:border-[#D7FF00] transition-colors cursor-pointer"
+            className="ml-2 p-1.5 border border-[#F5F5F0]/15 text-[#8A8A8A] hover:text-[#DDFE67] hover:border-[#DDFE67] transition-colors cursor-pointer"
             title="Expand Fullscreen Diagram"
             aria-label="Expand Fullscreen Diagram"
           >
@@ -627,7 +627,7 @@ export default function ArchitectureDiagram({
             <div className="flex flex-wrap items-start justify-between gap-3 pb-3 border-b border-[#F5F5F0]/10">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-[#D7FF00] font-bold text-sm uppercase">
+                  <span className="text-[#DDFE67] font-bold text-sm uppercase">
                     {inspectedNode.label}
                   </span>
                   {inspectedNode.port && (
@@ -655,7 +655,7 @@ export default function ArchitectureDiagram({
               {selectedNodeId && (
                 <button
                   onClick={() => setSelectedNodeId(null)}
-                  className="text-[10px] text-[#8A8A8A] hover:text-[#D7FF00] flex items-center gap-1 border border-[#F5F5F0]/10 px-2 py-1 cursor-pointer"
+                  className="text-[10px] text-[#8A8A8A] hover:text-[#DDFE67] flex items-center gap-1 border border-[#F5F5F0]/10 px-2 py-1 cursor-pointer"
                 >
                   <X size={11} />
                   <span>CLEAR PIN</span>
@@ -737,7 +737,7 @@ export default function ArchitectureDiagram({
         ) : (
           <div className="px-4 py-2 border-t border-[#F5F5F0]/10 bg-[#0A0A0A] flex items-center justify-between text-[9px] font-mono text-[#8A8A8A] uppercase tracking-wider">
             <span className="flex items-center gap-1.5">
-              <Info size={11} className="text-[#D7FF00]" />
+              <Info size={11} className="text-[#DDFE67]" />
               <span>HOVER OR CLICK ANY NODE TO TRACE CALL PATHS & PROTOCOLS</span>
             </span>
             <span className="text-[#606060]">CLICK PIN TO LOCK INSPECTION</span>
@@ -757,7 +757,7 @@ export default function ArchitectureDiagram({
             {/* Modal Header */}
             <div className="flex items-center justify-between pb-4 border-b border-[#F5F5F0]/15 font-mono mb-4">
               <div className="flex items-center gap-3">
-                <span className="text-xl font-bold text-[#D7FF00]">
+                <span className="text-xl font-bold text-[#DDFE67]">
                   SYSTEM ARCHITECTURE DEEP DIVE
                 </span>
                 <span className="text-xs text-[#8A8A8A] hidden md:inline">
@@ -770,7 +770,7 @@ export default function ArchitectureDiagram({
                 </span>
                 <button
                   onClick={() => setIsFullscreen(false)}
-                  className="p-2 border border-[#F5F5F0]/20 text-[#F5F5F0] hover:text-[#D7FF00] hover:border-[#D7FF00] transition-colors cursor-pointer"
+                  className="p-2 border border-[#F5F5F0]/20 text-[#F5F5F0] hover:text-[#DDFE67] hover:border-[#DDFE67] transition-colors cursor-pointer"
                   aria-label="Close fullscreen"
                 >
                   <Minimize2 size={16} />
@@ -786,7 +786,7 @@ export default function ArchitectureDiagram({
                 <button
                   onClick={() => setActiveProtocol("ALL")}
                   className={`px-3 py-1 border transition-colors cursor-pointer ${activeProtocol === "ALL"
-                      ? "bg-[#D7FF00] text-[#050505] border-[#D7FF00] font-bold"
+                      ? "bg-[#DDFE67] text-[#050505] border-[#DDFE67] font-bold"
                       : "border-[#F5F5F0]/10 text-[#8A8A8A] hover:text-[#F5F5F0]"
                     }`}
                 >
@@ -800,7 +800,7 @@ export default function ArchitectureDiagram({
                       key={proto}
                       onClick={() => setActiveProtocol(proto)}
                       className={`px-3 py-1 border transition-colors cursor-pointer flex items-center gap-1.5 ${activeProtocol === proto
-                          ? "bg-[#D7FF00] text-[#050505] border-[#D7FF00] font-bold"
+                          ? "bg-[#DDFE67] text-[#050505] border-[#DDFE67] font-bold"
                           : "border-[#F5F5F0]/10 text-[#8A8A8A] hover:text-[#F5F5F0]"
                         }`}
                     >
@@ -824,7 +824,7 @@ export default function ArchitectureDiagram({
               {/* Modal Bottom Inspector */}
               {inspectedNode && (
                 <div className="mt-3 p-3 bg-[#0A0A0A] border border-[#F5F5F0]/15 font-mono text-xs">
-                  <div className="flex items-center justify-between text-[#D7FF00] font-bold mb-1">
+                  <div className="flex items-center justify-between text-[#DDFE67] font-bold mb-1">
                     <span>
                       {inspectedNode.label} {inspectedNode.port && `(${inspectedNode.port})`}
                     </span>
