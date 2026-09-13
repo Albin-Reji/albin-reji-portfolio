@@ -158,7 +158,7 @@ export default function Projects() {
     <section
       ref={sectionRef}
       id="projects"
-      className="py-14 md:py-20 bg-transparent border-b border-[#F5F5F0]/15 overflow-hidden"
+      className="py-14 md:py-20 bg-transparent border-b border-[#F5F5F0]/15"
     >
       {/* ═══ Section Heading & Navigation Controls ═══ */}
       <div className="projects-header-trigger px-6 md:px-12 max-w-[1728px] mx-auto mb-8 md:mb-10">
@@ -237,7 +237,7 @@ export default function Projects() {
           tabIndex={0}
           role="region"
           aria-label="Featured projects horizontal slider"
-          className={`flex gap-6 md:gap-10 overflow-x-auto snap-x snap-mandatory py-4 pb-8 focus:outline-none select-none ${isDragging ? "cursor-grabbing scroll-auto" : "cursor-grab scroll-smooth"
+          className={`flex gap-6 md:gap-10 overflow-x-auto snap-x snap-mandatory py-4 pb-12 focus:outline-none select-none [&::-webkit-scrollbar]:hidden ${isDragging ? "cursor-grabbing scroll-auto" : "cursor-grab scroll-smooth"
             }`}
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
@@ -249,7 +249,7 @@ export default function Projects() {
             return (
               <article
                 key={project.name}
-                className={`w-[90vw] sm:w-[85vw] lg:w-[1240px] xl:w-[1360px] shrink-0 snap-center border border-[#F5F5F0]/15 bg-[#000000] p-6 md:p-10 transition-all duration-500 ${isActive
+                className={`w-[90vw] sm:w-[85vw] lg:w-[1240px] xl:w-[1300px] shrink-0 snap-center border border-[#F5F5F0]/15 bg-[#000000] p-6 md:p-10 transition-all duration-500 flex flex-col ${isActive
                   ? "border-[#D7FF00]/60 shadow-[0_0_40px_rgba(215,255,0,0.04)]"
                   : "opacity-60 hover:opacity-90"
                   }`}
@@ -302,10 +302,10 @@ export default function Projects() {
 
                 {/* Main Slide Grid */}
                 {currentTab === "preview" ? (
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
                     {/* Left Column: Visual Media (6 cols) */}
-                    <div className="lg:col-span-6 space-y-4">
-                      <div className="relative aspect-[16/10] overflow-hidden border border-[#F5F5F0]/15 bg-[#111111] group">
+                    <div className="lg:col-span-6 space-y-4 flex flex-col">
+                      <div className="relative aspect-[16/10] overflow-hidden border border-[#F5F5F0]/15 bg-[#111111] group shrink-0">
                         <Image
                           src={PROJECT_IMAGES[idx] || PROJECT_IMAGES[0]}
                           alt={`${project.name} visual preview`}
@@ -326,7 +326,7 @@ export default function Projects() {
                       </div>
 
                       {/* Tech Badges Strip below preview */}
-                      <div className="flex flex-wrap gap-2 pt-2">
+                      <div className="flex flex-wrap gap-2 pt-4 mt-auto">
                         {project.techStack.map((tech) => (
                           <span
                             key={tech}
@@ -339,7 +339,7 @@ export default function Projects() {
                     </div>
 
                     {/* Right Column: Architectural Highlights & Specs (6 cols) */}
-                    <div className="lg:col-span-6 space-y-6 flex flex-col justify-between h-full">
+                    <div className="lg:col-span-6 space-y-6 flex flex-col justify-between">
                       {/* System Overview */}
                       <div className="space-y-2">
                         <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#8A8A8A] block">
