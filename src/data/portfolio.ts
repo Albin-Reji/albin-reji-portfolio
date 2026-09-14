@@ -183,7 +183,7 @@ export const socialLinks: SocialLink[] = [
   },
   {
     platform: "LeetCode",
-    url: "https://leetcode.com/u/albinrejim30",
+    url: "https://leetcode.com/u/_albinreji_/",
     icon: "leetcode",
   },
   {

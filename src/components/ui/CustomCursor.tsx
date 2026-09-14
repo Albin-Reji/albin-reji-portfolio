@@ -52,8 +52,10 @@ export default function CustomCursor() {
         if (label) label.textContent = "";
       }
 
-      // Hide the dot entirely when hovering inside the contact form card
-      const formCard = (e.target as Element)?.closest?.(".contact-form-card, .cf-fields, .cf-field, .cf-field-body");
+      // Hide the dot entirely when hovering inside inputs, textareas, or contact form cards
+      const formCard = (e.target as Element)?.closest?.(
+        ".contact-form-card, .transmission-card, .cf-fields, .cf-field, .cf-field-body, input, textarea"
+      );
       if (formCard) {
         cursor.style.opacity = "0";
       } else {
@@ -75,7 +77,9 @@ export default function CustomCursor() {
       // Don't expand when over inputs/textareas inside the contact form or when labeled
       const target = e.target as Element;
       if (cursor.classList.contains("is-labeled")) return;
-      const isInsideForm = target.closest(".contact-form-card, .cf-fields");
+      const isInsideForm = target.closest(
+        ".contact-form-card, .transmission-card, .cf-fields, input, textarea"
+      );
       if (isInsideForm) return;
       cursor.classList.add("is-active");
     };

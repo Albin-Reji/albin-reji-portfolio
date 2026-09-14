@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, type FormEvent } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowUpRight, Send, Check, Copy, AlertCircle, Loader2 } from "lucide-react";
+import { ArrowUpRight, Check, AlertCircle, Loader2 } from "lucide-react";
 import {
   GitHubIcon,
   LinkedInIcon,
@@ -140,83 +140,6 @@ function StrikethroughSVG() {
         strokeLinejoin="round"
       />
     </svg>
-  );
-}
-
-/* ── Compact Numbered Form Field ─────────────────────────────────────────── */
-function CompactField({
-  id,
-  fieldNum,
-  label,
-  type = "text",
-  value,
-  onChange,
-  onBlur,
-  error,
-  isTextarea = false,
-  autoComplete,
-  placeholder,
-  headerExtra,
-  footerExtra,
-}: {
-  id: string;
-  fieldNum: string;
-  label: string;
-  type?: string;
-  value: string;
-  onChange: (v: string) => void;
-  onBlur?: () => void;
-  error?: string;
-  isTextarea?: boolean;
-  autoComplete?: string;
-  placeholder?: string;
-  headerExtra?: React.ReactNode;
-  footerExtra?: React.ReactNode;
-}) {
-  return (
-    <div className={`cf-field${error ? " cf-field--error" : ""}`}>
-      <div className="cf-field-head">
-        <span className="cf-field-num" aria-hidden="true">{fieldNum}</span>
-        <label htmlFor={id} className="cf-field-lbl">
-          {label}<span className="cf-req">*</span>
-        </label>
-        {headerExtra}
-      </div>
-      <div className="cf-field-body">
-        {isTextarea ? (
-          <textarea
-            id={id}
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            onBlur={onBlur}
-            className="cf-input cf-textarea"
-            placeholder={placeholder}
-            aria-invalid={!!error}
-            aria-describedby={error ? `${id}-error` : undefined}
-          />
-        ) : (
-          <input
-            id={id}
-            type={type}
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            onBlur={onBlur}
-            className="cf-input"
-            placeholder={placeholder}
-            autoComplete={autoComplete}
-            aria-invalid={!!error}
-            aria-describedby={error ? `${id}-error` : undefined}
-          />
-        )}
-        {footerExtra}
-      </div>
-      {error && (
-        <p id={`${id}-error`} className="cf-field-err" role="alert">
-          <AlertCircle size={10} aria-hidden="true" />
-          {error}
-        </p>
-      )}
-    </div>
   );
 }
 
@@ -496,76 +419,114 @@ export default function Contact() {
 
         {/* ═══ Content Grid ═══ */}
         <div className="contact-content-grid px-5 sm:px-8 md:px-12 lg:px-20 max-w-[1728px] mx-auto w-full mt-14 sm:mt-16 md:mt-24 box-border min-w-0">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-start w-full min-w-0">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start w-full min-w-0">
 
-            {/* ── Left: Direct Comms ── */}
-            <div className="lg:col-span-5 space-y-10 contact-block-fade w-full min-w-0">
-              <div className="space-y-7">
-                <span className="contact-section-label text-[#171717] font-bold block">// DIRECT COMMS</span>
-                <div className="space-y-6">
-                  {/* Primary Email */}
-                  <div className="border-b border-[rgba(23,23,23,0.18)] pb-5 space-y-2">
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="contact-info-label">PRIMARY EMAIL</span>
-                      <button onClick={handleCopyEmail} className="contact-copy-btn" aria-label="Copy email address to clipboard">
-                        {copiedEmail ? (
-                          <><Check size={12} className="text-[#16A34A]" /><span className="text-[#16A34A] font-bold">COPIED!</span></>
-                        ) : (
-                          <><Copy size={12} /><span>COPY ADDRESS</span></>
-                        )}
-                      </button>
-                    </div>
+            {/* ── Left Column: Direct Comms (Image 2) + Network Channels ── */}
+            <div className="lg:col-span-5 space-y-6 contact-block-fade w-full min-w-0">
+              
+              {/* Direct Comms Card (Image 2 Design) */}
+              <div className="transmission-card bg-white rounded-[2rem] sm:rounded-[2.25rem] p-6 sm:p-8 md:p-9 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-[#E2E8F0] relative">
+                {/* Header */}
+                <div className="flex items-center justify-between gap-4 mb-6 sm:mb-8">
+                  <span className="font-mono text-xs sm:text-[13px] font-bold text-[#4D5A2B] tracking-[0.16em] uppercase">
+                    // DIRECT COMMS
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#CCFF00] shadow-[0_0_8px_rgba(204,255,0,0.8)] animate-pulse" />
+                    <span className="font-mono text-[10px] sm:text-[11px] font-bold text-slate-800 tracking-wider uppercase">
+                      INBOX OPEN
+                    </span>
+                  </div>
+                </div>
+
+                {/* Primary Email */}
+                <div className="space-y-2 mb-4 sm:mb-5">
+                  <span className="block font-mono text-[10px] sm:text-[11px] font-semibold text-[#64748B] tracking-[0.16em] uppercase">
+                    PRIMARY EMAIL
+                  </span>
+                  <div className="bg-[#F4F7FB] border border-[#CBD5E1]/70 rounded-2xl p-3 sm:p-3.5 md:p-4 flex items-center justify-between gap-3 hover:border-[#94A3B8] transition-colors">
                     <a
                       href={`mailto:${personalInfo.email}`}
-                      className="text-lg sm:text-2xl md:text-3xl font-bold text-[#171717] hover:opacity-75 transition-opacity block break-all tracking-tight"
+                      className="font-mono font-bold text-sm sm:text-base md:text-[17px] text-slate-900 hover:text-[#4D5A2B] transition-colors tracking-tight truncate select-all"
                       aria-label={`Send email to ${personalInfo.email}`}
                     >
                       {personalInfo.email}
                     </a>
+                    <button
+                      type="button"
+                      onClick={handleCopyEmail}
+                      className="bg-[#111111] hover:bg-black text-[#CCFF00] px-4 sm:px-5 py-2 rounded-full font-mono font-extrabold text-xs tracking-wider transition-all duration-200 cursor-pointer flex items-center gap-1.5 shrink-0 shadow-sm active:scale-95"
+                      aria-label="Copy email address"
+                    >
+                      {copiedEmail ? (
+                        <>
+                          <Check size={13} className="text-[#CCFF00]" />
+                          <span>COPIED!</span>
+                        </>
+                      ) : (
+                        <span>COPY</span>
+                      )}
+                    </button>
                   </div>
-                  {/* Phone */}
-                  <div className="border-b border-[rgba(23,23,23,0.18)] pb-5">
-                    <span className="contact-info-label block">PHONE // WHATSAPP</span>
+                </div>
+
+                {/* 2-Column Info Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-4">
+                  {/* Phone // WhatsApp */}
+                  <div className="bg-[#F4F7FB] border border-[#CBD5E1]/70 rounded-2xl p-4 sm:p-5 hover:border-[#94A3B8] transition-colors">
+                    <span className="block font-mono text-[10px] sm:text-[11px] font-semibold text-[#64748B] tracking-[0.14em] uppercase mb-1.5">
+                      PHONE // WHATSAPP
+                    </span>
                     <a
                       href={`tel:${personalInfo.phone.replace(/[^+\d]/g, "")}`}
-                      className="text-base sm:text-xl text-[#171717] hover:opacity-75 transition-opacity font-semibold block"
+                      className="font-mono font-bold text-sm sm:text-base text-slate-900 hover:text-[#4D5A2B] transition-colors block tracking-tight"
                       aria-label={`Call phone number ${personalInfo.phone}`}
                     >
                       {personalInfo.phone}
                     </a>
                   </div>
-                  {/* Location */}
-                  <div className="pb-2">
-                    <span className="contact-info-label block">BASE HEADQUARTERS</span>
-                    <div className="text-base sm:text-lg text-[#171717] font-semibold flex items-center gap-2 flex-wrap">
-                      <span className="text-[10px] text-[#777771] lowercase">{personalInfo.location}</span>
-                      <span className="text-[rgba(23,23,23,0.4)] font-normal">/</span>
-                      <span className="text-[10px] text-[#777771] lowercase">remote available</span>
-                    </div>
+
+                  {/* Base Headquarters */}
+                  <div className="bg-[#F4F7FB] border border-[#CBD5E1]/70 rounded-2xl p-4 sm:p-5 hover:border-[#94A3B8] transition-colors">
+                    <span className="block font-mono text-[10px] sm:text-[11px] font-semibold text-[#64748B] tracking-[0.14em] uppercase mb-1.5">
+                      BASE HEADQUARTERS
+                    </span>
+                    <span className="font-mono font-bold text-sm sm:text-base text-slate-900 block tracking-tight">
+                      {personalInfo.location}
+                    </span>
                   </div>
                 </div>
               </div>
 
-              {/* Social Links */}
-              <div className="pt-4 sm:pt-6 space-y-1 w-full min-w-0">
-                <span className="contact-section-label text-[rgba(23,23,23,0.65)] block mb-4">NETWORK CHANNELS</span>
-                <div className="w-full min-w-0 space-y-0.5">
+              {/* Verified Network Channels Companion Card */}
+              <div className="transmission-card bg-white/80 backdrop-blur-md rounded-[2rem] p-5 sm:p-6 shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-[#E2E8F0]">
+                <div className="flex items-center justify-between gap-2 mb-3.5">
+                  <span className="font-mono text-[10px] sm:text-[11px] font-bold text-[#4D5A2B] tracking-[0.16em] uppercase">
+                    NETWORK CHANNELS // VERIFIED HANDLES
+                  </span>
+                  <span className="text-[10px] font-mono text-slate-400">CONNECT</span>
+                </div>
+                <div className="flex flex-wrap gap-2 sm:gap-2.5">
                   {socialLinks.map((link) => {
                     const Icon = iconMap[link.icon];
+                    const isMail = link.icon === "mail";
                     return (
                       <a
                         key={link.platform}
                         href={link.url}
-                        target={link.icon === "mail" ? undefined : "_blank"}
-                        rel={link.icon === "mail" ? undefined : "noopener noreferrer"}
-                        aria-label={`Open ${link.platform} link`}
-                        className="contact-social-row"
+                        target={isMail ? undefined : "_blank"}
+                        rel={isMail ? undefined : "noopener noreferrer"}
+                        aria-label={`Open ${link.platform} channel`}
+                        className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#F4F7FB] hover:bg-[#111111] border border-[#CBD5E1]/70 hover:border-black text-slate-800 hover:text-[#CCFF00] font-mono text-xs font-semibold tracking-wide transition-all duration-200 group"
                       >
-                        <span className="social-row-label">
-                          {Icon && <Icon size={16} />}
-                          <span className="truncate">{link.platform}</span>
+                        <span className="text-slate-600 group-hover:text-[#CCFF00] transition-colors">
+                          {Icon && <Icon size={14} />}
                         </span>
-                        <ArrowUpRight size={17} className="social-row-arrow" />
+                        <span>{link.platform}</span>
+                        <ArrowUpRight
+                          size={12}
+                          className="opacity-40 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all text-[#CCFF00]"
+                        />
                       </a>
                     );
                   })}
@@ -573,127 +534,203 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* ── Right: Transmission Console ── */}
+            {/* ── Right Column: Transmission Console (Image 1 Design) ── */}
             <div className="lg:col-span-7 contact-block-fade w-full min-w-0">
               {submitStatus === "success" ? (
                 /* ── Success State ── */
-                <div className="contact-success-card">
-                  <div className="contact-success-icon-wrap">
-                    <Check size={24} aria-hidden="true" />
+                <div className="transmission-card bg-white rounded-[2rem] sm:rounded-[2.25rem] p-8 sm:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-[#E2E8F0] text-center space-y-6">
+                  <div className="w-16 h-16 rounded-full bg-[#CCFF00]/25 border border-[#CCFF00] flex items-center justify-center mx-auto text-slate-950 shadow-[0_0_20px_rgba(204,255,0,0.4)]">
+                    <Check size={28} className="text-slate-950 stroke-[2.5]" aria-hidden="true" />
                   </div>
-                  <h3 className="contact-success-heading">TRANSMISSION COMPLETE</h3>
-                  <p className="contact-success-body">
-                    Message received. Expect a reply at{" "}
-                    <strong className="text-[#171717]">{form.email}</strong>
-                    {" "}— direct inbox monitored continuously.
+                  <div className="space-y-2">
+                    <span className="font-mono text-xs font-bold text-[#4D5A2B] tracking-[0.2em] uppercase">
+                      TRANSMISSION SUCCESSFUL
+                    </span>
+                    <h3 className="text-2xl sm:text-3xl font-black font-sans uppercase tracking-tight text-slate-900">
+                      MESSAGE DISPATCHED
+                    </h3>
+                  </div>
+                  <p className="max-w-md mx-auto font-mono text-xs sm:text-sm text-slate-600 leading-relaxed">
+                    Received loud and clear. Expect a direct reply at{" "}
+                    <strong className="text-slate-900 underline decoration-[#CCFF00] decoration-2">
+                      {form.email}
+                    </strong>{" "}
+                    shortly.
                   </p>
-                  <button onClick={handleReset} className="contact-success-reset">
+                  <button
+                    onClick={handleReset}
+                    className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#111111] hover:bg-black text-[#CCFF00] font-mono font-bold text-xs tracking-wider uppercase transition-all duration-200 cursor-pointer shadow-sm hover:scale-105 active:scale-95"
+                  >
                     <span>SEND ANOTHER MESSAGE</span>
-                    <ArrowUpRight size={13} aria-hidden="true" />
+                    <ArrowUpRight size={14} aria-hidden="true" />
                   </button>
                 </div>
               ) : (
-                /* ── Form ── */
-                <form onSubmit={handleSubmit} noValidate className="w-full min-w-0 box-border">
-                  {/* Header with LIVE indicator */}
-                  <div className="contact-form-header">
-                    <span className="contact-form-header-accent" aria-hidden="true" />
-                    <span className="contact-section-label" style={{ color: "#171717", fontWeight: "700" }}>
+                /* ── Transmission Console Form (Image 1) ── */
+                <form
+                  onSubmit={handleSubmit}
+                  noValidate
+                  className="transmission-card bg-white rounded-[2rem] sm:rounded-[2.25rem] p-6 sm:p-8 md:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-[#E2E8F0] relative w-full min-w-0 box-border"
+                >
+                  {/* Header: Title + LIVE Pill Badge */}
+                  <div className="flex items-center justify-between gap-4 mb-6 sm:mb-8">
+                    <span className="font-mono text-xs sm:text-[13px] font-bold text-[#4D5A2B] tracking-[0.16em] uppercase">
                       TRANSMISSION CONSOLE // NEW MESSAGE
                     </span>
-                    <span className="cf-live-badge" aria-hidden="true">
-                      <span className="cf-live-dot" />
+                    <span className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#CCFF00] text-black font-mono font-black text-[10px] sm:text-[11px] tracking-widest uppercase shadow-[0_0_12px_rgba(204,255,0,0.35)]">
                       LIVE
                     </span>
                   </div>
 
-                  {/* Unified card with grid background */}
-                  <div className="contact-form-card">
-                    <span className="contact-form-card-accent" aria-hidden="true" />
-                    <div className="cf-fields">
-                      <CompactField
+                  {/* Form fields */}
+                  <div className="space-y-5 sm:space-y-6">
+                    {/* 01 NAME · RECRUITER · CLIENT* */}
+                    <div>
+                      <label
+                        htmlFor="contact-name"
+                        className="block font-mono text-[11px] sm:text-xs font-bold text-[#475569] tracking-[0.14em] uppercase mb-2.5 cursor-pointer"
+                      >
+                        01 NAME · RECRUITER · CLIENT*
+                      </label>
+                      <input
                         id="contact-name"
-                        fieldNum="01"
-                        label="NAME · RECRUITER · CLIENT"
+                        type="text"
                         value={form.name}
-                        onChange={(v) => handleChange("name", v)}
-                        error={errors.name}
-                        placeholder="Your full name"
+                        onChange={(e) => handleChange("name", e.target.value)}
+                        placeholder="Sarah Connor / Team Lead"
                         autoComplete="name"
+                        aria-invalid={!!errors.name}
+                        aria-describedby={errors.name ? "contact-name-error" : undefined}
+                        className={`w-full bg-[#F4F7FB] border ${
+                          errors.name ? "border-red-400 focus:border-red-500" : "border-[#CBD5E1]/70 focus:border-[#4D5A2B]"
+                        } hover:border-[#94A3B8] focus:bg-white focus:ring-4 focus:ring-[#CCFF00]/25 rounded-2xl px-5 py-3.5 sm:py-4 font-mono text-sm sm:text-base text-slate-900 placeholder:text-[#94A3B8] transition-all outline-none`}
                       />
-                      <CompactField
+                      {errors.name && (
+                        <p id="contact-name-error" className="mt-1.5 flex items-center gap-1.5 font-mono text-xs font-bold text-red-600" role="alert">
+                          <AlertCircle size={12} aria-hidden="true" />
+                          <span>{errors.name}</span>
+                        </p>
+                      )}
+                    </div>
+
+                    {/* 02 RETURN EMAIL* */}
+                    <div>
+                      <div className="flex items-center justify-between gap-2 mb-2.5">
+                        <label
+                          htmlFor="contact-email"
+                          className="block font-mono text-[11px] sm:text-xs font-bold text-[#475569] tracking-[0.14em] uppercase cursor-pointer"
+                        >
+                          02 RETURN EMAIL*
+                        </label>
+                        {emailVerify.status === "checking" && (
+                          <span className="font-mono text-[10px] text-slate-500 tracking-wider uppercase flex items-center gap-1">
+                            <Loader2 size={10} className="animate-spin" />
+                            VERIFYING
+                          </span>
+                        )}
+                      </div>
+                      <input
                         id="contact-email"
-                        fieldNum="02"
-                        label="RETURN EMAIL"
                         type="email"
                         value={form.email}
-                        onChange={(v) => handleChange("email", v)}
+                        onChange={(e) => handleChange("email", e.target.value)}
                         onBlur={handleEmailBlur}
-                        error={errors.email}
-                        placeholder="your@email.com"
+                        placeholder="lead@infrastructure.corp"
                         autoComplete="email"
+                        aria-invalid={!!errors.email}
+                        aria-describedby={errors.email ? "contact-email-error" : undefined}
+                        className={`w-full bg-[#F4F7FB] border ${
+                          errors.email ? "border-red-400 focus:border-red-500" : "border-[#CBD5E1]/70 focus:border-[#4D5A2B]"
+                        } hover:border-[#94A3B8] focus:bg-white focus:ring-4 focus:ring-[#CCFF00]/25 rounded-2xl px-5 py-3.5 sm:py-4 font-mono text-sm sm:text-base text-slate-900 placeholder:text-[#94A3B8] transition-all outline-none`}
+                      />
+                      {/* Suggestion box */}
+                      {emailVerify.suggestion && (
+                        <div className="mt-2 p-3 bg-[#CCFF00]/15 border border-[#CCFF00]/50 rounded-xl flex items-center justify-between gap-3 text-xs font-mono">
+                          <span>
+                            Did you mean <strong className="text-slate-900 underline">{emailVerify.suggestion}</strong>?
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => handleApplySuggestion(emailVerify.suggestion!)}
+                            className="bg-[#111111] hover:bg-black text-[#CCFF00] px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all"
+                          >
+                            APPLY
+                          </button>
+                        </div>
+                      )}
+                      {errors.email && (
+                        <p id="contact-email-error" className="mt-1.5 flex items-center gap-1.5 font-mono text-xs font-bold text-red-600" role="alert">
+                          <AlertCircle size={12} aria-hidden="true" />
+                          <span>{errors.email}</span>
+                        </p>
+                      )}
+                    </div>
 
-                        footerExtra={
-                          emailVerify.suggestion ? (
-                            <div className="cf-suggestion-box">
-                              <span>
-                                Did you mean <strong className="text-[#171717]">{emailVerify.suggestion}</strong>?
-                              </span>
-                              <button
-                                type="button"
-                                onClick={() => handleApplySuggestion(emailVerify.suggestion!)}
-                                className="cf-suggestion-btn"
-                              >
-                                APPLY
-                              </button>
-                            </div>
-                          ) : null
-                        }
-                      />
-                      <CompactField
+                    {/* 03 SCOPE OF WORK · MESSAGE* */}
+                    <div>
+                      <label
+                        htmlFor="contact-message"
+                        className="block font-mono text-[11px] sm:text-xs font-bold text-[#475569] tracking-[0.14em] uppercase mb-2.5 cursor-pointer"
+                      >
+                        03 SCOPE OF WORK · MESSAGE*
+                      </label>
+                      <textarea
                         id="contact-message"
-                        fieldNum="03"
-                        label="SCOPE OF WORK · MESSAGE"
-                        isTextarea
                         value={form.message}
-                        onChange={(v) => handleChange("message", v)}
-                        error={errors.message}
-                        placeholder="Describe your project, role, or collaboration..."
+                        onChange={(e) => handleChange("message", e.target.value)}
+                        placeholder="Brief description of your backend challenge, team requirements, or role specification..."
+                        aria-invalid={!!errors.message}
+                        aria-describedby={errors.message ? "contact-message-error" : undefined}
+                        className={`w-full min-h-[140px] sm:min-h-[160px] bg-[#F4F7FB] border ${
+                          errors.message ? "border-red-400 focus:border-red-500" : "border-[#CBD5E1]/70 focus:border-[#4D5A2B]"
+                        } hover:border-[#94A3B8] focus:bg-white focus:ring-4 focus:ring-[#CCFF00]/25 rounded-2xl px-5 py-4 font-mono text-sm sm:text-base text-slate-900 placeholder:text-[#94A3B8] leading-relaxed transition-all outline-none resize-none`}
                       />
+                      {errors.message && (
+                        <p id="contact-message-error" className="mt-1.5 flex items-center gap-1.5 font-mono text-xs font-bold text-red-600" role="alert">
+                          <AlertCircle size={12} aria-hidden="true" />
+                          <span>{errors.message}</span>
+                        </p>
+                      )}
                     </div>
                   </div>
 
                   {/* Server error */}
                   {submitStatus === "error" && serverError && (
-                    <div className="contact-server-error" role="alert">
-                      <AlertCircle size={14} aria-hidden="true" />
+                    <div className="mt-4 p-3.5 bg-red-50 border border-red-200 text-red-700 rounded-xl flex items-center gap-2 font-mono text-xs" role="alert">
+                      <AlertCircle size={15} className="shrink-0 text-red-600" />
                       <span>{serverError}</span>
                     </div>
                   )}
 
-                  {/* Submit */}
+                  {/* Submit Button: Bright Neon Lime with BLACK text and arrow */}
                   <button
                     id="contact-submit-btn"
                     type="submit"
                     disabled={submitStatus === "loading"}
-                    className={`contact-submit-btn${submitStatus === "loading" ? " contact-submit-btn--loading" : ""}${submitStatus === "error" ? " contact-submit-btn--error" : ""}`}
+                    className="w-full mt-6 sm:mt-8 py-4 sm:py-4.5 px-8 rounded-full bg-[#CCFF00] hover:bg-[#b8e600] active:scale-[0.99] text-black font-mono font-black text-xs sm:text-sm tracking-[0.22em] uppercase transition-all duration-200 flex items-center justify-center gap-3 shadow-[0_4px_20px_rgba(204,255,0,0.35)] hover:shadow-[0_6px_25px_rgba(204,255,0,0.5)] cursor-pointer disabled:opacity-75 disabled:cursor-not-allowed group"
                   >
                     {submitStatus === "loading" ? (
                       <>
-                        <Loader2 size={15} className="contact-submit-spinner" aria-hidden="true" />
-                        <span>TRANSMITTING...</span>
+                        <Loader2 size={16} className="animate-spin text-black" aria-hidden="true" />
+                        <span className="text-black">TRANSMITTING...</span>
                       </>
                     ) : submitStatus === "error" ? (
                       <>
-                        <AlertCircle size={15} aria-hidden="true" />
-                        <span>RETRY TRANSMISSION</span>
-                        <ArrowUpRight size={15} aria-hidden="true" />
+                        <AlertCircle size={16} className="text-black" aria-hidden="true" />
+                        <span className="text-black">RETRY TRANSMISSION</span>
+                        <ArrowUpRight size={16} className="text-black group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" aria-hidden="true" />
                       </>
                     ) : (
                       <>
-                        <Send size={14} aria-hidden="true" />
-                        <span>SEND MESSAGE</span>
-                        <ArrowUpRight size={15} aria-hidden="true" />
+                        <span className="text-black">SEND MESSAGE</span>
+                        {/* Outlined arrow shape matching Image 1 */}
+                        <svg
+                          className="w-4 h-4 text-black fill-current group-hover:translate-x-1 transition-transform"
+                          viewBox="0 0 24 24"
+                          aria-hidden="true"
+                        >
+                          <path d="M4 3.5l17 8.5-17 8.5 3.5-8.5-3.5-8.5zm4.5 8.5l-2 5 11-5-11-5 2 5z" />
+                        </svg>
                       </>
                     )}
                   </button>

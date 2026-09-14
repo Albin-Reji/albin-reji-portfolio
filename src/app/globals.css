@@ -1199,6 +1199,23 @@
   animation: contact-spin 0.8s linear infinite;
 }
 
+/* ── Transmission Console & Direct Comms Custom Cards ────────────────────── */
+.transmission-card {
+  cursor: default;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.transmission-card input,
+.transmission-card textarea {
+  cursor: text !important;
+  caret-color: #0F172A;
+}
+
+.transmission-card input:focus,
+.transmission-card textarea:focus {
+  background-color: #ffffff !important;
+}
+
 /* ── Success Card ────────────────────────────────────────────────────────── */
 .contact-success-card {
   display: flex;
