@@ -144,7 +144,7 @@ export interface Certification {
 
 export const personalInfo = {
   name: "Albin Reji",
-  title: "Full Stack Developer",
+  title: "Software Engineer",
   tagline:
     "I **architect** secure, scalable web applications and distributed systems using Java, Spring Boot, React, and modern cloud-native technologies.",
   location: "Udupi, Karnataka, India",
@@ -196,7 +196,7 @@ export const socialLinks: SocialLink[] = [
 // ─── About ───────────────────────────────────────────────────────────────────
 
 export const aboutText =
-  "Full Stack Developer with expertise in Java, Spring Boot, and React. A proven track record **shipping** secure REST APIs and microservices — built to **survive** production, not just pass a demo. Skilled in PostgreSQL optimization and integrating AI services to **scale** web applications. Focused on **delivering** high-performance, modular solutions with clean, maintainable code.";
+  "Software Engineer with expertise in Java, Spring Boot, and React. A proven track record **shipping** secure REST APIs and microservices — built to **survive** production, not just pass a demo. Skilled in PostgreSQL optimization and integrating AI services to **scale** web applications. Focused on **delivering** high-performance, modular solutions with clean, maintainable code.";
 
 export const coreTechnologies = [
   "Java",

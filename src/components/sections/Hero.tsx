@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowDown, ArrowUpRight, Terminal, Check } from "lucide-react";
+import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { personalInfo } from "@/data/portfolio";
 import MarqueeTicker from "@/components/ui/MarqueeTicker";
 import { TextParser } from "@/components/ui/TextParser";
@@ -30,13 +30,6 @@ export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const headlineRef = useRef<HTMLDivElement>(null);
   const imageContainerRef = useRef<HTMLDivElement>(null);
-  const [copiedCmd, setCopiedCmd] = useState(false);
-
-  const handleCopyCmd = () => {
-    navigator.clipboard.writeText("npx albin-reji");
-    setCopiedCmd(true);
-    setTimeout(() => setCopiedCmd(false), 2000);
-  };
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
@@ -111,24 +104,11 @@ export default function Hero() {
             className="lg:col-span-7 space-y-6 max-w-2xl lg:max-w-none"
           >
             <div>
-              {/* Eyebrow & Terminal Pill */}
-              <div className="flex flex-wrap items-center gap-3 mb-3">
-                <div className="overflow-hidden">
-                  <p className="hero-text-line font-mono text-xs md:text-sm font-semibold uppercase tracking-[0.35em] text-[#DDFE67]">
-                    {"// "}{personalInfo.title}
-                  </p>
-                </div>
-                <button
-                  onClick={handleCopyCmd}
-                  className="hero-fade inline-flex items-center gap-1.5 px-2.5 py-1 border border-[#F5F5F0]/15 bg-[#000000]/60 hover:border-[#DDFE67]/50 transition-colors font-mono text-[10px] text-[#8A8A8A] hover:text-[#F5F5F0] cursor-pointer"
-                  aria-label="Copy terminal run command"
-                >
-                  <Terminal size={11} className="text-[#DDFE67]" />
-                  <span>npx albin-reji</span>
-                  {copiedCmd ? (
-                    <Check size={11} className="text-[#DDFE67]" />
-                  ) : null}
-                </button>
+              {/* Eyebrow */}
+              <div className="overflow-hidden mb-3">
+                <p className="hero-text-line font-mono text-sm sm:text-base font-bold uppercase tracking-[0.35em] text-[#DDFE67]">
+                  {"// "}{personalInfo.title}
+                </p>
               </div>
 
               {/* Dominant Headline Anchor */}

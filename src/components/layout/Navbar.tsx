@@ -99,12 +99,10 @@ export default function Navbar() {
             </div>
           </button>
 
-          {/* Center Systems Engineer Status Chip */}
-          <div className="hidden lg:flex items-center gap-3 px-3 py-1 border border-[#F5F5F0]/15 bg-[#000000]/60 font-mono text-[9px] uppercase tracking-[0.2em]">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#DDFE67] animate-pulse shadow-[0_0_8px_rgba(221,254,103,0.8)]" />
-            <span className="text-[#8A8A8A]">SYS // OPERATIONAL</span>
-            <span className="text-[#F5F5F0]/25">•</span>
-            <span className="text-[#DDFE67] font-semibold">IST (UTC+5:30)</span>
+          {/* Center Software Engineer Status (No border rectangle, no IST, larger size) */}
+          <div className="hidden lg:flex items-center gap-2.5 font-mono text-xs sm:text-[13px] font-bold uppercase tracking-[0.22em] text-[#F5F5F0]">
+            <span className="w-2 h-2 rounded-full bg-[#DDFE67] animate-pulse shadow-[0_0_10px_rgba(221,254,103,0.9)]" />
+            <span>SOFTWARE ENGINEER</span>
           </div>
 
           {/* Desktop Nav Links */}

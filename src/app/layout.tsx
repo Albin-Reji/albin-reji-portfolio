@@ -15,17 +15,17 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Albin Reji | Full Stack Developer",
+  title: "Albin Reji | Software Engineer",
   description:
-    "Full Stack Developer specializing in Java, Spring Boot, React, microservices, secure APIs, and scalable web applications.",
+    "Software Engineer specializing in Java, Spring Boot, React, microservices, secure APIs, and scalable web applications.",
   keywords: [
     "Albin Reji",
+    "Software Engineer",
     "Full Stack Developer",
     "Java",
     "Spring Boot",
     "React",
     "Microservices",
-    "Software Engineer",
   ],
   authors: [{ name: "Albin Reji" }],
   icons: {
@@ -39,16 +39,16 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_IN",
-    title: "Albin Reji | Full Stack Developer",
+    title: "Albin Reji | Software Engineer",
     description:
-      "Full Stack Developer specializing in Java, Spring Boot, React, microservices, secure APIs, and scalable web applications.",
+      "Software Engineer specializing in Java, Spring Boot, React, microservices, secure APIs, and scalable web applications.",
     siteName: "Albin Reji Portfolio",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Albin Reji | Full Stack Developer",
+    title: "Albin Reji | Software Engineer",
     description:
-      "Full Stack Developer specializing in Java, Spring Boot, React, microservices, secure APIs, and scalable web applications.",
+      "Software Engineer specializing in Java, Spring Boot, React, microservices, secure APIs, and scalable web applications.",
   },
   robots: {
     index: true,

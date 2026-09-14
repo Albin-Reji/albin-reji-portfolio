@@ -348,7 +348,7 @@ export default function HeroPortrait3D() {
       >
         <Image
           src="/albin-reji_photo_fianal.png"
-          alt="Albin Reji — Full Stack Developer"
+          alt="Albin Reji — Software Engineer"
           fill
           className={`object-cover object-center transition-opacity duration-700 ${
             isReady ? "opacity-100" : "opacity-0"
