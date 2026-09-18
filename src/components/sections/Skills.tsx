@@ -138,9 +138,9 @@ export default function Skills() {
         </div>
       </div>
 
-      {/* ═══ Category Grid with Editorial Dividers ═══ */}
+      {/* ═══ Category Grid with Curved Enclosure Cards ═══ */}
       <div className="stack-grid px-6 md:px-12 max-w-[1728px] mx-auto">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {skillGroups.map((group, idx) => {
             const isDimmed = hoveredCategory !== null && hoveredCategory !== group.category;
             const isFocused = hoveredCategory === group.category;
@@ -150,34 +150,36 @@ export default function Skills() {
                 key={group.category}
                 onMouseEnter={() => setHoveredCategory(group.category)}
                 onMouseLeave={() => setHoveredCategory(null)}
-                className={`stack-card spotlight-card border-t border-[#F5F5F0]/15 pt-6 space-y-6 transition-all duration-400 ${
+                className={`stack-card spotlight-card rounded-[2rem] sm:rounded-[2.25rem] border border-[#F5F5F0]/15 bg-[#000000] p-6 sm:p-8 flex flex-col justify-between transition-all duration-400 relative overflow-hidden group hover:border-[#DDFE67]/50 hover:shadow-[0_0_40px_rgba(221,254,103,0.06)] ${
                   isDimmed ? "opacity-35" : isFocused ? "opacity-100 border-[#DDFE67]/70" : "opacity-90"
                 }`}
               >
-                <div className="flex items-baseline justify-between">
-                  <h3 className="font-mono text-xs font-bold uppercase tracking-[0.25em] text-[#DDFE67]">
-                    // {group.category}
-                  </h3>
-                  <span className="font-mono text-[10px] text-[#777771]">
-                    0{idx + 1}
-                  </span>
-                </div>
+                {/* Ambient Radial Glow */}
+                <div className="absolute -top-24 -right-24 w-60 h-60 bg-[#DDFE67]/[0.03] rounded-full blur-3xl pointer-events-none group-hover:bg-[#DDFE67]/[0.06] transition-all duration-500" />
 
-                <ul className="space-y-1">
-                  {group.items.map((item) => (
-                    <li
-                      key={item}
-                      className="group flex items-center justify-between py-2.5 border-b border-[#F5F5F0]/5 hover:border-[#DDFE67]/40 transition-colors cursor-default"
-                    >
-                      <span className="text-lg md:text-xl font-bold uppercase tracking-tight text-[#F5F5F0] group-hover:text-[#DDFE67] group-hover:translate-x-2 transition-all duration-300">
-                        {item}
-                      </span>
-                      <span className="font-mono text-[8px] lowercase tracking-widest text-[#DDFE67] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        ready
-                      </span>
-                    </li>
-                  ))}
-                </ul>
+                <div>
+                  <div className="flex items-center justify-between border-b border-[#F5F5F0]/10 pb-4 mb-5">
+                    <h3 className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-[#DDFE67]">
+                      // {group.category}
+                    </h3>
+                    <span className="font-mono text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-[#F5F5F0]/15 text-[#8A8A8A] group-hover:text-[#DDFE67] group-hover:border-[#DDFE67]/40 transition-colors">
+                      0{idx + 1}
+                    </span>
+                  </div>
+
+                  <ul className="space-y-1">
+                    {group.items.map((item) => (
+                      <li
+                        key={item}
+                        className="group/item flex items-center justify-between py-2.5 border-b border-[#F5F5F0]/5 hover:border-[#DDFE67]/30 transition-colors cursor-default"
+                      >
+                        <span className="text-lg md:text-xl font-bold uppercase tracking-tight text-[#F5F5F0] group-hover/item:text-[#DDFE67] group-hover/item:translate-x-2 transition-all duration-300">
+                          {item}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             );
           })}

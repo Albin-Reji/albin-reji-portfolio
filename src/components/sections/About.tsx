@@ -243,7 +243,7 @@ export default function About() {
                   TECHNICAL FOCUS
                 </span>
                 <p className="font-mono text-sm font-bold uppercase text-[#DDFE67]">
-                  Full-Stack Architecture &amp; High-Throughput Microservices
+                  {education.technicalFocus || "Software Engineering"}
                 </p>
               </div>
             </div>

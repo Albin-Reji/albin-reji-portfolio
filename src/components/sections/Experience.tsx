@@ -124,11 +124,6 @@ export default function Experience() {
                 key={`${exp.company}-${exp.duration}`}
                 className="exp-timeline-entry grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 items-start relative group"
               >
-                {/* Milestone Node Dot (Desktop) */}
-                <div
-                  className="hidden md:block absolute left-[33.333%] top-2 -translate-x-1/2 w-3 h-3 rounded-full border-2 border-[#DDFE67] bg-[#050505] shadow-[0_0_12px_rgba(221,254,103,0.6)] z-10 transition-transform duration-300 group-hover:scale-125"
-                  aria-hidden="true"
-                />
 
                 {/* Left: Duration, Company, Location (4 cols) */}
                 <div className="md:col-span-4 space-y-2 md:text-right md:pr-12">

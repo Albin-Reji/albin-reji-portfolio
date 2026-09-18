@@ -194,7 +194,7 @@ export default function Projects() {
             </div>
 
             {/* Slide Position Counter */}
-            <div className="px-3 py-1.5 border border-[#F5F5F0]/15 bg-[#000000] text-[11px] uppercase tracking-wider text-[#F5F5F0]">
+            <div className="px-3.5 py-1.5 border border-[#F5F5F0]/15 bg-[#000000] text-[11px] uppercase tracking-wider text-[#F5F5F0] rounded-full">
               <span className="text-[#DDFE67] font-bold">
                 0{activeProjectIndex + 1}
               </span>{" "}
@@ -206,7 +206,7 @@ export default function Projects() {
               <button
                 onClick={handlePrev}
                 disabled={activeProjectIndex === 0}
-                className="p-3 border border-[#F5F5F0]/15 text-[#F5F5F0] hover:border-[#DDFE67] hover:text-[#DDFE67] disabled:opacity-30 disabled:pointer-events-none transition-colors cursor-pointer"
+                className="p-3 border border-[#F5F5F0]/15 text-[#F5F5F0] hover:border-[#DDFE67] hover:text-[#DDFE67] disabled:opacity-30 disabled:pointer-events-none transition-colors cursor-pointer rounded-full"
                 aria-label="Previous project"
               >
                 <ChevronLeft size={16} />
@@ -214,7 +214,7 @@ export default function Projects() {
               <button
                 onClick={handleNext}
                 disabled={activeProjectIndex === projects.length - 1}
-                className="p-3 border border-[#F5F5F0]/15 text-[#F5F5F0] hover:border-[#DDFE67] hover:text-[#DDFE67] disabled:opacity-30 disabled:pointer-events-none transition-colors cursor-pointer"
+                className="p-3 border border-[#F5F5F0]/15 text-[#F5F5F0] hover:border-[#DDFE67] hover:text-[#DDFE67] disabled:opacity-30 disabled:pointer-events-none transition-colors cursor-pointer rounded-full"
                 aria-label="Next project"
               >
                 <ChevronRight size={16} />
@@ -238,7 +238,6 @@ export default function Projects() {
           tabIndex={0}
           role="region"
           aria-label="Featured projects horizontal slider"
-          data-cursor="DRAG"
           className={`flex gap-6 md:gap-10 overflow-x-auto snap-x snap-mandatory py-4 pb-12 focus:outline-none select-none [&::-webkit-scrollbar]:hidden ${isDragging ? "cursor-grabbing scroll-auto" : "cursor-grab scroll-smooth"
             }`}
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
@@ -251,7 +250,7 @@ export default function Projects() {
             return (
               <article
                 key={project.name}
-                className={`w-[90vw] sm:w-[85vw] lg:w-[1240px] xl:w-[1300px] shrink-0 snap-center border border-[#F5F5F0]/15 bg-[#000000] p-6 md:p-10 transition-all duration-500 flex flex-col ${isActive
+                className={`w-[90vw] sm:w-[85vw] lg:w-[1240px] xl:w-[1300px] shrink-0 snap-center rounded-[2rem] sm:rounded-[2.25rem] border border-[#F5F5F0]/15 bg-[#000000] p-6 sm:p-8 md:p-10 transition-all duration-500 flex flex-col relative overflow-hidden ${isActive
                   ? "border-[#DDFE67]/60 shadow-[0_0_45px_rgba(221,254,103,0.06)]"
                   : "opacity-60 hover:opacity-90"
                   }`}
@@ -273,14 +272,14 @@ export default function Projects() {
                   </div>
 
                     {/* Visual / Blueprint Switcher */}
-                    <div className="flex items-center gap-1 bg-[#111111] p-1 border border-[#F5F5F0]/10 text-[10px] uppercase">
+                    <div className="flex items-center gap-1 bg-[#111111] p-1 border border-[#F5F5F0]/10 text-[10px] uppercase rounded-full">
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
                           setActiveTabByProject((prev) => ({ ...prev, [idx]: "preview" }));
                         }}
-                        className={`px-3 py-1.5 transition-colors cursor-pointer flex items-center gap-1.5 ${currentTab === "preview"
-                          ? "bg-[#DDFE67] text-[#050505] font-bold"
+                        className={`px-3.5 py-1.5 transition-colors cursor-pointer flex items-center gap-1.5 rounded-full ${currentTab === "preview"
+                          ? "bg-[#DDFE67] text-[#050505] font-bold shadow-[0_0_12px_rgba(221,254,103,0.35)]"
                           : "text-[#8A8A8A] hover:text-[#F5F5F0]"
                           }`}
                       >
@@ -291,8 +290,8 @@ export default function Projects() {
                           e.stopPropagation();
                           setActiveTabByProject((prev) => ({ ...prev, [idx]: "architecture" }));
                         }}
-                        className={`px-3 py-1.5 transition-colors cursor-pointer flex items-center gap-1.5 ${currentTab === "architecture"
-                          ? "bg-[#DDFE67] text-[#050505] font-bold"
+                        className={`px-3.5 py-1.5 transition-colors cursor-pointer flex items-center gap-1.5 rounded-full ${currentTab === "architecture"
+                          ? "bg-[#DDFE67] text-[#050505] font-bold shadow-[0_0_12px_rgba(221,254,103,0.35)]"
                           : "text-[#8A8A8A] hover:text-[#F5F5F0]"
                           }`}
                       >
@@ -307,7 +306,7 @@ export default function Projects() {
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
                       {/* Left Column: Visual Media (6 cols) */}
                       <div className="lg:col-span-6 space-y-4 flex flex-col">
-                        <div className="relative aspect-[16/10] overflow-hidden border border-[#F5F5F0]/15 bg-[#111111] group shrink-0">
+                        <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-[#F5F5F0]/15 bg-[#111111] group shrink-0">
                           <Image
                             src={PROJECT_IMAGES[idx] || PROJECT_IMAGES[0]}
                             alt={`${project.name} visual preview`}
@@ -317,7 +316,7 @@ export default function Projects() {
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-[#000000]/80 via-transparent to-transparent pointer-events-none" />
 
-                          <div className="absolute top-4 left-4 z-20 font-mono text-[9px] uppercase tracking-[0.25em] text-[#DDFE67] px-2.5 py-1 bg-[#050505]/85 border border-[#F5F5F0]/15">
+                          <div className="absolute top-4 left-4 z-20 font-mono text-[9px] uppercase tracking-[0.25em] text-[#DDFE67] px-3 py-1 bg-[#050505]/85 border border-[#F5F5F0]/15 rounded-full backdrop-blur-sm shadow-sm">
                             SYSTEM RUNTIME // ACTIVE
                           </div>
 
@@ -332,7 +331,7 @@ export default function Projects() {
                           {project.techStack.map((tech) => (
                             <span
                               key={tech}
-                              className="font-mono text-[10px] uppercase tracking-[0.15em] border border-[#F5F5F0]/15 px-3 py-1 text-[#F5F5F0] bg-[#050505] hover:border-[#DDFE67]/50 transition-colors"
+                              className="font-mono text-[10px] uppercase tracking-[0.15em] border border-[#F5F5F0]/15 px-3 py-1 text-[#F5F5F0] bg-[#050505] hover:border-[#DDFE67]/50 transition-colors rounded-lg"
                             >
                               {tech}
                             </span>
@@ -433,7 +432,7 @@ export default function Projects() {
                             {project.techStack.map((tech) => (
                               <span
                                 key={tech}
-                                className="font-mono text-[9px] uppercase tracking-[0.15em] border border-[#F5F5F0]/15 px-2.5 py-1 text-[#F5F5F0] bg-[#050505] hover:border-[#DDFE67]/50 transition-colors"
+                                className="font-mono text-[9px] uppercase tracking-[0.15em] border border-[#F5F5F0]/15 px-2.5 py-1 text-[#F5F5F0] bg-[#050505] hover:border-[#DDFE67]/50 transition-colors rounded-lg"
                               >
                                 {tech}
                               </span>

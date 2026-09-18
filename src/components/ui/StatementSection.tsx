@@ -143,7 +143,6 @@ export default function StatementSection() {
             {architecturalPillars.map((pillar) => (
               <div
                 key={pillar.id}
-                data-cursor="SYSTEM"
                 className="pillar-card spotlight-card relative border border-[#F5F5F0]/15 p-6 bg-[#050505]/90 hover:border-[#DDFE67]/60 hover:bg-[#DDFE67]/[0.03] transition-all duration-300 flex flex-col justify-between space-y-6 group hover:shadow-[0_0_30px_rgba(221,254,103,0.07)]"
               >
                 {/* Precision Corner Crosshairs */}

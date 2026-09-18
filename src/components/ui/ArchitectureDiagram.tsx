@@ -552,7 +552,7 @@ export default function ArchitectureDiagram({
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6 }}
-      className="w-full bg-[#050505] border border-[#F5F5F0]/15 flex flex-col"
+      className="w-full bg-[#050505] border border-[#F5F5F0]/15 flex flex-col rounded-2xl overflow-hidden"
     >
       {/* ═══ Header Bar: Title, Protocol Filters & Maximize Action ═══ */}
       <div className="p-3 md:p-4 border-b border-[#F5F5F0]/15 flex flex-wrap items-center justify-between gap-3 bg-[#0A0A0A]">
@@ -561,7 +561,7 @@ export default function ArchitectureDiagram({
             <Layers size={13} className="text-[#DDFE67]" />
             <span>{title || "DISTRIBUTED SYSTEM TOPOLOGY"}</span>
           </span>
-          <span className="font-mono text-[9px] px-2 py-0.5 border border-[#F5F5F0]/15 text-[#DDFE67] bg-[#000000]">
+          <span className="font-mono text-[9px] px-2 py-0.5 border border-[#F5F5F0]/15 text-[#DDFE67] bg-[#000000] rounded-md">
             {nodes.length} NODES // {connections.length} FLOWS
           </span>
         </div>
@@ -570,7 +570,7 @@ export default function ArchitectureDiagram({
         <div className="flex flex-wrap items-center gap-1 font-mono text-[9px] uppercase">
           <button
             onClick={() => setActiveProtocol("ALL")}
-            className={`px-2 py-1 border transition-colors cursor-pointer ${activeProtocol === "ALL"
+            className={`px-2 py-1 border transition-colors cursor-pointer rounded-md ${activeProtocol === "ALL"
                 ? "bg-[#DDFE67] text-[#050505] border-[#DDFE67] font-bold"
                 : "border-[#F5F5F0]/10 text-[#8A8A8A] hover:text-[#F5F5F0]"
               }`}
@@ -584,7 +584,7 @@ export default function ArchitectureDiagram({
               <button
                 key={proto}
                 onClick={() => setActiveProtocol(isActive ? "ALL" : proto)}
-                className={`px-2 py-1 border transition-colors cursor-pointer flex items-center gap-1 ${isActive
+                className={`px-2 py-1 border transition-colors cursor-pointer flex items-center gap-1 rounded-md ${isActive
                     ? "bg-[#DDFE67] text-[#050505] border-[#DDFE67] font-bold"
                     : "border-[#F5F5F0]/10 text-[#8A8A8A] hover:text-[#F5F5F0]"
                   }`}
@@ -601,7 +601,7 @@ export default function ArchitectureDiagram({
           {/* Fullscreen Modal Toggle Button */}
           <button
             onClick={() => setIsFullscreen(true)}
-            className="ml-2 p-1.5 border border-[#F5F5F0]/15 text-[#8A8A8A] hover:text-[#DDFE67] hover:border-[#DDFE67] transition-colors cursor-pointer"
+            className="ml-2 p-1.5 border border-[#F5F5F0]/15 text-[#8A8A8A] hover:text-[#DDFE67] hover:border-[#DDFE67] transition-colors cursor-pointer rounded-md"
             title="Expand Fullscreen Diagram"
             aria-label="Expand Fullscreen Diagram"
           >

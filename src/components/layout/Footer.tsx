@@ -78,7 +78,7 @@ export default function Footer() {
         {/* ── Footer Bottom Row ── */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-[11px] uppercase tracking-wider text-[#8A8A8A]">
           <div className="flex items-center gap-3 text-center sm:text-left flex-wrap justify-center sm:justify-start">
-            <span>&copy; {new Date().getFullYear()} {personalInfo.name}. ART-DIRECTED DEV PORTFOLIO.</span>
+            <span>&copy; {new Date().getFullYear()} {personalInfo.name}</span>
             <span className="hidden md:inline text-[#F5F5F0]/20">•</span>
             <span className="hidden md:inline text-[#777771]">BENGALURU, IN</span>
           </div>

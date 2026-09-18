@@ -148,7 +148,6 @@ export default function Certifications() {
                       handleSelect(index);
                     }
                   }}
-                  data-cursor={isActive ? "ZOOM" : "SELECT"}
                 >
                   {/* Card Container */}
                   <div

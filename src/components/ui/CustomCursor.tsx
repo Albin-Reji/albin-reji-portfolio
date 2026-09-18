@@ -4,11 +4,9 @@ import { useEffect, useRef } from "react";
 
 export default function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
-  const labelRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     const cursor = cursorRef.current;
-    const label = labelRef.current;
     if (!cursor) return;
 
     // Only on non-touch devices
@@ -40,18 +38,6 @@ export default function CustomCursor() {
         spotlightCard.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
       }
 
-      // Check for contextual cursor labels (e.g., data-cursor="DRAG" or data-cursor="VIEW")
-      const labeledElement = (e.target as Element)?.closest?.("[data-cursor]") as HTMLElement | null;
-      if (labeledElement) {
-        const text = labeledElement.getAttribute("data-cursor") || "";
-        cursor.classList.add("is-labeled");
-        cursor.classList.remove("is-active");
-        if (label) label.textContent = text;
-      } else {
-        cursor.classList.remove("is-labeled");
-        if (label) label.textContent = "";
-      }
-
       // Hide the dot entirely when hovering inside inputs, textareas, or contact form cards
       const formCard = (e.target as Element)?.closest?.(
         ".contact-form-card, .transmission-card, .cf-fields, .cf-field, .cf-field-body, input, textarea"
@@ -74,9 +60,8 @@ export default function CustomCursor() {
     };
 
     const onMouseEnterInteractive = (e: Event) => {
-      // Don't expand when over inputs/textareas inside the contact form or when labeled
+      // Don't expand when over inputs/textareas inside the contact form
       const target = e.target as Element;
-      if (cursor.classList.contains("is-labeled")) return;
       const isInsideForm = target.closest(
         ".contact-form-card, .transmission-card, .cf-fields, input, textarea"
       );
@@ -126,8 +111,6 @@ export default function CustomCursor() {
   }, []);
 
   return (
-    <div ref={cursorRef} className="cursor-dot" aria-hidden="true">
-      <span ref={labelRef} className="cursor-label" />
-    </div>
+    <div ref={cursorRef} className="cursor-dot" aria-hidden="true" />
   );
 }

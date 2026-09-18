@@ -60,6 +60,7 @@ export interface EducationEntry {
   duration: string;
   cgpa: string;
   location: string;
+  technicalFocus?: string;
 }
 
 export interface SkillGroup {
@@ -217,6 +218,7 @@ export const education: EducationEntry = {
   duration: "Nov 2021 – May 2025",
   cgpa: "8.5 / 10",
   location: "Mangalore, India",
+  technicalFocus: "Software Engineering",
 };
 
 // ─── Skills ──────────────────────────────────────────────────────────────────
@@ -334,6 +336,7 @@ export const projects: Project[] = [
       "Keycloak",
       "PostgreSQL",
     ],
+    githubUrl: "https://github.com/Albin-Reji/ca-connect",
     architecture: {
       nodes: [
         {
@@ -688,6 +691,7 @@ export const projects: Project[] = [
       "RabbitMQ",
       "Spring Cloud Gateway",
     ],
+    githubUrl: "https://github.com/Albin-Reji/ai-powered-fitness-app",
     architecture: {
       nodes: [
         {
