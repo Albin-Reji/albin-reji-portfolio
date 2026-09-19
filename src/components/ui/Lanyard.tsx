@@ -1199,10 +1199,10 @@ function Band({
     useMemo(() => {
       const c =
         new THREE.CatmullRomCurve3([
-          new THREE.Vector3(),
-          new THREE.Vector3(),
-          new THREE.Vector3(),
-          new THREE.Vector3(),
+          new THREE.Vector3(0, 0, 0),
+          new THREE.Vector3(0, -0.5, 0),
+          new THREE.Vector3(0, -1, 0),
+          new THREE.Vector3(0, -1.5, 0),
         ]);
 
       c.curveType =
@@ -1329,14 +1329,36 @@ function Band({
   }, [dragged]);
 
   /* =======================================================
+     INITIALIZE STRAP GEOMETRY
+     ======================================================= */
+
+  useEffect(() => {
+    if (band.current?.geometry?.setPoints) {
+      try {
+        band.current.geometry.setPoints([
+          new THREE.Vector3(0, 0, 0),
+          new THREE.Vector3(0, -0.5, 0),
+          new THREE.Vector3(0, -1, 0),
+        ]);
+      } catch { }
+    }
+  }, []);
+
+  /* =======================================================
      PHYSICS ANIMATION
      ======================================================= */
+
+  const frameCount = useRef(0);
 
   useFrame(
     (
       state,
       delta
     ) => {
+      // Skip the first few frames while physics bodies initialize
+      frameCount.current += 1;
+      if (frameCount.current < 5) return;
+
       /* ===================================================
          DRAGGING
          =================================================== */
@@ -1377,20 +1399,27 @@ function Band({
           }
         );
 
-        card.current?.setNextKinematicTranslation(
-          {
-            x:
-              vec.x -
-              dragged.x,
+        if (
+          Number.isFinite(vec.x) &&
+          Number.isFinite(vec.y) &&
+          Number.isFinite(dragged.x) &&
+          Number.isFinite(dragged.y)
+        ) {
+          card.current?.setNextKinematicTranslation(
+            {
+              x:
+                vec.x -
+                dragged.x,
 
-            y:
-              vec.y -
-              dragged.y,
+              y:
+                vec.y -
+                dragged.y,
 
-            z:
-              0,
-          }
-        );
+              z:
+                0,
+            }
+          );
+        }
       }
 
       /* ===================================================
@@ -1411,14 +1440,9 @@ function Band({
           const tJ2 = j2.current.translation();
           const tJ3 = j3.current.translation();
 
+          const isNum = (n: any) => typeof n === 'number' && Number.isFinite(n);
           const isValidVec = (v: any) =>
-            v &&
-            typeof v.x === 'number' &&
-            !isNaN(v.x) &&
-            typeof v.y === 'number' &&
-            !isNaN(v.y) &&
-            typeof v.z === 'number' &&
-            !isNaN(v.z);
+            Boolean(v && isNum(v.x) && isNum(v.y) && isNum(v.z));
 
           if (
             isValidVec(tFixed) &&
@@ -1426,24 +1450,33 @@ function Band({
             isValidVec(tJ2) &&
             isValidVec(tJ3)
           ) {
+            // Guard delta to prevent physics explosion from tab inactive or lag frames
+            const clampedDelta = Math.min(Math.max(delta, 0.001), 0.05);
+
             [
               { ref: j1, t: tJ1 },
               { ref: j2, t: tJ2 },
             ].forEach(({ ref, t }) => {
-              if (!ref.current.lerped || !isValidVec(ref.current.lerped)) {
+              if (
+                !ref.current.lerped ||
+                !isValidVec(ref.current.lerped) ||
+                ref.current.lerped.distanceTo(t) > 20
+              ) {
                 ref.current.lerped = new THREE.Vector3(t.x, t.y, t.z);
               }
 
               const dist = ref.current.lerped.distanceTo(t);
-              const clampedDistance = Math.max(0.1, Math.min(1, isNaN(dist) ? 0.1 : dist));
+              const clampedDistance = Math.max(0.1, Math.min(1, isNum(dist) ? dist : 0.1));
 
-              ref.current.lerped.lerp(
-                t,
-                delta *
-                (minSpeed +
-                  clampedDistance *
-                  (maxSpeed - minSpeed))
-              );
+              // Crucial fix: clamp lerp alpha to [0, 0.9] so it never exceeds 1 and cannot explode to Infinity
+              const rawAlpha = clampedDelta * (minSpeed + clampedDistance * (maxSpeed - minSpeed));
+              const alpha = Math.max(0, Math.min(0.9, rawAlpha));
+
+              ref.current.lerped.lerp(t, alpha);
+
+              if (!isValidVec(ref.current.lerped)) {
+                ref.current.lerped.set(t.x, t.y, t.z);
+              }
             });
 
             if (isValidVec(j2.current.lerped) && isValidVec(j1.current.lerped)) {
@@ -1459,9 +1492,41 @@ function Band({
                  UPDATE STRAP
                  ================================================= */
               const pts = curve.getPoints(isMobile ? 16 : 32);
-              const allValid = pts.every((p: any) => isValidVec(p));
-              if (allValid && band.current.geometry?.setPoints) {
-                band.current.geometry.setPoints(pts);
+              const allValid =
+                Array.isArray(pts) &&
+                pts.length >= 2 &&
+                pts.every((p: any) => isValidVec(p));
+
+              if (allValid && band.current?.geometry?.setPoints) {
+                const geom = band.current.geometry;
+                // Patch computeBoundingSphere on this geometry instance to guard against any NaN/Infinite values
+                if (!geom._patchedBoundingSphere) {
+                  geom._patchedBoundingSphere = true;
+                  const originalCompute = geom.computeBoundingSphere.bind(geom);
+                  geom.computeBoundingSphere = function () {
+                    const posAttr = this.getAttribute('position');
+                    if (posAttr?.array) {
+                      const arr = posAttr.array;
+                      let hasInvalid = false;
+                      for (let i = 0; i < arr.length; i++) {
+                        if (!Number.isFinite(arr[i])) {
+                          arr[i] = 0;
+                          hasInvalid = true;
+                        }
+                      }
+                      if (hasInvalid) posAttr.needsUpdate = true;
+                    }
+                    try {
+                      originalCompute();
+                    } catch {
+                      if (!this.boundingSphere) this.boundingSphere = new THREE.Sphere();
+                      this.boundingSphere.radius = 1;
+                      this.boundingSphere.center.set(0, 0, 0);
+                    }
+                  };
+                }
+
+                geom.setPoints(pts);
               }
             }
           }
@@ -1475,9 +1540,10 @@ function Band({
             ang.set(cAng.x, cAng.y, cAng.z);
             rot.set(cRot.x, cRot.y, cRot.z);
 
+            const targetAngY = Math.max(-10, Math.min(10, ang.y - rot.y * 0.25));
             card.current.setAngvel({
               x: ang.x,
-              y: ang.y - rot.y * 0.25,
+              y: targetAngY,
               z: ang.z,
             });
           }
@@ -1670,14 +1736,25 @@ function Band({
                 );
               } catch { }
 
-              const cardPos = card.current ? card.current.translation() : { x: 0, y: 0, z: 0 };
-              drag(
-                new THREE.Vector3()
-                  .copy(e.point)
-                  .sub(
-                    vec.set(cardPos.x, cardPos.y, cardPos.z)
-                  )
-              );
+              const cardPos = card.current ? card.current.translation() : null;
+              if (
+                cardPos &&
+                Number.isFinite(cardPos.x) &&
+                Number.isFinite(cardPos.y) &&
+                Number.isFinite(cardPos.z) &&
+                e.point &&
+                Number.isFinite(e.point.x) &&
+                Number.isFinite(e.point.y) &&
+                Number.isFinite(e.point.z)
+              ) {
+                drag(
+                  new THREE.Vector3()
+                    .copy(e.point)
+                    .sub(
+                      vec.set(cardPos.x, cardPos.y, cardPos.z)
+                    )
+                );
+              }
             }}
           >
             {/* =============================================
